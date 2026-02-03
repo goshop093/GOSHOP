@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go Shop - Catálogo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Go Shop</h1>
+    <p>Catálogo de productos</p>
+  </header>
+
+  <main>
+    <section class="products">
+      
+      <!-- Producto 1 -->
+      <div class="product-card">
+        <img src="imagenes/perfume1.jpg" alt="Perfume 1">
+        <h2>Perfume X</h2>
+        <p>Fragancia fresca y duradera</p>
+        <p class="price">$49.99</p>
+        <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20el%20Perfume%20X" class="btn-contact">Contactar</a>
+      </div>
+
+      <!-- Producto 2 -->
+      <div class="product-card">
+        <img src="imagenes/perfume2.jpg" alt="Perfume 2">
+        <h2>Perfume Y</h2>
+        <p>Notas florales y dulces</p>
+        <p class="price">$59.99</p>
+        <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20el%20Perfume%20Y" class="btn-contact">Contactar</a>
+      </div>
+
+      <!-- Producto 3 -->
+      <div class="product-card">
+        <img src="imagenes/perfume3.jpg" alt="Perfume 3">
+        <h2>Perfume Z</h2>
+        <p>Aromas amaderados intensos</p>
+        <p class="price">$69.99</p>
+        <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20el%20Perfume%20Z" class="btn-contact">Contactar</a>
+      </div>
+
+      <!-- Producto 4 -->
+      <div class="product-card">
+        <img src="imagenes/sudadera1.jpg" alt="Sudadera 1">
+        <h2>Sudadera A</h2>
+        <p>Comodidad y estilo urbano</p>
+        <p class="price">$39.99</p>
+        <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20la%20Sudadera%20A" class="btn-contact">Contactar</a>
+      </div>
+
+      <!-- Producto 5 -->
+      <div class="product-card">
+        <img src="imagenes/sudadera2.jpg" alt="Sudadera 2">
+        <h2>Sudadera B</h2>
+        <p>Diseño minimalista y elegante</p>
+        <p class="price">$44.99</p>
+        <a href="https://wa.me/521XXXXXXXXXX?text=Hola%20quiero%20la%20Sudadera%20B" class="btn-contact">Contactar</a>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>
+    <p>Contacto: <a href="https://wa.me/521XXXXXXXXXX">WhatsApp</a> | Instagram: @tumarca</p>
+  </footer>
+</body>
+</html>
