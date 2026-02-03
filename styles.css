@@ -29,6 +29,13 @@ header {
   width: 100%;
   height: auto;
 }
+.imagen-principal {
+  width: 300px;
+  border-radius: 15px;
+  display: block;
+  margin: 20px auto;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
 
 .price {
   font-weight: bold;
