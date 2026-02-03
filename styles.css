@@ -1,17 +1,21 @@
+/* Estilo general */
 body {
-  background-color: #fef4f8;
+  background-color: #000; /* fondo negro */
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   text-align: center;
+  color: #000; /* texto negro */
 }
 
 header {
-  background: #222;
-  color: white;
-  padding: 20px;
+  background: #111;
+  color: #FFD700; /* dorado */
+  padding: 25px;
+  font-size: 2rem;
 }
 
+/* Contenedor de productos */
 .products {
   display: flex;
   flex-wrap: wrap;
@@ -20,12 +24,13 @@ header {
   padding: 30px;
 }
 
+/* Tarjetas de producto */
 .product-card {
-  background: white;
+  background: #FFD700; /* fondo dorado de catálogo */
   border-radius: 15px;
   width: 220px;
   padding: 15px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
 
 .product-card img {
@@ -33,16 +38,31 @@ header {
   border-radius: 10px;
 }
 
+.product-card h2, 
+.product-card p, 
+.product-card .price {
+  color: #000; /* texto negro */
+}
+
+/* Precio destacado */
 .price {
   font-weight: bold;
-  color: #e91e63;
   font-size: 18px;
+  margin: 10px 0;
 }
 
-p {
-  color: #333;
+/* Botones de compra */
+button {
+  background-color: #e91e63; /* color rosa fuerte */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-h1 {
-  color: #2536cb;
+button:hover {
+  background-color: #c2185b;
 }
