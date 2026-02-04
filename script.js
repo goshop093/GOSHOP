@@ -1,69 +1,108 @@
-// ===== Manejo de carrito =====
-let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+<script>
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+let filteredCart = [...cart];
 
-// ===== Actualizar contador del carrito =====
-function updateCartCount() {
-  document.querySelectorAll("#cart-count").forEach(el => el.textContent = cartItems.length);
+// ====== MAYOREO ======
+function getMayoreoPrice(qty, base){
+  if(qty >= 10) return 450;
+  if(qty >= 5) return 250;
+  return base;
 }
 
-// ===== Agregar productos =====
-document.querySelectorAll(".btn-add").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const name = btn.dataset.name;
-    const price = parseFloat(btn.dataset.price);
-    const img = btn.dataset.img;
-    cartItems.push({ name, price, img });
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    updateCartCount();
-    alert(`${name} agregado al carrito`);
-  });
-});
-
-// ===== Mostrar carrito en pagina-del-carro.html =====
-function displayCartPage() {
-  const container = document.getElementById("cart-items-container");
-  const totalSpan = document.getElementById("cart-total-page");
-  if (!container) return;
-
-  container.innerHTML = "";
+function updateCart(){
+  const container = document.getElementById('cart-container');
+  const totalSpan = document.getElementById('cart-total');
+  container.innerHTML = '';
   let total = 0;
 
-  cartItems.forEach((item, index) => {
-    const imgSrc = item.img || "images/default.jpg";
-    const div = document.createElement("div");
-    div.classList.add("cart-item-page");
+  filteredCart.forEach((item,index)=>{
+    const unitPrice = getMayoreoPrice(item.qty, item.price);
+    const subtotal = unitPrice * item.qty;
+    const ahorro = (item.price - unitPrice) * item.qty;
+    total += subtotal;
+
+    const div = document.createElement('div');
+    div.className = 'cart-item animate';
     div.innerHTML = `
-      <img src="${imgSrc}" alt="${item.name}">
+      <img src="${item.img}" alt="${item.name}">
       <div class="info">
-        <p>${item.name}</p>
-        <p>$${item.price.toFixed(2)}</p>
+        ${item.qty >= 5 ? '<span class="mayoreo-badge">MAYOREO</span>' : ''}
+        <p><b>${item.name}</b></p>
+
+        <p>
+          ${item.qty >= 5 ? `<span class="old-price">$${item.price.toFixed(2)}</span><br>` : ''}
+          Precio: $${unitPrice.toFixed(2)}
+        </p>
+
+        ${ahorro > 0 ? `<p class="save">Ahorras $${ahorro.toFixed(2)}</p>` : ''}
+
+        <p>
+          Cantidad:
+          <button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
+          ${item.qty}
+          <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+        </p>
+
+        <small style="color:#ccc">
+          Mayoreo: 5 pz $250 · 10 pz $450
+        </small>
       </div>
-      <button class="remove-btn-page" data-index="${index}">X</button>
+      <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
     container.appendChild(div);
-    total += item.price;
   });
 
   totalSpan.textContent = total.toFixed(2);
-
-  document.querySelectorAll(".remove-btn-page").forEach(btn => {
-    btn.addEventListener("click", () => {
-      cartItems.splice(btn.dataset.index, 1);
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      displayCartPage();
-      updateCartCount();
-    });
-  });
+  localStorage.setItem('cart',JSON.stringify(cart));
 }
 
-// ===== Vaciar carrito =====
-document.getElementById("clear-cart")?.addEventListener("click", () => {
-  cartItems = [];
-  localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  displayCartPage();
-  updateCartCount();
-});
+// ====== CANTIDAD ======
+function changeQty(index,delta){
+  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
+  cart[realIndex].qty += delta;
+  if(cart[realIndex].qty < 1) cart[realIndex].qty = 1;
+  filteredCart[index].qty = cart[realIndex].qty;
+  updateCart();
+}
 
-// ===== Inicializar =====
-updateCartCount();
-displayCartPage();
+// ====== ELIMINAR ======
+function removeItem(index){
+  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
+  cart.splice(realIndex,1);
+  filteredCart.splice(index,1);
+  updateCart();
+}
+
+// ====== BUSCADOR ======
+function searchCart(text){
+  filteredCart = cart.filter(i=>i.name.toLowerCase().includes(text.toLowerCase()));
+  updateCart();
+}
+
+// ====== REGRESAR ======
+function goBack(){ window.location.href='index.html'; }
+
+// ====== WHATSAPP ======
+function sendOrder(){
+  if(cart.length===0){ alert('El carrito está vacío'); return; }
+
+  let msg = 'Pedido Go Shop:\n';
+  let total = 0;
+
+  cart.forEach(i=>{
+    const unit = getMayoreoPrice(i.qty, i.price);
+    const sub = unit * i.qty;
+    total += sub;
+    msg += `${i.name} - $${unit} x ${i.qty}\n`;
+  });
+
+  msg += `Total: $${total.toFixed(2)}`;
+  const waNumber = '13129348674';
+  window.open(
+    `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(msg)}`,
+    '_blank'
+  );
+}
+
+updateCart();
+</script>
