@@ -20,7 +20,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 header{
   position:fixed;
   top:0;
@@ -47,10 +47,10 @@ header{
   font-size:12px;
 }
 
-/* ===== MAIN ===== */
+/* MAIN */
 main{padding-top:90px;padding-bottom:90px}
 
-/* ===== MENÚ LATERAL ===== */
+/* MENÚ */
 .side-menu{
   position:fixed;
   left:-260px;
@@ -74,7 +74,7 @@ main{padding-top:90px;padding-bottom:90px}
 }
 .submenu{display:none;margin-left:10px}
 
-/* ===== BUSCADOR FLOTANTE ===== */
+/* BUSCADOR */
 .search-fab{
   position:fixed;
   bottom:90px;
@@ -104,10 +104,9 @@ main{padding-top:90px;padding-bottom:90px}
   padding:12px;
   border-radius:25px;
   border:none;
-  outline:none;
 }
 
-/* ===== PRODUCTOS ===== */
+/* PRODUCTOS */
 .products{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
@@ -119,7 +118,7 @@ main{padding-top:90px;padding-bottom:90px}
   color:#000;
   border-radius:16px;
   padding:10px;
-  animation:fadeUp .4s ease;
+  animation:fadeUp .3s ease;
 }
 .card img{
   width:100%;
@@ -139,13 +138,7 @@ main{padding-top:90px;padding-bottom:90px}
   cursor:pointer;
 }
 
-/* ===== ANIMACIONES ===== */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(15px)}
-  to{opacity:1;transform:translateY(0)}
-}
-
-/* ===== BARRA MÓVIL ===== */
+/* BARRA MÓVIL */
 .mobile-bar{
   position:fixed;
   bottom:0;
@@ -154,7 +147,6 @@ main{padding-top:90px;padding-bottom:90px}
   display:flex;
   justify-content:space-around;
   padding:10px 0;
-  z-index:2500;
 }
 .mobile-bar button{
   background:none;
@@ -162,9 +154,9 @@ main{padding-top:90px;padding-bottom:90px}
   color:var(--gold);
 }
 
-/* ===== RESPONSIVE ===== */
-@media screen and (max-width:600px){
-  .products{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
 }
 </style>
 </head>
@@ -177,6 +169,7 @@ main{padding-top:90px;padding-bottom:90px}
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
+<!-- MENÚ -->
 <div class="side-menu" id="menu">
   <button onclick="toggleSub()">Productos ▸</button>
   <div class="submenu" id="submenu">
@@ -185,6 +178,8 @@ main{padding-top:90px;padding-bottom:90px}
     <button onclick="filterCat('Relojes')">Relojes</button>
     <button onclick="filterCat('Tenis')">Tenis</button>
   </div>
+
+  <button onclick="showFavs()">❤️ Favoritos</button>
   <button onclick="openWA()">Contacto</button>
 </div>
 
@@ -205,7 +200,6 @@ main{padding-top:90px;padding-bottom:90px}
 </div>
 
 <script>
-// ===== DATOS DE PRODUCTOS =====
 const data=[
 {name:"Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
 {name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
@@ -226,11 +220,7 @@ const data=[
 {name:"Azzaro The Most Wanted",price:60,cat:"Perfumes Hombre",img:"images/perfume17.jpg"},
 {name:"Dior J’adore",price:60,cat:"Perfumes Mujer",img:"images/perfume18.jpg"},
 {name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
-{name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"},
-{name:"Reloj Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
-{name:"Reloj Casio",price:50,cat:"Relojes",img:"images/reloj2.jpg"},
-{name:"Tenis Nike",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
-{name:"Tenis Adidas",price:85,cat:"Tenis",img:"images/tenis2.jpg"}
+{name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"}
 ];
 
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
@@ -245,7 +235,7 @@ function render(list=data){
     p.innerHTML+=`
     <div class="card">
       <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
-      <img src="${i.img}" alt="${i.name}">
+      <img src="${i.img}">
       <b>${i.name}</b><br>$${i.price}
       <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
     </div>`;
@@ -253,16 +243,27 @@ function render(list=data){
 }
 
 function addCart(i){
-  cart.push({...i,qty:1});
+  const index=cart.findIndex(p=>p.name===i.name);
+  if(index!==-1) cart[index].qty++;
+  else cart.push({...i,qty:1});
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
-  alert(`${i.name} agregado al carrito`);
 }
 
 function toggleFav(i){
-  favs=favs.find(f=>f.name===i.name)?favs.filter(f=>f.name!==i.name):[...favs,i];
+  favs=favs.find(f=>f.name===i.name)
+    ?favs.filter(f=>f.name!==i.name)
+    :[...favs,i];
   localStorage.setItem("favs",JSON.stringify(favs));
   render(cat?data.filter(d=>d.cat===cat):data);
+}
+
+function showFavs(){
+  const p=document.getElementById("products");
+  document.getElementById("menu").style.left="-260px";
+  if(favs.length===0){
+    p.innerHTML="<p style='color:gold'>No tienes favoritos ❤️</p>";
+  }else render(favs);
 }
 
 function search(t){
@@ -272,16 +273,26 @@ function search(t){
 function filterCat(c){
   cat=c;
   render(data.filter(d=>d.cat===c));
+  document.getElementById("menu").style.left="-260px";
 }
 
 function updateCount(){
-  document.getElementById("cartCount").innerText=cart.length;
+  document.getElementById("cartCount").innerText=
+  cart.reduce((s,p)=>s+p.qty,0);
 }
 
 function toggleMenu(){
   const m=document.getElementById("menu");
   m.style.left=m.style.left==="0px"?"-260px":"0px";
 }
+
+document.addEventListener("click",e=>{
+  const m=document.getElementById("menu");
+  const b=document.querySelector(".menu-btn");
+  if(m.style.left==="0px"&&!m.contains(e.target)&&!b.contains(e.target))
+    m.style.left="-260px";
+});
+
 function toggleSub(){
   const s=document.getElementById("submenu");
   s.style.display=s.style.display==="block"?"none":"block";
