@@ -2,20 +2,24 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi Carrito - Go Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 :root{
   --gold:#FFD700;
   --dark:#111;
 }
+*{box-sizing:border-box}
+
 body{
   background:#000;
-  color:#fff;
-  font-family:Arial,sans-serif;
+  color:#FFD700;
+  font-family:Arial, sans-serif;
   margin:0;
   padding:0;
 }
+
+/* ===== HEADER ===== */
 header{
   position:fixed;
   top:0;
@@ -23,156 +27,153 @@ header{
   background:var(--dark);
   color:var(--gold);
   text-align:center;
-  padding:15px;
-  font-size:1.8rem;
+  padding:14px;
   z-index:1000;
+  font-size:1.8rem;
 }
-main{
-  padding:80px 15px 20px 15px;
-  max-width:900px;
-  margin:0 auto;
-}
+
+/* ===== MAIN ===== */
+main{padding-top:70px;padding-bottom:90px; max-width:900px;margin:auto;}
+
+/* ===== CART ITEMS ===== */
 .cart-item{
   display:flex;
   align-items:center;
   background:#222;
-  margin-bottom:15px;
-  border-radius:12px;
+  border-radius:10px;
+  margin:10px 0;
   padding:10px;
-  gap:10px;
+  transition:0.3s;
 }
 .cart-item img{
-  width:100px;
-  height:100px;
+  width:80px;
+  height:80px;
   object-fit:cover;
-  border-radius:10px;
+  border-radius:8px;
 }
-.cart-item .info{
+.cart-info{
   flex:1;
+  margin-left:15px;
 }
-.cart-item .info b{
-  display:block;
-  margin-bottom:5px;
-}
-.qty-controls{
+.cart-info b{display:block;}
+.cart-actions{
   display:flex;
+  flex-direction:column;
   align-items:center;
-  gap:5px;
-  margin-top:5px;
 }
-.qty-controls button{
-  padding:3px 8px;
-  border:none;
-  border-radius:6px;
-  background:#000;
-  color:var(--gold);
-  cursor:pointer;
-}
-.remove-btn{
+.cart-actions button{
   background:#000;
   color:var(--gold);
   border:none;
-  padding:5px 10px;
+  padding:4px 8px;
+  margin:2px;
   border-radius:6px;
   cursor:pointer;
 }
+.cart-actions span{margin:5px 0;}
+
+/* ===== TOTAL ===== */
 .cart-total{
   text-align:center;
   font-size:1.5rem;
-  margin:20px 0;
+  margin-top:20px;
   font-weight:bold;
 }
+
+/* ===== BOTONES ===== */
 .btn{
   display:block;
   width:200px;
-  margin:15px auto;
+  margin:20px auto;
   padding:12px;
-  background:var(--gold);
-  color:#000;
+  background:#000;
+  color:var(--gold);
   border:none;
-  border-radius:12px;
-  font-weight:bold;
+  border-radius:10px;
   cursor:pointer;
-  text-align:center;
-  text-decoration:none;
+  font-weight:bold;
+  font-size:1rem;
 }
+.btn:hover{background:#222;}
+
+/* ===== RESPONSIVE ===== */
 @media screen and (max-width:600px){
   .cart-item{flex-direction:column;align-items:flex-start;}
-  .cart-item img{width:100%;height:auto;}
+  .cart-item img{width:100%; height:auto;}
+  .cart-actions{flex-direction:row;margin-top:10px;}
 }
 </style>
 </head>
 <body>
 
 <header>Mi Carrito</header>
+
 <main>
-  <div id="cartItems"></div>
-  <div class="cart-total">Total: $<span id="total">0</span></div>
-  <button class="btn" onclick="goBack()">← Volver a la tienda</button>
-  <button class="btn" id="sendWA">Enviar pedido por WhatsApp</button>
+  <div id="cartContainer"></div>
+  <div class="cart-total">Total: $<span id="totalPrice">0</span></div>
+  <button class="btn" onclick="goBack()">← Regresar a la tienda</button>
+  <button class="btn" onclick="sendWhatsApp()">Enviar Pedido por WhatsApp</button>
 </main>
 
 <script>
-// ===== VARIABLES =====
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let cart = JSON.parse(localStorage.getItem("cart"))||[];
 
-// ===== FUNCIONES =====
+// ===== RENDER CART =====
 function renderCart(){
-  const container = document.getElementById("cartItems");
+  const container = document.getElementById("cartContainer");
   container.innerHTML="";
-  let total = 0;
+  let total=0;
 
   cart.forEach((item,index)=>{
-    total += item.price*item.qty;
-    const div = document.createElement("div");
+    total+=item.price*item.qty;
+    const div=document.createElement("div");
     div.className="cart-item";
     div.innerHTML=`
       <img src="${item.img}" alt="${item.name}">
-      <div class="info">
+      <div class="cart-info">
         <b>${item.name}</b>
-        $${item.price.toFixed(2)}
-        <div class="qty-controls">
-          <button onclick="changeQty(${index},-1)">-</button>
-          <span>${item.qty}</span>
-          <button onclick="changeQty(${index},1)">+</button>
-        </div>
+        Precio: $${item.price.toFixed(2)}
       </div>
-      <button class="remove-btn" onclick="removeItem(${index})">X</button>
+      <div class="cart-actions">
+        <button onclick="decreaseQty(${index})">-</button>
+        <span>${item.qty}</span>
+        <button onclick="increaseQty(${index})">+</button>
+      </div>
     `;
     container.appendChild(div);
   });
 
-  document.getElementById("total").innerText=total.toFixed(2);
+  document.getElementById("totalPrice").innerText = total.toFixed(2);
   localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-function changeQty(i,delta){
-  cart[i].qty += delta;
-  if(cart[i].qty<1) cart[i].qty=1;
+// ===== QUANTITY HANDLERS =====
+function increaseQty(i){
+  cart[i].qty++;
+  renderCart();
+}
+function decreaseQty(i){
+  if(cart[i].qty>1) cart[i].qty--;
+  else cart.splice(i,1);
   renderCart();
 }
 
-function removeItem(i){
-  cart.splice(i,1);
-  renderCart();
-}
-
+// ===== BOTONES =====
 function goBack(){
   window.location.href="index.html";
 }
 
-// ===== ENVIAR PEDIDO POR WHATSAPP =====
-document.getElementById("sendWA").addEventListener("click",()=>{
-  if(cart.length===0){alert("El carrito está vacío");return;}
-  let message="Hola! Quiero hacer el siguiente pedido:\n";
-  cart.forEach(i=>{
-    message += `${i.name} x${i.qty} - $${(i.price*i.qty).toFixed(2)}\n`;
+// ===== WHATSAPP =====
+function sendWhatsApp(){
+  if(cart.length===0){alert("El carrito está vacío"); return;}
+  let msg="Hola! Este es mi pedido:%0A";
+  cart.forEach(item=>{
+    msg+=`- ${item.name} x${item.qty} = $${(item.price*item.qty).toFixed(2)}%0A`;
   });
-  message += `Total: $${cart.reduce((a,b)=>a+a*b.price*b.qty,0).toFixed(2)}`;
-  const phone = "13129348674"; // tu número USA
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-  window.open(url,"_blank");
-});
+  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
+  msg+=`Total: $${total.toFixed(2)}`;
+  window.open(`https://wa.me/13129348674?text=${msg}`,"_blank");
+}
 
 // ===== INICIALIZAR =====
 renderCart();
