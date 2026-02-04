@@ -2,30 +2,164 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Go Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{background:#000;color:#fff;font-family:Arial;margin:0;text-align:center}
-header{background:#111;color:#FFD700;padding:20px;position:relative;font-size:2rem}
-.menu-btn{position:absolute;left:20px;top:20px;font-size:28px;cursor:pointer}
-.cart-btn{position:absolute;right:20px;top:20px;font-size:28px;cursor:pointer}
-.cart-btn span{background:#000;color:#FFD700;padding:2px 7px;border-radius:50%;font-size:14px}
+:root{
+  --gold:#FFD700;
+  --dark:#111;
+}
+*{box-sizing:border-box}
 
-.side-menu{position:fixed;left:-250px;top:0;width:250px;height:100%;background:#111;padding:20px;transition:.3s;z-index:1000}
-.side-menu button{width:100%;background:#000;color:#FFD700;padding:12px;margin-bottom:10px;border:none;border-radius:10px;font-weight:bold}
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  margin:0;
+  overflow-x:hidden;
+}
+
+/* ===== HEADER ===== */
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:var(--dark);
+  color:var(--gold);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:14px;
+  z-index:1000;
+}
+.menu-btn,.cart-btn{
+  position:absolute;
+  font-size:24px;
+  cursor:pointer;
+}
+.menu-btn{left:15px}
+.cart-btn{right:15px}
+.cart-btn span{
+  background:#000;
+  padding:2px 6px;
+  border-radius:50%;
+  font-size:12px;
+}
+
+/* ===== MAIN ===== */
+main{padding-top:90px;padding-bottom:90px}
+
+/* ===== MENÚ LATERAL ===== */
+.side-menu{
+  position:fixed;
+  left:-260px;
+  top:0;
+  width:260px;
+  height:100%;
+  background:#111;
+  padding:20px;
+  transition:.3s;
+  z-index:2000;
+}
+.side-menu button{
+  width:100%;
+  background:#000;
+  color:var(--gold);
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  font-weight:bold;
+}
 .submenu{display:none;margin-left:10px}
 
-.products{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;padding:20px}
-.product-card{background:#FFD700;color:#000;border-radius:15px;width:220px;padding:15px}
-.product-card img{width:100%;border-radius:10px}
-.product-card button{background:#000;color:#FFD700;border:none;padding:10px;border-radius:8px;cursor:pointer}
+/* ===== BUSCADOR FLOTANTE ===== */
+.search-fab{
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  background:var(--gold);
+  color:#000;
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  z-index:3000;
+  cursor:pointer;
+}
+.search-box{
+  position:fixed;
+  bottom:160px;
+  right:20px;
+  width:0;
+  overflow:hidden;
+  transition:.3s;
+}
+.search-box input{
+  width:220px;
+  padding:12px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+}
 
-.pagination button{background:#000;color:#FFD700;border:none;padding:8px 12px;margin:5px;border-radius:8px}
+/* ===== PRODUCTOS ===== */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;
+  padding:10px;
+}
+.card{
+  background:var(--gold);
+  color:#000;
+  border-radius:16px;
+  padding:10px;
+  animation:fadeUp .4s ease;
+}
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+.card button{
+  width:100%;
+  padding:8px;
+  border:none;
+  border-radius:8px;
+  background:#000;
+  color:var(--gold);
+}
+.fav{
+  text-align:right;
+  font-size:20px;
+  cursor:pointer;
+}
 
-@media(max-width:600px){
-.product-card{width:90%}
-.side-menu{width:90%}
+/* ===== ANIMACIONES ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* ===== BARRA MÓVIL ===== */
+.mobile-bar{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#111;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  z-index:2500;
+}
+.mobile-bar button{
+  background:none;
+  border:none;
+  color:var(--gold);
 }
 </style>
 </head>
@@ -33,103 +167,108 @@ header{background:#111;color:#FFD700;padding:20px;position:relative;font-size:2r
 <body>
 
 <header>
-  <div class="menu-btn" id="menu-btn">☰</div>
-  Go Shop
-  <div class="cart-btn" id="cart-btn">🛒 <span id="cart-count">0</span></div>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <b>Go Shop</b>
+  <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
-<div class="side-menu" id="side-menu">
-  <button id="btn-products">Productos ▸</button>
-  <div class="submenu" id="submenu-products">
-    <button onclick="filterCategory('Perfumes Hombre')">Perfumes Hombre</button>
-    <button onclick="filterCategory('Perfumes Mujer')">Perfumes Mujer</button>
-    <button onclick="filterCategory('Relojes')">Relojes</button>
-    <button onclick="filterCategory('Tenis')">Tenis</button>
+<div class="side-menu" id="menu">
+  <button onclick="toggleSub()">Productos ▸</button>
+  <div class="submenu" id="submenu">
+    <button onclick="filterCat('Perfumes Hombre')">Perfumes Hombre</button>
+    <button onclick="filterCat('Perfumes Mujer')">Perfumes Mujer</button>
+    <button onclick="filterCat('Relojes')">Relojes</button>
+    <button onclick="filterCat('Tenis')">Tenis</button>
   </div>
-  <button onclick="window.open('https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t','_blank')">Contacto</button>
+  <button onclick="openWA()">Contacto</button>
 </div>
 
-<div id="products-container" class="products"></div>
-<div id="pagination" class="pagination"></div>
+<main>
+  <div class="products" id="products"></div>
+</main>
+
+<!-- BUSCADOR -->
+<div class="search-fab" onclick="toggleSearch()">🔍</div>
+<div class="search-box" id="searchBox">
+  <input type="text" placeholder="Buscar..." oninput="search(this.value)">
+</div>
+
+<div class="mobile-bar">
+  <button onclick="location.reload()">🏠</button>
+  <button onclick="goCart()">🛒</button>
+  <button onclick="openWA()">💬</button>
+</div>
 
 <script>
-const products=[
-{name:"Perfume Valentino",price:60,category:"Perfumes Hombre",img:"images/perfume1.jpg"},
-{name:"Perfume Invictus",price:60,category:"Perfumes Hombre",img:"images/perfume2.jpg"},
-{name:"Perfume Dior",price:60,category:"Perfumes Hombre",img:"images/perfume3.jpg"},
-{name:"Perfume Dior Elixir",price:60,category:"Perfumes Hombre",img:"images/perfume4.jpg"},
-{name:"Perfume MYSLF",price:60,category:"Perfumes Hombre",img:"images/perfume5.jpg"},
-{name:"Creed Aventus",price:60,category:"Perfumes Hombre",img:"images/perfume6.jpg"},
-{name:"Layton Exclusif",price:60,category:"Perfumes Hombre",img:"images/perfume7.jpg"},
-{name:"YSL Eau de Parfum",price:60,category:"Perfumes Hombre",img:"images/perfume8.jpg"},
-{name:"Xerjoff Erba Pura",price:60,category:"Perfumes Hombre",img:"images/perfume9.jpg"},
-{name:"JPG Scandal",price:60,category:"Perfumes Hombre",img:"images/perfume10.jpg"},
-{name:"JPG Le Male",price:60,category:"Perfumes Hombre",img:"images/perfume11.jpg"},
-{name:"JPG Le Beau",price:60,category:"Perfumes Hombre",img:"images/perfume12.jpg"},
-{name:"JPG Le Male Elixir",price:60,category:"Perfumes Hombre",img:"images/perfume13.jpg"},
-{name:"JPG Ultra Male",price:60,category:"Perfumes Hombre",img:"images/perfume14.jpg"},
-{name:"Valentino Intense",price:60,category:"Perfumes Hombre",img:"images/perfume15.jpg"},
-{name:"Santal 33",price:60,category:"Perfumes Hombre",img:"images/perfume16.jpg"},
-{name:"Azzaro The Most Wanted",price:60,category:"Perfumes Hombre",img:"images/perfume17.jpg"},
-{name:"Dior J’adore",price:60,category:"Perfumes Mujer",img:"images/perfume18.jpg"},
-{name:"Delina",price:60,category:"Perfumes Mujer",img:"images/perfume19.jpg"},
-{name:"Stronger With You Mujer",price:60,category:"Perfumes Mujer",img:"images/perfume20.jpg"},
-{name:"Reloj Rolex",price:150,category:"Relojes",img:"images/reloj1.jpg"},
-{name:"Reloj Casio",price:50,category:"Relojes",img:"images/reloj2.jpg"},
-{name:"Tenis Nike",price:80,category:"Tenis",img:"images/tenis1.jpg"},
-{name:"Tenis Adidas",price:85,category:"Tenis",img:"images/tenis2.jpg"}
+const data=[
+{name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
+{name:"Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
+{name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
+{name:"Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
+{name:"Nike Air",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
 ];
 
-let cartItems=JSON.parse(localStorage.getItem("cartItems"))||[];
-let currentPage=1,itemsPerPage=6,currentCategory=null;
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let favs=JSON.parse(localStorage.getItem("favs"))||[];
+let cat=null;
 
-function updateCartCount(){document.getElementById("cart-count").textContent=cartItems.length}
-
-function filterCategory(cat){currentCategory=cat;currentPage=1;displayProducts()}
-
-function displayProducts(){
-const c=document.getElementById("products-container");
-c.innerHTML="";
-let f=currentCategory?products.filter(p=>p.category===currentCategory):products;
-let pages=Math.ceil(f.length/itemsPerPage);
-f.slice((currentPage-1)*itemsPerPage,currentPage*itemsPerPage).forEach(p=>{
-c.innerHTML+=`<div class="product-card">
-<img src="${p.img}">
-<h3>${p.name}</h3>
-<p>$${p.price}</p>
-<button onclick='addToCart(${JSON.stringify(p)})'>Agregar</button>
-</div>`});
-const pag=document.getElementById("pagination");
-pag.innerHTML="";
-for(let i=1;i<=pages;i++){
-pag.innerHTML+=`<button onclick="currentPage=${i};displayProducts()">${i}</button>`
-}
+function render(list=data){
+  const p=document.getElementById("products");
+  p.innerHTML="";
+  list.forEach(i=>{
+    const f=favs.find(f=>f.name===i.name)?"❤️":"🤍";
+    p.innerHTML+=`
+    <div class="card">
+      <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
+      <img src="${i.img}">
+      <b>${i.name}</b><br>$${i.price}
+      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+    </div>`;
+  });
 }
 
-function addToCart(p){
-cartItems.push(p);
-localStorage.setItem("cartItems",JSON.stringify(cartItems));
-updateCartCount();
-alert("Agregado al carrito");
+function addCart(i){
+  cart.push({...i,qty:1});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCount();
 }
 
-document.getElementById("menu-btn").onclick=()=>{
-const m=document.getElementById("side-menu");
-m.style.left=m.style.left==="0px"?"-250px":"0px";
+function toggleFav(i){
+  favs=favs.find(f=>f.name===i.name)?favs.filter(f=>f.name!==i.name):[...favs,i];
+  localStorage.setItem("favs",JSON.stringify(favs));
+  render(cat?data.filter(d=>d.cat===cat):data);
 }
-document.getElementById("btn-products").onclick=()=>{
-const s=document.getElementById("submenu-products");
-s.style.display=s.style.display==="block"?"none":"block";
-}
-document.getElementById("cart-btn").onclick=()=>location.href="pagina-del-carro.html";
 
-displayProducts();updateCartCount();
+function search(t){
+  render(data.filter(p=>p.name.toLowerCase().includes(t.toLowerCase())));
+}
+
+function filterCat(c){
+  cat=c;
+  render(data.filter(d=>d.cat===c));
+}
+
+function updateCount(){
+  document.getElementById("cartCount").innerText=cart.length;
+}
+
+function toggleMenu(){
+  const m=document.getElementById("menu");
+  m.style.left=m.style.left==="0px"?"-260px":"0px";
+}
+function toggleSub(){
+  const s=document.getElementById("submenu");
+  s.style.display=s.style.display==="block"?"none":"block";
+}
+function toggleSearch(){
+  const b=document.getElementById("searchBox");
+  b.style.width=b.style.width==="220px"?"0":"220px";
+}
+function goCart(){location.href="pagina-del-carro.html"}
+function openWA(){window.open("https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t","_blank")}
+
+updateCount();render();
 </script>
-<div class="mobile-bar">
-  <button onclick="scrollToTop()">🏠<span>Inicio</span></button>
-  <button onclick="goToCart()">🛒<span id="mobile-cart-count">0</span></button>
-  <button onclick="openWhatsApp()">💬<span>WhatsApp</span></button>
-</div>
-  
+
 </body>
 </html>
