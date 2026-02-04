@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+
+       
+      <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -7,17 +9,18 @@
 </head>
 <body>
 
-  <header>
-    <h1>Go Shop</h1>
-  </header>
+<header>
+  <h1>Go Shop</h1>
+</header>
 
-  <section class="products">
+<section class="products">
 
-    <!-- ================= PERFUMES HOMBRE ================= -->
-    <section class="category">
-      <h2 class="category-title">Perfumes Hombre</h2>
+  <!-- ================= PERFUMES HOMBRE ================= -->
+  <section class="category">
+    <h2 class="category-title">Perfumes Hombre</h2>
 
-      <!-- PERFUMES HOMBRE ORIGINALES Y NUEVOS -->
+    <div id="male-products" class="product-grid">
+      <!-- PERFUMES 1-17 -->
       <div class="product-card">
         <img src="images/perfume1.jpg" alt="Perfume Valentino">
         <h2>Perfume Valentino</h2>
@@ -98,14 +101,75 @@
         <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
       </div>
 
-      <!-- Continúa igual con todos los perfumes hombre hasta perfume17 -->
+      <div class="product-card">
+        <img src="images/perfume11.jpg" alt="JPG Le Male">
+        <h2>JPG Le Male</h2>
+        <p>Clásico · Masculino · Seductor</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
 
-    </section>
+      <div class="product-card">
+        <img src="images/perfume12.jpg" alt="JPG Le Beau">
+        <h2>JPG Le Beau</h2>
+        <p>Fresco · Tropical · Atractivo</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
 
-    <!-- ================= PERFUMES MUJER ================= -->
-    <section class="category">
-      <h2 class="category-title">Perfumes Mujer</h2>
+      <div class="product-card">
+        <img src="images/perfume13.jpg" alt="JPG Le Male Elixir">
+        <h2>JPG Le Male Elixir</h2>
+        <p>Intenso · Cálido · Adictivo</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
 
+      <div class="product-card">
+        <img src="images/perfume14.jpg" alt="JPG Ultra Male">
+        <h2>JPG Ultra Male</h2>
+        <p>Dulce · Fuerte · Nocturno</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
+
+      <div class="product-card">
+        <img src="images/perfume15.jpg" alt="Valentino Intense">
+        <h2>Valentino Intense</h2>
+        <p>Elegante · Oscuro · Sofisticado</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
+
+      <div class="product-card">
+        <img src="images/perfume16.jpg" alt="Santal 33">
+        <h2>Santal 33</h2>
+        <p>Amaderado · Moderno · Exclusivo</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
+
+      <div class="product-card">
+        <img src="images/perfume17.jpg" alt="Azzaro The Most Wanted">
+        <h2>Azzaro The Most Wanted</h2>
+        <p>Potente · Seductor · Duradero</p>
+        <div class="price">$60.00</div>
+        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+      </div>
+
+    </div>
+
+    <div class="pagination">
+      <button id="prev-male" class="page-btn">Anterior</button>
+      <button id="next-male" class="page-btn">Siguiente</button>
+    </div>
+  </section>
+
+  <!-- ================= PERFUMES MUJER ================= -->
+  <section class="category">
+    <h2 class="category-title">Perfumes Mujer</h2>
+
+    <div id="female-products" class="product-grid">
       <div class="product-card">
         <img src="images/perfume18.jpg" alt="Dior Jadore">
         <h2>Dior J’adore</h2>
@@ -129,10 +193,49 @@
         <div class="price">$60.00</div>
         <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
       </div>
+    </div>
 
-    </section>
-
+    <div class="pagination">
+      <button id="prev-female" class="page-btn">Anterior</button>
+      <button id="next-female" class="page-btn">Siguiente</button>
+    </div>
   </section>
+
+</section>
+
+<!-- ================= JAVASCRIPT PAGINACIÓN ================= -->
+<script>
+function setupPagination(containerId, prevBtnId, nextBtnId, itemsPerPage) {
+  const container = document.getElementById(containerId);
+  const items = Array.from(container.children);
+  let currentPage = 1;
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+
+  function showPage(page) {
+    items.forEach((item, index) => {
+      const start = (page - 1) * itemsPerPage;
+      const end = page * itemsPerPage;
+      item.style.display = (index >= start && index < end) ? "block" : "none";
+    });
+  }
+
+  document.getElementById(prevBtnId).addEventListener("click", () => {
+    if(currentPage > 1) currentPage--;
+    showPage(currentPage);
+  });
+
+  document.getElementById(nextBtnId).addEventListener("click", () => {
+    if(currentPage < totalPages) currentPage++;
+    showPage(currentPage);
+  });
+
+  showPage(currentPage);
+}
+
+// 6 perfumes por página
+setupPagination("male-products", "prev-male", "next-male", 6);
+setupPagination("female-products", "prev-female", "next-female", 6);
+</script>
 
 </body>
 </html>
