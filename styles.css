@@ -96,3 +96,25 @@ header {
   .cart-item-page .info { margin-left: 0; margin-top: 10px; }
   .cart-item-page img { width: 100%; height: auto; }
 }
+.mayoreo-badge{
+  display:inline-block;
+  background:#FFD700;
+  color:#000;
+  font-size:11px;
+  font-weight:bold;
+  padding:3px 8px;
+  border-radius:12px;
+  margin-bottom:5px;
+}
+
+.old-price{
+  text-decoration:line-through;
+  color:#aaa;
+  font-size:13px;
+}
+
+.save{
+  color:#00ff9c;
+  font-size:12px;
+  font-weight:bold;
+}
