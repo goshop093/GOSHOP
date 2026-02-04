@@ -8,16 +8,15 @@
 <body>
 
 <header>
-  <div class="menu-btn" id="menu-btn">&#9776;</div>
+  <div class="menu-btn" id="menu-btn">☰</div>
   <h1>Go Shop</h1>
-  <a href="pagina-del-carro.html" target="_blank" class="cart-btn" id="cart-btn">
-    🛒 <span id="cart-count">0</span>
-  </a>
+  <div class="cart-btn" id="cart-btn">🛒 <span id="cart-count">0</span></div>
 </header>
 
 <!-- MENÚ LATERAL -->
 <div id="side-menu" class="side-menu">
   <button class="close-btn" id="close-menu">&times;</button>
+
   <div class="menu-section">
     <button class="menu-item" id="btn-products">Productos ▸</button>
     <div class="submenu" id="submenu-products">
@@ -26,6 +25,7 @@
       <button class="submenu-item">Tenis</button>
     </div>
   </div>
+
   <div class="menu-section">
     <button class="menu-item" id="btn-contact">Contacto</button>
   </div>
@@ -38,170 +38,171 @@
 
 <!-- PRODUCTOS -->
 <section class="products">
+  <div class="product-grid" id="product-grid">
 
-  <!-- PERFUMES HOMBRE -->
-  <section class="category">
-    <h2 class="category-title">Perfumes Hombre</h2>
-    <div id="male-products" class="product-grid">
-      <!-- PRODUCTOS 1–17 -->
-      <div class="product-card">
-        <img src="images/perfume1.jpg" alt="Perfume Valentino">
-        <h2>Perfume Valentino</h2>
-        <p>Fragancia masculina, intensa y fresca.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Valentino" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume2.jpg" alt="Perfume Invictus">
-        <h2>Perfume Invictus</h2>
-        <p>Elegante y sofisticado, aroma floral.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Invictus" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume3.jpg" alt="Perfume Dior">
-        <h2>Perfume Dior</h2>
-        <p>Clásico y refinado, aroma duradero.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Dior" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume4.jpg" alt="Perfume Dior Elixir">
-        <h2>Perfume Dior Elixir</h2>
-        <p>Clásico y refinado, aroma duradero.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Dior Elixir" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume5.jpg" alt="Perfume MYSLF">
-        <h2>Perfume MYSLF</h2>
-        <p>Elegante y fuerte, aroma duradero.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume MYSLF" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume6.jpg" alt="Perfume Creed Aventus">
-        <h2>Perfume Creed Aventus</h2>
-        <p>Masculino y sofisticado, aroma duradero.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Creed Aventus" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume7.jpg" alt="Perfume Layton Exclusif">
-        <h2>Perfume Layton Exclusif</h2>
-        <p>Lujo, poder y presencia.</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Perfume Layton Exclusif" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume8.jpg" alt="YSL Eau de Parfum">
-        <h2>YSL Eau de Parfum</h2>
-        <p>Elegante · Sensual · Duradero</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="YSL Eau de Parfum" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume9.jpg" alt="Xerjoff Erba Pura">
-        <h2>Xerjoff Erba Pura</h2>
-        <p>Dulce · Intenso · Exótico</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Xerjoff Erba Pura" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume10.jpg" alt="JPG Scandal">
-        <h2>JPG Scandal</h2>
-        <p>Audaz · Dulce · Potente</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="JPG Scandal" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume11.jpg" alt="JPG Le Male">
-        <h2>JPG Le Male</h2>
-        <p>Clásico · Masculino · Seductor</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="JPG Le Male" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume12.jpg" alt="JPG Le Beau">
-        <h2>JPG Le Beau</h2>
-        <p>Fresco · Tropical · Atractivo</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="JPG Le Beau" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume13.jpg" alt="JPG Le Male Elixir">
-        <h2>JPG Le Male Elixir</h2>
-        <p>Intenso · Cálido · Adictivo</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="JPG Le Male Elixir" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume14.jpg" alt="JPG Ultra Male">
-        <h2>JPG Ultra Male</h2>
-        <p>Dulce · Fuerte · Nocturno</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="JPG Ultra Male" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume15.jpg" alt="Valentino Intense">
-        <h2>Valentino Intense</h2>
-        <p>Elegante · Oscuro · Sofisticado</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Valentino Intense" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume16.jpg" alt="Santal 33">
-        <h2>Santal 33</h2>
-        <p>Amaderado · Moderno · Exclusivo</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Santal 33" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume17.jpg" alt="Azzaro The Most Wanted">
-        <h2>Azzaro The Most Wanted</h2>
-        <p>Potente · Seductor · Duradero</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Azzaro The Most Wanted" data-price="60">Agregar al carrito</button>
-      </div>
+    <!-- PERFUMES HOMBRE -->
+    <div class="product-card">
+      <img src="images/perfume1.jpg" alt="Perfume Valentino">
+      <h2>Perfume Valentino</h2>
+      <p>Fragancia masculina, intensa y fresca.</p>
+      <div class="price">60</div>
+      <button class="btn-add" data-name="Perfume Valentino" data-price="60">Agregar al carrito</button>
     </div>
-    <div class="pagination">
-      <button id="prev-male" class="page-btn">Anterior</button>
-      <button id="next-male" class="page-btn">Siguiente</button>
-    </div>
-  </section>
 
-  <!-- PERFUMES MUJER -->
-  <section class="category">
-    <h2 class="category-title">Perfumes Mujer</h2>
-    <div id="female-products" class="product-grid">
-      <div class="product-card">
-        <img src="images/perfume18.jpg" alt="Dior Jadore">
-        <h2>Dior J’adore</h2>
-        <p>Elegante · Floral · Femenino</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Dior J’adore" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume19.jpg" alt="Delina">
-        <h2>Delina</h2>
-        <p>Romántico · Dulce · Sofisticado</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Delina" data-price="60">Agregar al carrito</button>
-      </div>
-      <div class="product-card">
-        <img src="images/perfume20.jpg" alt="Stronger With You Mujer">
-        <h2>Stronger With You</h2>
-        <p>Cálido · Dulce · Envolvente</p>
-        <div class="price">60</div>
-        <button class="btn-add" data-name="Stronger With You" data-price="60">Agregar al carrito</button>
-      </div>
+    <div class="product-card">
+      <img src="images/perfume2.jpg" alt="Perfume Invictus">
+      <h2>Perfume Invictus</h2>
+      <p>Elegante y sofisticado, aroma floral.</p>
+      <div class="price">60</div>
+      <button class="btn-add" data-name="Perfume Invictus" data-price="60">Agregar al carrito</button>
     </div>
-    <div class="pagination">
-      <button id="prev-female" class="page-btn">Anterior</button>
-      <button id="next-female" class="page-btn">Siguiente</button>
-    </div>
-  </section>
 
+    <div class="product-card">
+      <img src="images/perfume3.jpg" alt="Dior Sauvage">
+      <h2>Dior Sauvage</h2>
+      <p>Clásico, fresco y potente.</p>
+      <div class="price">65</div>
+      <button class="btn-add" data-name="Dior Sauvage" data-price="65">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume4.jpg" alt="Creed Aventus">
+      <h2>Creed Aventus</h2>
+      <p>Masculino, sofisticado y duradero.</p>
+      <div class="price">120</div>
+      <button class="btn-add" data-name="Creed Aventus" data-price="120">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume5.jpg" alt="MYSLF">
+      <h2>MYSLF</h2>
+      <p>Elegante y fuerte, aroma duradero.</p>
+      <div class="price">60</div>
+      <button class="btn-add" data-name="MYSLF" data-price="60">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume6.jpg" alt="Layton Exclusif">
+      <h2>Layton Exclusif</h2>
+      <p>Lujo, poder y presencia.</p>
+      <div class="price">75</div>
+      <button class="btn-add" data-name="Layton Exclusif" data-price="75">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume7.jpg" alt="YSL La Nuit">
+      <h2>YSL La Nuit</h2>
+      <p>Elegante, sensual y duradero.</p>
+      <div class="price">70</div>
+      <button class="btn-add" data-name="YSL La Nuit" data-price="70">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume8.jpg" alt="JPG Le Male">
+      <h2>JPG Le Male</h2>
+      <p>Clásico, masculino y seductor.</p>
+      <div class="price">60</div>
+      <button class="btn-add" data-name="JPG Le Male" data-price="60">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume9.jpg" alt="JPG Ultra Male">
+      <h2>JPG Ultra Male</h2>
+      <p>Dulce, fuerte y nocturno.</p>
+      <div class="price">65</div>
+      <button class="btn-add" data-name="JPG Ultra Male" data-price="65">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume10.jpg" alt="Azzaro The Most Wanted">
+      <h2>Azzaro The Most Wanted</h2>
+      <p>Potente, seductor y duradero.</p>
+      <div class="price">60</div>
+      <button class="btn-add" data-name="Azzaro The Most Wanted" data-price="60">Agregar al carrito</button>
+    </div>
+
+    <!-- PERFUMES MUJER -->
+    <div class="product-card">
+      <img src="images/perfume11.jpg" alt="Dior J'adore">
+      <h2>Dior J'adore</h2>
+      <p>Elegante, floral y femenino.</p>
+      <div class="price">70</div>
+      <button class="btn-add" data-name="Dior J'adore" data-price="70">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume12.jpg" alt="Delina">
+      <h2>Delina</h2>
+      <p>Romántico, dulce y sofisticado.</p>
+      <div class="price">75</div>
+      <button class="btn-add" data-name="Delina" data-price="75">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume13.jpg" alt="Stronger With You Mujer">
+      <h2>Stronger With You</h2>
+      <p>Cálido, dulce y envolvente.</p>
+      <div class="price">65</div>
+      <button class="btn-add" data-name="Stronger With You" data-price="65">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume14.jpg" alt="Chanel Coco Mademoiselle">
+      <h2>Chanel Coco Mademoiselle</h2>
+      <p>Elegante y moderno, aroma femenino.</p>
+      <div class="price">90</div>
+      <button class="btn-add" data-name="Chanel Coco Mademoiselle" data-price="90">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume15.jpg" alt="Gucci Bloom">
+      <h2>Gucci Bloom</h2>
+      <p>Floral, fresco y sofisticado.</p>
+      <div class="price">80</div>
+      <button class="btn-add" data-name="Gucci Bloom" data-price="80">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume16.jpg" alt="Valentino Donna">
+      <h2>Valentino Donna</h2>
+      <p>Femenino, elegante y duradero.</p>
+      <div class="price">85</div>
+      <button class="btn-add" data-name="Valentino Donna" data-price="85">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume17.jpg" alt="YSL Black Opium">
+      <h2>YSL Black Opium</h2>
+      <p>Dulce, intenso y moderno.</p>
+      <div class="price">75</div>
+      <button class="btn-add" data-name="YSL Black Opium" data-price="75">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume18.jpg" alt="Lancome La Vie Est Belle">
+      <h2>Lancome La Vie Est Belle</h2>
+      <p>Dulce, alegre y sofisticado.</p>
+      <div class="price">80</div>
+      <button class="btn-add" data-name="Lancome La Vie Est Belle" data-price="80">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume19.jpg" alt="Flowerbomb Viktor&Rolf">
+      <h2>Flowerbomb</h2>
+      <p>Explosivo, floral y femenino.</p>
+      <div class="price">90</div>
+      <button class="btn-add" data-name="Flowerbomb" data-price="90">Agregar al carrito</button>
+    </div>
+
+    <div class="product-card">
+      <img src="images/perfume20.jpg" alt="Tom Ford Black Orchid">
+      <h2>Black Orchid</h2>
+      <p>Intenso, elegante y duradero.</p>
+      <div class="price">95</div>
+      <button class="btn-add" data-name="Black Orchid" data-price="95">Agregar al carrito</button>
+    </div>
+
+  </div>
 </section>
 
 <script src="script.js"></script>
