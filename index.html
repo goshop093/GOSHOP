@@ -3,21 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <title>Go Shop</title>
-<link rel="stylesheet" href="styles.css">
+<style>
+/* ================= BODY ================= */
+body {
+  background-color: #000;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: #111;
+  color: #FFD700;
+  padding: 20px;
+  position: relative;
+  font-size: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menu-btn {
+  position: absolute;
+  left: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #FFD700;
+}
+
+.cart-btn {
+  position: absolute;
+  right: 20px;
+  font-size: 28px;
+  cursor: pointer;
+  color: #FFD700;
+}
+
+.cart-btn span {
+  background: #000;
+  color: #FFD700;
+  padding: 2px 7px;
+  border-radius: 50%;
+  font-size: 14px;
+  vertical-align: super;
+}
+
+/* ================= MENÚ LATERAL ================= */
+.side-menu {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #111;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.side-menu button {
+  display: block;
+  width: 100%;
+  background: #000;
+  color: #FFD700;
+  padding: 12px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.submenu {
+  display: none;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+
+.submenu button {
+  background: #222;
+}
+
+/* ================= PRODUCTOS ================= */
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.product-card {
+  background: #FFD700;
+  border-radius: 15px;
+  width: 220px;
+  padding: 15px;
+  text-align: center;
+  color: #000;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.product-card h2 {
+  margin: 10px 0 5px 0;
+}
+
+.product-card .price {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.product-card button {
+  padding: 10px 15px;
+  background: #000;
+  color: #FFD700;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  border: none;
+}
+
+/* ================= RESPONSIVE ================= */
+@media screen and (max-width: 600px) {
+  .product-card { width: 90%; }
+  .side-menu { width: 90%; }
+}
+</style>
 </head>
 <body>
 
 <header>
+  <div class="menu-btn" id="menu-btn">☰</div>
   <h1>Go Shop</h1>
-  <div class="cart-btn">🛒 <span id="cart-count">0</span></div>
-  <a href="pagina-del-carro.html" style="position:absolute; right:80px; top:25px; color:#FFD700; font-size:18px; text-decoration:underline;">Ver Carrito</a>
+  <div class="cart-btn" id="cart-btn">🛒 <span id="cart-count">0</span></div>
 </header>
 
+<!-- MENÚ LATERAL -->
+<div id="side-menu" class="side-menu">
+  <button id="btn-products">Productos ▸</button>
+  <div class="submenu" id="submenu-products">
+    <button onclick="alert('Perfumes clic')">Perfumes</button>
+    <button onclick="alert('Relojes clic')">Relojes</button>
+    <button onclick="alert('Tenis clic')">Tenis</button>
+  </div>
+  <button id="btn-contact">Contacto</button>
+</div>
+
 <section class="products">
-
   <!-- ================= PERFUMES HOMBRE ================= -->
-  <h2 style="color:#FFD700;">Perfumes Hombre</h2>
-
+  <!-- perfume1 a perfume17 -->
   <div class="product-card">
     <img src="images/perfume1.jpg" alt="Perfume Valentino">
     <h2>Perfume Valentino</h2>
@@ -25,7 +165,6 @@
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Valentino" data-price="60" data-img="images/perfume1.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume2.jpg" alt="Perfume Invictus">
     <h2>Perfume Invictus</h2>
@@ -33,23 +172,20 @@
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Invictus" data-price="60" data-img="images/perfume2.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume3.jpg" alt="Perfume Dior">
     <h2>Perfume Dior</h2>
-    <p>Clásico y refinado</p>
+    <p>Clásico y duradero</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Dior" data-price="60" data-img="images/perfume3.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume4.jpg" alt="Perfume Dior Elixir">
     <h2>Perfume Dior Elixir</h2>
-    <p>Clásico y duradero</p>
+    <p>Clásico y refinado</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Dior Elixir" data-price="60" data-img="images/perfume4.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume5.jpg" alt="Perfume MYSLF">
     <h2>Perfume MYSLF</h2>
@@ -57,7 +193,6 @@
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume MYSLF" data-price="60" data-img="images/perfume5.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume6.jpg" alt="Perfume Creed Aventus">
     <h2>Perfume Creed Aventus</h2>
@@ -65,124 +200,186 @@
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Creed Aventus" data-price="60" data-img="images/perfume6.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume7.jpg" alt="Perfume Layton Exclusif">
     <h2>Perfume Layton Exclusif</h2>
-    <p>Lujo, poder y presencia</p>
+    <p>Lujo y poder</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Perfume Layton Exclusif" data-price="60" data-img="images/perfume7.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume8.jpg" alt="YSL Eau de Parfum">
     <h2>YSL Eau de Parfum</h2>
-    <p>Elegante, sensual y duradero</p>
+    <p>Elegante y sensual</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="YSL Eau de Parfum" data-price="60" data-img="images/perfume8.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume9.jpg" alt="Xerjoff Erba Pura">
     <h2>Xerjoff Erba Pura</h2>
-    <p>Dulce, intenso y exótico</p>
+    <p>Dulce e intenso</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Xerjoff Erba Pura" data-price="60" data-img="images/perfume9.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume10.jpg" alt="JPG Scandal">
     <h2>JPG Scandal</h2>
-    <p>Audaz, dulce y potente</p>
+    <p>Audaz y potente</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="JPG Scandal" data-price="60" data-img="images/perfume10.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume11.jpg" alt="JPG Le Male">
     <h2>JPG Le Male</h2>
-    <p>Clásico, masculino y seductor</p>
+    <p>Clásico y seductor</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="JPG Le Male" data-price="60" data-img="images/perfume11.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume12.jpg" alt="JPG Le Beau">
     <h2>JPG Le Beau</h2>
-    <p>Fresco, tropical y atractivo</p>
+    <p>Fresco y atractivo</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="JPG Le Beau" data-price="60" data-img="images/perfume12.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume13.jpg" alt="JPG Le Male Elixir">
     <h2>JPG Le Male Elixir</h2>
-    <p>Intenso, cálido y adictivo</p>
+    <p>Intenso y cálido</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="JPG Le Male Elixir" data-price="60" data-img="images/perfume13.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume14.jpg" alt="JPG Ultra Male">
     <h2>JPG Ultra Male</h2>
-    <p>Dulce, fuerte y nocturno</p>
+    <p>Dulce y nocturno</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="JPG Ultra Male" data-price="60" data-img="images/perfume14.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume15.jpg" alt="Valentino Intense">
     <h2>Valentino Intense</h2>
-    <p>Elegante, oscuro y sofisticado</p>
+    <p>Elegante y sofisticado</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Valentino Intense" data-price="60" data-img="images/perfume15.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume16.jpg" alt="Santal 33">
     <h2>Santal 33</h2>
-    <p>Amaderado, moderno y exclusivo</p>
+    <p>Amaderado y exclusivo</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Santal 33" data-price="60" data-img="images/perfume16.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume17.jpg" alt="Azzaro The Most Wanted">
     <h2>Azzaro The Most Wanted</h2>
-    <p>Potente, seductor y duradero</p>
+    <p>Potente y seductor</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Azzaro The Most Wanted" data-price="60" data-img="images/perfume17.jpg">Agregar</button>
   </div>
 
   <!-- ================= PERFUMES MUJER ================= -->
-  <h2 style="color:#FFD700; margin-top:40px;">Perfumes Mujer</h2>
-
   <div class="product-card">
     <img src="images/perfume18.jpg" alt="Dior Jadore">
     <h2>Dior J’adore</h2>
-    <p>Elegante, floral y femenino</p>
+    <p>Elegante y floral</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Dior J’adore" data-price="60" data-img="images/perfume18.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume19.jpg" alt="Delina">
     <h2>Delina</h2>
-    <p>Romántico, dulce y sofisticado</p>
+    <p>Romántico y dulce</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Delina" data-price="60" data-img="images/perfume19.jpg">Agregar</button>
   </div>
-
   <div class="product-card">
     <img src="images/perfume20.jpg" alt="Stronger With You Mujer">
     <h2>Stronger With You</h2>
-    <p>Cálido, dulce y envolvente</p>
+    <p>Cálido y envolvente</p>
     <div class="price">$60.00</div>
     <button class="btn-add" data-name="Stronger With You" data-price="60" data-img="images/perfume20.jpg">Agregar</button>
   </div>
 
+  <!-- ================= RELOJES ================= -->
+  <div class="product-card">
+    <img src="images/reloj1.jpg" alt="Reloj Rolex">
+    <h2>Reloj Rolex</h2>
+    <p>Lujo y precisión</p>
+    <div class="price">$150.00</div>
+    <button class="btn-add" data-name="Reloj Rolex" data-price="150" data-img="images/reloj1.jpg">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="images/reloj2.jpg" alt="Reloj Casio">
+    <h2>Reloj Casio</h2>
+    <p>Deportivo y resistente</p>
+    <div class="price">$50.00</div>
+    <button class="btn-add" data-name="Reloj Casio" data-price="50" data-img="images/reloj2.jpg">Agregar</button>
+  </div>
+
+  <!-- ================= TENIS ================= -->
+  <div class="product-card">
+    <img src="images/tenis1.jpg" alt="Tenis Nike">
+    <h2>Tenis Nike</h2>
+    <p>Comodidad y estilo</p>
+    <div class="price">$80.00</div>
+    <button class="btn-add" data-name="Tenis Nike" data-price="80" data-img="images/tenis1.jpg">Agregar</button>
+  </div>
+  <div class="product-card">
+    <img src="images/tenis2.jpg" alt="Tenis Adidas">
+    <h2>Tenis Adidas</h2>
+    <p>Elegancia deportiva</p>
+    <div class="price">$85.00</div>
+    <button class="btn-add" data-name="Tenis Adidas" data-price="85" data-img="images/tenis2.jpg">Agregar</button>
+  </div>
+
 </section>
 
-<script src="script.js"></script>
+<script>
+// ====== MENÚ LATERAL ======
+const menuBtn = document.getElementById("menu-btn");
+const sideMenu = document.getElementById("side-menu");
+menuBtn.addEventListener("click", () => {
+  sideMenu.style.left = sideMenu.style.left === "0px" ? "-250px" : "0px";
+});
+
+const btnProducts = document.getElementById("btn-products");
+const submenuProducts = document.getElementById("submenu-products");
+btnProducts.addEventListener("click", () => {
+  submenuProducts.style.display = submenuProducts.style.display === "block" ? "none" : "block";
+});
+
+const btnContact = document.getElementById("btn-contact");
+btnContact.addEventListener("click", () => {
+  window.open("https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t", "_blank");
+});
+
+// ====== CARRITO CON LOCALSTORAGE ======
+let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+function updateCartCount() {
+  document.getElementById("cart-count").textContent = cartItems.length;
+}
+
+document.querySelectorAll(".btn-add").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const name = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    const img = btn.dataset.img;
+    cartItems.push({name, price, img});
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    updateCartCount();
+    alert(`${name} agregado al carrito`);
+  });
+});
+
+updateCartCount();
+
+// Abrir página del carrito
+document.getElementById("cart-btn").addEventListener("click", () => {
+  window.location.href = "pagina-del-carro.html";
+});
+</script>
+
 </body>
 </html>
