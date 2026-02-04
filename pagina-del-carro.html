@@ -2,181 +2,111 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Mi Carrito - Go Shop</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Carrito - Go Shop</title>
 <style>
-:root{
-  --gold:#FFD700;
-  --dark:#111;
-}
-*{box-sizing:border-box}
-
-body{
-  background:#000;
-  color:#FFD700;
-  font-family:Arial, sans-serif;
-  margin:0;
-  padding:0;
-}
-
-/* ===== HEADER ===== */
-header{
-  position:fixed;
-  top:0;
-  width:100%;
-  background:var(--dark);
-  color:var(--gold);
-  text-align:center;
-  padding:14px;
-  z-index:1000;
-  font-size:1.8rem;
-}
-
-/* ===== MAIN ===== */
-main{padding-top:70px;padding-bottom:90px; max-width:900px;margin:auto;}
-
-/* ===== CART ITEMS ===== */
-.cart-item{
-  display:flex;
-  align-items:center;
-  background:#222;
-  border-radius:10px;
-  margin:10px 0;
-  padding:10px;
-  transition:0.3s;
-}
-.cart-item img{
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  border-radius:8px;
-}
-.cart-info{
-  flex:1;
-  margin-left:15px;
-}
-.cart-info b{display:block;}
-.cart-actions{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-}
-.cart-actions button{
-  background:#000;
-  color:var(--gold);
-  border:none;
-  padding:4px 8px;
-  margin:2px;
-  border-radius:6px;
-  cursor:pointer;
-}
-.cart-actions span{margin:5px 0;}
-
-/* ===== TOTAL ===== */
-.cart-total{
-  text-align:center;
-  font-size:1.5rem;
-  margin-top:20px;
-  font-weight:bold;
-}
-
-/* ===== BOTONES ===== */
-.btn{
-  display:block;
-  width:200px;
-  margin:20px auto;
-  padding:12px;
-  background:#000;
-  color:var(--gold);
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-  font-size:1rem;
-}
-.btn:hover{background:#222;}
-
-/* ===== RESPONSIVE ===== */
-@media screen and (max-width:600px){
-  .cart-item{flex-direction:column;align-items:flex-start;}
-  .cart-item img{width:100%; height:auto;}
-  .cart-actions{flex-direction:row;margin-top:10px;}
-}
+:root{--gold:#FFD700;--dark:#111;}
+body{background:#000;color:#fff;font-family:Arial,sans-serif;margin:0;padding:0;}
+header{position:fixed;top:0;width:100%;background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;z-index:1000;}
+.cart-count{position:absolute;right:15px;background:#000;padding:2px 6px;border-radius:50%;font-size:12px;}
+main{padding-top:80px;padding-bottom:80px;}
+.cart-page{max-width:900px;margin:20px auto;padding:20px;background:var(--dark);border-radius:15px;color:var(--gold);}
+.cart-item-page{display:flex;align-items:center;background:#222;padding:12px;margin-bottom:12px;border-radius:10px;}
+.cart-item-page img{width:100px;height:100px;object-fit:cover;border-radius:10px;margin-right:10px;}
+.cart-item-page .info{flex:1;text-align:left;}
+.cart-item-page .info p{margin:2px 0;}
+.remove-btn-page{background:#000;color:var(--gold);border:none;padding:6px 10px;border-radius:6px;cursor:pointer;}
+.remove-btn-page:hover{background:#222;}
+.cart-total-page{text-align:center;font-size:20px;font-weight:bold;margin-top:15px;}
+.btn-clear-cart,.btn-whatsapp,.btn-back{display:block;margin:15px auto;padding:12px 20px;background:#000;color:var(--gold);border-radius:10px;border:none;cursor:pointer;font-weight:bold;}
+.btn-clear-cart:hover,.btn-whatsapp:hover,.btn-back:hover{background:#222;}
 </style>
 </head>
 <body>
 
-<header>Mi Carrito</header>
+<header>
+  <h1>Mi Carrito</h1>
+  <div class="cart-count" id="cart-count">0</div>
+</header>
 
 <main>
-  <div id="cartContainer"></div>
-  <div class="cart-total">Total: $<span id="totalPrice">0</span></div>
-  <button class="btn" onclick="goBack()">← Regresar a la tienda</button>
-  <button class="btn" onclick="sendWhatsApp()">Enviar Pedido por WhatsApp</button>
+  <section class="cart-page">
+    <div id="cart-items-container"></div>
+    <div class="cart-total-page">Total: $<span id="cart-total-page">0.00</span></div>
+    <button class="btn-clear-cart" id="clear-cart">Vaciar Carrito</button>
+    <button class="btn-whatsapp" id="send-whatsapp">Enviar Link del Carrito por WhatsApp</button>
+    <button class="btn-back" onclick="location.href='index.html'">Volver a la Tienda</button>
+  </section>
 </main>
 
 <script>
-let cart = JSON.parse(localStorage.getItem("cart"))||[];
+// ====== CART ======
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ===== RENDER CART =====
-function renderCart(){
-  const container = document.getElementById("cartContainer");
-  container.innerHTML="";
-  let total=0;
+// ====== FUNCIONES ======
+function updateCartCount(){
+  document.getElementById("cart-count").textContent = cart.length;
+}
 
+function displayCart(){
+  const container = document.getElementById("cart-items-container");
+  const totalSpan = document.getElementById("cart-total-page");
+  container.innerHTML = "";
+  let total = 0;
   cart.forEach((item,index)=>{
-    total+=item.price*item.qty;
-    const div=document.createElement("div");
-    div.className="cart-item";
-    div.innerHTML=`
+    const div = document.createElement("div");
+    div.classList.add("cart-item-page");
+    div.innerHTML = `
       <img src="${item.img}" alt="${item.name}">
-      <div class="cart-info">
-        <b>${item.name}</b>
-        Precio: $${item.price.toFixed(2)}
+      <div class="info">
+        <p>${item.name}</p>
+        <p>Cantidad: <span id="qty-${index}">${item.qty}</span></p>
+        <p>Precio: $${(item.price*item.qty).toFixed(2)}</p>
       </div>
-      <div class="cart-actions">
-        <button onclick="decreaseQty(${index})">-</button>
-        <span>${item.qty}</span>
-        <button onclick="increaseQty(${index})">+</button>
+      <div>
+        <button onclick="changeQty(${index},1)">+</button>
+        <button onclick="changeQty(${index},-1)">-</button>
+        <button class="remove-btn-page" onclick="removeItem(${index})">X</button>
       </div>
     `;
     container.appendChild(div);
+    total += item.price*item.qty;
   });
+  totalSpan.textContent = total.toFixed(2);
+}
 
-  document.getElementById("totalPrice").innerText = total.toFixed(2);
+function changeQty(i,delta){
+  cart[i].qty += delta;
+  if(cart[i].qty<1) cart[i].qty=1;
   localStorage.setItem("cart",JSON.stringify(cart));
+  displayCart();
+  updateCartCount();
 }
 
-// ===== QUANTITY HANDLERS =====
-function increaseQty(i){
-  cart[i].qty++;
-  renderCart();
-}
-function decreaseQty(i){
-  if(cart[i].qty>1) cart[i].qty--;
-  else cart.splice(i,1);
-  renderCart();
+function removeItem(i){
+  cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  displayCart();
+  updateCartCount();
 }
 
-// ===== BOTONES =====
-function goBack(){
-  window.location.href="index.html";
-}
+document.getElementById("clear-cart").addEventListener("click",()=>{
+  cart = [];
+  localStorage.setItem("cart",JSON.stringify(cart));
+  displayCart();
+  updateCartCount();
+});
 
-// ===== WHATSAPP =====
-function sendWhatsApp(){
-  if(cart.length===0){alert("El carrito está vacío"); return;}
-  let msg="Hola! Este es mi pedido:%0A";
-  cart.forEach(item=>{
-    msg+=`- ${item.name} x${item.qty} = $${(item.price*item.qty).toFixed(2)}%0A`;
-  });
-  const total=cart.reduce((a,b)=>a+b.price*b.qty,0);
-  msg+=`Total: $${total.toFixed(2)}`;
-  window.open(`https://wa.me/13129348674?text=${msg}`,"_blank");
-}
+// ====== ENVIAR LINK DE WHATSAPP ======
+document.getElementById("send-whatsapp").addEventListener("click",()=>{
+  if(cart.length===0){ alert("El carrito está vacío"); return; }
+  const carritoLink = encodeURIComponent(window.location.href);
+  window.open(`https://wa.me/13129348674?text=Mi%20pedido%20está%20aquí:%20${carritoLink}`,"_blank");
+});
 
-// ===== INICIALIZAR =====
-renderCart();
+// ====== INICIALIZAR ======
+updateCartCount();
+displayCart();
 </script>
 
 </body>
