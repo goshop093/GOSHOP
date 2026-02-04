@@ -118,6 +118,7 @@ main{padding-top:90px;padding-bottom:90px}
   color:#000;
   border-radius:16px;
   padding:10px;
+  position:relative;
   animation:fadeUp .3s ease;
 }
 .card img{
@@ -136,6 +137,22 @@ main{padding-top:90px;padding-bottom:90px}
   text-align:right;
   font-size:20px;
   cursor:pointer;
+}
+.badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:#000;
+  color:var(--gold);
+  padding:4px 8px;
+  font-size:11px;
+  border-radius:8px;
+  font-weight:bold;
+}
+.mayoreo{
+  font-size:11px;
+  font-weight:bold;
+  margin:4px 0;
 }
 
 /* BARRA MÓVIL */
@@ -169,7 +186,6 @@ main{padding-top:90px;padding-bottom:90px}
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
-<!-- MENÚ -->
 <div class="side-menu" id="menu">
   <button onclick="toggleSub()">Productos ▸</button>
   <div class="submenu" id="submenu">
@@ -178,7 +194,6 @@ main{padding-top:90px;padding-bottom:90px}
     <button onclick="filterCat('Relojes')">Relojes</button>
     <button onclick="filterCat('Tenis')">Tenis</button>
   </div>
-
   <button onclick="showFavs()">❤️ Favoritos</button>
   <button onclick="openWA()">Contacto</button>
 </div>
@@ -187,7 +202,6 @@ main{padding-top:90px;padding-bottom:90px}
   <div class="products" id="products"></div>
 </main>
 
-<!-- BUSCADOR -->
 <div class="search-fab" onclick="toggleSearch()">🔍</div>
 <div class="search-box" id="searchBox">
   <input type="text" placeholder="Buscar..." oninput="search(this.value)">
@@ -210,22 +224,18 @@ const data=[
 {name:"Layton Exclusif",price:60,cat:"Perfumes Hombre",img:"images/perfume7.jpg"},
 {name:"YSL Eau de Parfum",price:60,cat:"Perfumes Hombre",img:"images/perfume8.jpg"},
 {name:"Xerjoff Erba Pura",price:60,cat:"Perfumes Hombre",img:"images/perfume9.jpg"},
-{name:"JPG Scandal",price:60,cat:"Perfumes Hombre",img:"images/perfume10.jpg"},
-{name:"JPG Le Male",price:60,cat:"Perfumes Hombre",img:"images/perfume11.jpg"},
-{name:"JPG Le Beau",price:60,cat:"Perfumes Hombre",img:"images/perfume12.jpg"},
-{name:"JPG Le Male Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume13.jpg"},
-{name:"JPG Ultra Male",price:60,cat:"Perfumes Hombre",img:"images/perfume14.jpg"},
-{name:"Valentino Intense",price:60,cat:"Perfumes Hombre",img:"images/perfume15.jpg"},
-{name:"Santal 33",price:60,cat:"Perfumes Hombre",img:"images/perfume16.jpg"},
-{name:"Azzaro The Most Wanted",price:60,cat:"Perfumes Hombre",img:"images/perfume17.jpg"},
-{name:"Dior J’adore",price:60,cat:"Perfumes Mujer",img:"images/perfume18.jpg"},
-{name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
-{name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"}
+{name:"JPG Scandal",price:60,cat:"Perfumes Hombre",img:"images/perfume10.jpg"}
 ];
 
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
 let favs=JSON.parse(localStorage.getItem("favs"))||[];
 let cat=null;
+
+function getMayoreoPrice(qty, base){
+  if(qty>=10) return 450;
+  if(qty>=5) return 250;
+  return base;
+}
 
 function render(list=data){
   const p=document.getElementById("products");
@@ -234,9 +244,12 @@ function render(list=data){
     const f=favs.find(f=>f.name===i.name)?"❤️":"🤍";
     p.innerHTML+=`
     <div class="card">
+      <div class="badge">📦 Mayoreo</div>
       <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
       <img src="${i.img}">
-      <b>${i.name}</b><br>$${i.price}
+      <b>${i.name}</b>
+      <div class="mayoreo">5 pz $250 · 10 pz $450</div>
+      <b>$${i.price}</b>
       <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
     </div>`;
   });
@@ -244,8 +257,12 @@ function render(list=data){
 
 function addCart(i){
   const index=cart.findIndex(p=>p.name===i.name);
-  if(index!==-1) cart[index].qty++;
-  else cart.push({...i,qty:1});
+  if(index!==-1){
+    cart[index].qty++;
+    cart[index].priceFinal=getMayoreoPrice(cart[index].qty,i.price);
+  }else{
+    cart.push({...i,qty:1,priceFinal:i.price});
+  }
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
 }
@@ -261,51 +278,27 @@ function toggleFav(i){
 function showFavs(){
   const p=document.getElementById("products");
   document.getElementById("menu").style.left="-260px";
-  if(favs.length===0){
-    p.innerHTML="<p style='color:gold'>No tienes favoritos ❤️</p>";
-  }else render(favs);
+  favs.length===0
+    ?p.innerHTML="<p style='color:gold'>No tienes favoritos ❤️</p>"
+    :render(favs);
 }
 
-function search(t){
-  render(data.filter(p=>p.name.toLowerCase().includes(t.toLowerCase())));
-}
-
-function filterCat(c){
-  cat=c;
-  render(data.filter(d=>d.cat===c));
-  document.getElementById("menu").style.left="-260px";
-}
-
-function updateCount(){
-  document.getElementById("cartCount").innerText=
-  cart.reduce((s,p)=>s+p.qty,0);
-}
-
-function toggleMenu(){
-  const m=document.getElementById("menu");
-  m.style.left=m.style.left==="0px"?"-260px":"0px";
-}
-
+function search(t){render(data.filter(p=>p.name.toLowerCase().includes(t.toLowerCase())))}
+function filterCat(c){cat=c;render(data.filter(d=>d.cat===c));document.getElementById("menu").style.left="-260px"}
+function updateCount(){document.getElementById("cartCount").innerText=cart.reduce((s,p)=>s+p.qty,0)}
+function toggleMenu(){const m=document.getElementById("menu");m.style.left=m.style.left==="0px"?"-260px":"0px"}
 document.addEventListener("click",e=>{
   const m=document.getElementById("menu");
   const b=document.querySelector(".menu-btn");
   if(m.style.left==="0px"&&!m.contains(e.target)&&!b.contains(e.target))
     m.style.left="-260px";
 });
-
-function toggleSub(){
-  const s=document.getElementById("submenu");
-  s.style.display=s.style.display==="block"?"none":"block";
-}
-function toggleSearch(){
-  const b=document.getElementById("searchBox");
-  b.style.width=b.style.width==="220px"?"0":"220px";
-}
+function toggleSub(){const s=document.getElementById("submenu");s.style.display=s.style.display==="block"?"none":"block"}
+function toggleSearch(){const b=document.getElementById("searchBox");b.style.width=b.style.width==="220px"?"0":"220px"}
 function goCart(){location.href="pagina-del-carro.html"}
 function openWA(){window.open("https://wa.me/13129348674","_blank")}
 
-render();
-updateCount();
+render();updateCount();
 </script>
 
 </body>
