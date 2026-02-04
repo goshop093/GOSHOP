@@ -2,111 +2,209 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi Carrito - Go Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-:root{--gold:#FFD700;--dark:#111;}
-body{background:#000;color:#fff;font-family:Arial,sans-serif;margin:0;padding:0;}
-header{position:fixed;top:0;width:100%;background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;z-index:1000;}
-.cart-count{position:absolute;right:15px;background:#000;padding:2px 6px;border-radius:50%;font-size:12px;}
-main{padding-top:80px;padding-bottom:80px;}
-.cart-page{max-width:900px;margin:20px auto;padding:20px;background:var(--dark);border-radius:15px;color:var(--gold);}
-.cart-item-page{display:flex;align-items:center;background:#222;padding:12px;margin-bottom:12px;border-radius:10px;}
-.cart-item-page img{width:100px;height:100px;object-fit:cover;border-radius:10px;margin-right:10px;}
-.cart-item-page .info{flex:1;text-align:left;}
-.cart-item-page .info p{margin:2px 0;}
-.remove-btn-page{background:#000;color:var(--gold);border:none;padding:6px 10px;border-radius:6px;cursor:pointer;}
-.remove-btn-page:hover{background:#222;}
-.cart-total-page{text-align:center;font-size:20px;font-weight:bold;margin-top:15px;}
-.btn-clear-cart,.btn-whatsapp,.btn-back{display:block;margin:15px auto;padding:12px 20px;background:#000;color:var(--gold);border-radius:10px;border:none;cursor:pointer;font-weight:bold;}
-.btn-clear-cart:hover,.btn-whatsapp:hover,.btn-back:hover{background:#222;}
+:root{
+  --gold:#FFD700;
+  --dark:#111;
+}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif;}
+body{background:#000;color:#fff;overflow-x:hidden;}
+
+/* ===== HEADER ===== */
+header{
+  background:var(--dark);
+  color:var(--gold);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+}
+header h1{font-size:1.8rem;}
+.cart-btn{
+  position:absolute;
+  right:15px;
+  font-size:24px;
+  cursor:pointer;
+}
+.cart-btn span{
+  background:#000;
+  padding:2px 6px;
+  border-radius:50%;
+  font-size:12px;
+}
+
+/* ===== MAIN ===== */
+main{padding-top:80px;padding-bottom:20px;}
+.cart-page{
+  max-width:600px;
+  margin:auto;
+  padding:10px;
+}
+.cart-item{
+  display:flex;
+  align-items:center;
+  background:#222;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:12px;
+  animation:fadeUp 0.4s ease;
+}
+.cart-item img{
+  width:90px;
+  height:90px;
+  object-fit:cover;
+  border-radius:10px;
+}
+.item-info{
+  flex:1;
+  margin-left:10px;
+  text-align:left;
+}
+.item-info p{name:none;}
+.qty-control{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-top:6px;
+}
+.qty-control button{
+  padding:4px 8px;
+  border:none;
+  border-radius:6px;
+  background:#000;
+  color:var(--gold);
+  font-weight:bold;
+  cursor:pointer;
+}
+.remove-btn{
+  background:#000;
+  border:none;
+  color:var(--gold);
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* ===== TOTAL ===== */
+.cart-total{
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  margin-top:15px;
+}
+.btn-actions{
+  display:flex;
+  justify-content:space-around;
+  margin-top:15px;
+}
+.btn-actions button{
+  padding:10px 15px;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.btn-back{background:#000;color:var(--gold);}
+.btn-wa{background:var(--gold);color:#000;}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(15px);}
+  to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 <body>
 
 <header>
   <h1>Mi Carrito</h1>
-  <div class="cart-count" id="cart-count">0</div>
 </header>
 
 <main>
-  <section class="cart-page">
-    <div id="cart-items-container"></div>
-    <div class="cart-total-page">Total: $<span id="cart-total-page">0.00</span></div>
-    <button class="btn-clear-cart" id="clear-cart">Vaciar Carrito</button>
-    <button class="btn-whatsapp" id="send-whatsapp">Enviar Link del Carrito por WhatsApp</button>
-    <button class="btn-back" onclick="location.href='index.html'">Volver a la Tienda</button>
+  <section class="cart-page" id="cart-page">
+    <!-- Productos del carrito se insertarán aquí -->
   </section>
+
+  <div class="cart-total">
+    Total: $<span id="cart-total">0.00</span>
+  </div>
+
+  <div class="btn-actions">
+    <button class="btn-back" onclick="backToShop()">⬅ Volver a la tienda</button>
+    <button class="btn-wa" onclick="sendWhatsApp()">Enviar pedido</button>
+  </div>
 </main>
 
 <script>
-// ====== CART ======
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// ===== VARIABLES =====
+let cartItems = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ====== FUNCIONES ======
-function updateCartCount(){
-  document.getElementById("cart-count").textContent = cart.length;
-}
+// ===== RENDER DEL CARRITO =====
+function renderCart(){
+  const container = document.getElementById("cart-page");
+  container.innerHTML="";
+  let total=0;
 
-function displayCart(){
-  const container = document.getElementById("cart-items-container");
-  const totalSpan = document.getElementById("cart-total-page");
-  container.innerHTML = "";
-  let total = 0;
-  cart.forEach((item,index)=>{
+  cartItems.forEach((item,index)=>{
     const div = document.createElement("div");
-    div.classList.add("cart-item-page");
-    div.innerHTML = `
+    div.classList.add("cart-item");
+    div.innerHTML=`
       <img src="${item.img}" alt="${item.name}">
-      <div class="info">
-        <p>${item.name}</p>
-        <p>Cantidad: <span id="qty-${index}">${item.qty}</span></p>
-        <p>Precio: $${(item.price*item.qty).toFixed(2)}</p>
+      <div class="item-info">
+        <p><b>${item.name}</b></p>
+        <p>$${item.price.toFixed(2)}</p>
+        <div class="qty-control">
+          <button onclick="changeQty(${index},-1)">-</button>
+          <span id="qty-${index}">${item.qty}</span>
+          <button onclick="changeQty(${index},1)">+</button>
+        </div>
       </div>
-      <div>
-        <button onclick="changeQty(${index},1)">+</button>
-        <button onclick="changeQty(${index},-1)">-</button>
-        <button class="remove-btn-page" onclick="removeItem(${index})">X</button>
-      </div>
+      <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
     container.appendChild(div);
-    total += item.price*item.qty;
+    total += item.price * item.qty;
   });
-  totalSpan.textContent = total.toFixed(2);
+
+  document.getElementById("cart-total").innerText=total.toFixed(2);
 }
 
-function changeQty(i,delta){
-  cart[i].qty += delta;
-  if(cart[i].qty<1) cart[i].qty=1;
-  localStorage.setItem("cart",JSON.stringify(cart));
-  displayCart();
-  updateCartCount();
+// ===== FUNCIONES =====
+function changeQty(idx,delta){
+  cartItems[idx].qty+=delta;
+  if(cartItems[idx].qty<1) cartItems[idx].qty=1;
+  localStorage.setItem("cart",JSON.stringify(cartItems));
+  renderCart();
 }
 
-function removeItem(i){
-  cart.splice(i,1);
-  localStorage.setItem("cart",JSON.stringify(cart));
-  displayCart();
-  updateCartCount();
+function removeItem(idx){
+  cartItems.splice(idx,1);
+  localStorage.setItem("cart",JSON.stringify(cartItems));
+  renderCart();
 }
 
-document.getElementById("clear-cart").addEventListener("click",()=>{
-  cart = [];
-  localStorage.setItem("cart",JSON.stringify(cart));
-  displayCart();
-  updateCartCount();
-});
+function backToShop(){window.location.href="index.html";}
 
-// ====== ENVIAR LINK DE WHATSAPP ======
-document.getElementById("send-whatsapp").addEventListener("click",()=>{
-  if(cart.length===0){ alert("El carrito está vacío"); return; }
-  const carritoLink = encodeURIComponent(window.location.href);
-  window.open(`https://wa.me/13129348674?text=Mi%20pedido%20está%20aquí:%20${carritoLink}`,"_blank");
-});
+function sendWhatsApp(){
+  if(cartItems.length===0){alert("El carrito está vacío."); return;}
+  const base="https://wa.me/13129348674?text=";
+  let text="Pedido de Go Shop:%0A";
+  cartItems.forEach(item=>{
+    text+=`${item.name} x${item.qty} - $${(item.price*item.qty).toFixed(2)}%0A`;
+  });
+  const total=document.getElementById("cart-total").innerText;
+  text+=`Total: $${total}%0A`;
+  text+=`Link del carrito: ${window.location.href}`;
+  window.open(base+text,"_blank");
+}
 
-// ====== INICIALIZAR ======
-updateCartCount();
-displayCart();
+// ===== INICIALIZAR =====
+renderCart();
 </script>
 
 </body>
