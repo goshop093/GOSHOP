@@ -5,70 +5,84 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Carrito - Go Shop</title>
 <style>
-:root{--gold:#FFD700;--dark:#111}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#000;color:#fff;overflow-x:hidden;padding-top:90px}header{position:fixed;top:0;width:100%;background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;z-index:1000}header b{font-size:1.5rem}.back-btn{position:absolute;left:15px;font-size:24px;cursor:pointer}.products{display:grid;gap:15px;padding:10px}.cart-card{background:var(--gold);color:#000;border-radius:16px;padding:10px;display:flex;align-items:center;gap:10px;animation:fadeUp .4s ease}.cart-card img{width:80px;height:80px;object-fit:cover;border-radius:10px}.cart-card button{padding:5px 10px;border:none;border-radius:8px;background:#000;color:var(--gold);cursor:pointer}.cart-total{margin:15px 10px;font-size:1.3rem;font-weight:bold;text-align:right}.send-btn{width:calc(100%-20px);margin:10px;padding:12px;background:var(--gold);color:#000;border:none;border-radius:10px;font-size:1.2rem;cursor:pointer}.qty-control{display:flex;gap:5px;align-items:center}.qty-control button{width:25px;height:25px;text-align:center;padding:0}
-@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-</style>
+:root{--gold:#FFD700;--dark:#111}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#000;color:#fff;overflow-x:hidden;padding-top:90px}
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+/* Header */
+header{position:fixed;top:0;width:100%;background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;z-index:1000}
+header b{font-size:1.5rem}
+.cart-btn{position:absolute;right:15px;font-size:24px}
+
+/* Main */
+main{padding:20px 10px 90px 10px}
+.cart-item{display:flex;align-items:center;justify-content:space-between;background:var(--gold);color:#000;padding:10px;border-radius:12px;margin-bottom:10px;animation:fadeUp .3s ease}
+.cart-item img{width:80px;height:80px;object-fit:cover;border-radius:10px}
+.cart-info{flex:1;margin-left:10px}
+.cart-info b{display:block;margin-bottom:5px}
+.qty-btns button{padding:4px 8px;margin:0 2px;border:none;border-radius:6px;background:#000;color:var(--gold);cursor:pointer}
+.remove-btn{background:#000;color:var(--gold);border:none;padding:4px 8px;border-radius:6px;cursor:pointer}
+
+/* Total */
+.total{margin-top:15px;text-align:right;font-size:1.2rem}
+
+/* Botón WhatsApp */
+.send-btn{width:100%;padding:12px;background:var(--gold);color:#000;border:none;border-radius:12px;font-weight:bold;margin-top:20px;cursor:pointer;}
+
+/* Animación */
+@keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+
+/* Barra móvil */
+.mobile-bar{position:fixed;bottom:0;width:100%;background:var(--dark);display:flex;justify-content:space-around;padding:10px 0;z-index:2500}
+.mobile-bar button{background:none;border:none;color:var(--gold)}
+</style>
 </head>
 <body>
 
 <header>
-  <div class="back-btn" onclick="goBack()">←</div>
-  <b>Carrito</b>
+  <div class="cart-btn" onclick="location.href='index.html'">🏠</div>
+  <b>Mi Carrito</b>
 </header>
 
 <main>
-  <div class="products" id="cartProducts"></div>
-  <div class="cart-total" id="cartTotal">Total: $0</div>
-  <button class="send-btn" onclick="sendOrder()">Enviar Pedido</button>
+  <div id="cartItems"></div>
+  <div class="total" id="total">Total: $0.00</div>
+  <button class="send-btn" onclick="sendWhatsApp()">Enviar Pedido por WhatsApp</button>
 </main>
 
+<div class="mobile-bar">
+  <button onclick="location.href='index.html'">🏠</button>
+  <button onclick="location.reload()">🔄</button>
+</div>
+
 <script>
-// ===== Inicializar Firebase =====
-const firebaseConfig = {
-  apiKey: "AIzaSyBWA1abEfG8AMJo5qIYKDeK9-LjFq0IZZA",
-  authDomain: "goshop-e3b8e.firebaseapp.com",
-  projectId: "goshop-e3b8e",
-  storageBucket: "goshop-e3b8e.appspot.com",
-  messagingSenderId: "814425980665",
-  appId: "1:814425980665:web:e7efac0149dff4f8206c28",
-  measurementId: "G-HCC2C0G1ZM"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
-// ===== Carrito =====
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-// ===== Renderizar carrito =====
-function renderCart() {
-  const container = document.getElementById("cartProducts");
-  container.innerHTML = "";
-  cart.forEach((item, index)=>{
-    container.innerHTML += `
-      <div class="cart-card">
-        <img src="${item.img}" alt="${item.name}">
-        <div style="flex:1">
-          <b>${item.name}</b><br>$${item.price} 
-          <div class="qty-control">
-            <button onclick="changeQty(${index},-1)">-</button>
-            ${item.qty}
-            <button onclick="changeQty(${index},1)">+</button>
-          </div>
+function renderCart(){
+  const container=document.getElementById("cartItems");
+  container.innerHTML="";
+  cart.forEach((item,i)=>{
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`
+      <img src="${item.img}" alt="${item.name}">
+      <div class="cart-info">
+        <b>${item.name}</b>
+        $${item.price} x <span id="qty${i}">${item.qty}</span>
+        <div class="qty-btns">
+          <button onclick="changeQty(${i},-1)">-</button>
+          <button onclick="changeQty(${i},1)">+</button>
+          <button class="remove-btn" onclick="removeItem(${i})">Eliminar</button>
         </div>
-        <button onclick="removeItem(${index})">❌</button>
       </div>
     `;
+    container.appendChild(div);
   });
   updateTotal();
 }
 
-// ===== Cantidad / Eliminar =====
-function changeQty(i, delta){
-  cart[i].qty += delta;
+function changeQty(i,delta){
+  cart[i].qty+=delta;
   if(cart[i].qty<1) cart[i].qty=1;
   localStorage.setItem("cart",JSON.stringify(cart));
   renderCart();
@@ -80,35 +94,21 @@ function removeItem(i){
   renderCart();
 }
 
-// ===== Total =====
 function updateTotal(){
-  const total = cart.reduce((sum,i)=>sum+i.price*i.qty,0);
-  document.getElementById("cartTotal").innerText = "Total: $" + total;
+  const total=cart.reduce((a,b)=>a.price*b.qty+a,0);
+  document.getElementById("total").innerText=`Total: $${total.toFixed(2)}`;
 }
 
-// ===== Volver a tienda =====
-function goBack(){location.href="index.html"}
-
-// ===== Enviar pedido a Firebase + WhatsApp =====
-async function sendOrder(){
-  if(cart.length===0){alert("El carrito está vacío!"); return;}
-  try{
-    const docRef = await db.collection("pedidos").add({
-      items: cart,
-      total: cart.reduce((sum,i)=>sum+i.price*i.qty,0),
-      fecha: new Date()
-    });
-    localStorage.setItem("cart", JSON.stringify([]));
-    renderCart();
-    const waLink = `https://wa.me/13129348674?text=Nuevo pedido!%0AID:${docRef.id}%0ATotal:$${docRef.data?.total || 0}%0AVer en Firestore`;
-    window.open(waLink, "_blank");
-  }catch(e){
-    console.error("Error al enviar pedido:", e);
-    alert("Error al enviar pedido");
-  }
+function sendWhatsApp(){
+  if(cart.length===0){alert("El carrito está vacío");return;}
+  let msg="Pedido de Go Shop:%0A";
+  cart.forEach(i=>{
+    msg+=`${i.name} x ${i.qty} = $${(i.price*i.qty).toFixed(2)}%0A`;
+  });
+  msg+=`Total: $${cart.reduce((a,b)=>a.price*b.qty+a,0).toFixed(2)}`;
+  window.open("https://wa.me/13129348674?text="+msg,"_blank");
 }
 
-// ===== Inicializar =====
 renderCart();
 </script>
 
