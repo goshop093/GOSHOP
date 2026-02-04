@@ -1,69 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Carrito Avanzado - Go Shop</title>
-<style>
-:root{
-  --gold:#FFD700;
-  --dark:#111;
-}
-*{box-sizing:border-box;}
-body{background:#000;color:#fff;font-family:Arial,sans-serif;margin:0;padding:0;overflow-x:hidden;}
-header{background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;position:fixed;top:0;width:100%;z-index:1000;font-size:1.8rem;}
-header b{flex:1;text-align:center;}
-button{cursor:pointer;transition:.3s;}
-button:hover{opacity:.8;}
-.cart-page{padding:120px 20px 20px 20px;max-width:900px;margin:0 auto;}
-.cart-item{display:flex;align-items:center;justify-content:space-between;background:#222;margin-bottom:15px;padding:10px;border-radius:10px;transition:all .3s ease;}
-.cart-item.animate{animation:fadeIn 0.4s ease;}
-.cart-item img{width:100px;height:100px;object-fit:cover;border-radius:10px;}
-.cart-item .info{flex:1;margin-left:15px;}
-.cart-item .info p{margin:4px 0;}
-.qty-btn{padding:4px 8px;margin:0 4px;background:#000;color:var(--gold);border:none;border-radius:5px;}
-.remove-btn{background:#000;color:var(--gold);border:none;padding:6px 10px;border-radius:6px;}
-.cart-total{font-size:1.5rem;font-weight:bold;text-align:center;margin-top:20px;}
-.btn-actions{display:flex;justify-content:center;gap:15px;margin-top:20px;flex-wrap:wrap;}
-.btn-actions button{padding:10px 20px;background:#000;color:var(--gold);border:none;border-radius:10px;font-weight:bold;transition:.3s;}
-.btn-actions button:hover{background:#222;}
-.search-cart{margin:15px 0;text-align:center;}
-.search-cart input{width:90%;max-width:400px;padding:10px;border-radius:25px;border:none;outline:none;font-size:16px;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@media screen and (max-width:600px){
-  .cart-item{flex-direction:column;align-items:flex-start;}
-  .cart-item img{width:100%;height:auto;}
-  .cart-item .info{margin-left:0;margin-top:10px;}
-}
-</style>
-</head>
-<body>
-
-<header>
-  <b>Mi Carrito</b>
-</header>
-
-<section class="cart-page">
-
-  <div class="search-cart">
-    <input type="text" placeholder="Buscar en el carrito..." id="cartSearch" oninput="searchCart(this.value)">
-  </div>
-
-  <div id="cart-container"></div>
-
-  <div class="cart-total">
-    Total: $<span id="cart-total">0</span>
-  </div>
-
-  <div class="btn-actions">
-    <button onclick="goBack()">← Regresar a la tienda</button>
-    <button onclick="sendOrder()">Enviar Pedido WhatsApp</button>
-  </div>
-</section>
-
 <script>
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let filteredCart = [...cart];
+
+// ====== MAYOREO ======
+function getMayoreoPrice(qty, base){
+  if(qty >= 10) return 450;
+  if(qty >= 5) return 250;
+  return base;
+}
 
 function updateCart(){
   const container = document.getElementById('cart-container');
@@ -72,19 +16,29 @@ function updateCart(){
   let total = 0;
 
   filteredCart.forEach((item,index)=>{
-    total += item.price*item.qty;
+    const unitPrice = getMayoreoPrice(item.qty, item.price);
+    const subtotal = unitPrice * item.qty;
+    total += subtotal;
+
     const div = document.createElement('div');
     div.className = 'cart-item animate';
     div.innerHTML = `
       <img src="${item.img}" alt="${item.name}">
       <div class="info">
         <p><b>${item.name}</b></p>
-        <p>$${item.price.toFixed(2)}</p>
-        <p>Cantidad:
+        <p>
+          Precio: $${unitPrice.toFixed(2)}
+          ${item.qty >= 5 ? '<br><small style="color:#FFD700">Mayoreo aplicado</small>' : ''}
+        </p>
+        <p>
+          Cantidad:
           <button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
           ${item.qty}
           <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
         </p>
+        <small style="color:#ccc">
+          5 pz $250 · 10 pz $450
+        </small>
       </div>
       <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
@@ -99,12 +53,12 @@ function updateCart(){
 function changeQty(index,delta){
   const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
   cart[realIndex].qty += delta;
-  if(cart[realIndex].qty<1) cart[realIndex].qty=1;
+  if(cart[realIndex].qty < 1) cart[realIndex].qty = 1;
   filteredCart[index].qty = cart[realIndex].qty;
   updateCart();
 }
 
-// ====== ELIMINAR PRODUCTO ======
+// ====== ELIMINAR ======
 function removeItem(index){
   const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
   cart.splice(realIndex,1);
@@ -119,25 +73,28 @@ function searchCart(text){
 }
 
 // ====== REGRESAR ======
-function goBack(){window.location.href='index.html';}
+function goBack(){ window.location.href='index.html'; }
 
 // ====== WHATSAPP ======
 function sendOrder(){
-  if(cart.length===0){alert('El carrito está vacío'); return;}
+  if(cart.length===0){ alert('El carrito está vacío'); return; }
+
   let msg = 'Pedido Go Shop:\n';
+  let total = 0;
+
   cart.forEach(i=>{
-    msg += `${i.name} - $${i.price.toFixed(2)} x ${i.qty}\n`;
+    const unit = getMayoreoPrice(i.qty, i.price);
+    const sub = unit * i.qty;
+    total += sub;
+    msg += `${i.name} - $${unit} x ${i.qty}\n`;
   });
-  const total = cart.reduce((a,b)=>a+a+b.price*b.qty,0).toFixed(2);
-  msg += `Total: $${total}`;
-  const waNumber = '13129348674'; // tu número USA
+
+  msg += `Total: $${total.toFixed(2)}`;
+  const waNumber = '13129348674';
   const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(msg)}`;
   window.open(url,'_blank');
 }
 
-// ====== INICIALIZAR ======
+// ====== INICIO ======
 updateCart();
 </script>
-
-</body>
-</html>
