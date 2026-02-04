@@ -245,8 +245,8 @@ let favs=JSON.parse(localStorage.getItem("favs"))||[];
 let cat=null;
 
 function getMayoreoPrice(qty, base){
-  if(qty>=10) return 450;
-  if(qty>=5) return 250;
+  if(qty>=10) return 500;
+  if(qty>=5) return 300;
   return base;
 }
 
@@ -261,7 +261,7 @@ function render(list=data){
       <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
       <img src="${i.img}">
       <b>${i.name}</b>
-      <div class="mayoreo">5 pz $250 · 10 pz $450</div>
+      <div class="mayoreo">5 pz $300 · 10 pz $500</div>
       <b>$${i.price}</b>
       <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
     </div>`;
