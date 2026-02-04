@@ -2,65 +2,94 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<title>Carrito</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Carrito - Go Shop</title>
-
 <style>
-body{background:#000;color:#FFD700;font-family:Arial;text-align:center;margin:0}
-.cart{max-width:900px;margin:30px auto;background:#111;padding:20px;border-radius:15px}
-.item{display:flex;gap:15px;background:#222;padding:15px;border-radius:10px;margin-bottom:15px}
-.item img{width:100px;border-radius:10px}
-button,a{padding:12px 20px;border-radius:10px;font-weight:bold;border:none;cursor:pointer;text-decoration:none}
-.clear{background:#000;color:#FFD700}
-.back{background:#FFD700;color:#000}
-.whatsapp{background:#25D366;color:#000}
+body{background:#000;color:#FFD700;font-family:Arial;padding:15px}
+.item{
+  background:#111;
+  display:flex;
+  gap:10px;
+  padding:10px;
+  border-radius:12px;
+  margin-bottom:10px;
+}
+.item img{width:70px;border-radius:8px}
+.qty{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+.qty button{
+  background:#FFD700;
+  border:none;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+}
+.total{
+  font-size:20px;
+  margin-top:15px;
+}
+button.main{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  margin-top:10px;
+}
 </style>
 </head>
 
 <body>
+<h2>🛒 Tu carrito</h2>
+<div id="list"></div>
+<div class="total">Total: $<span id="total">0</span></div>
 
-<h1>Mi Carrito</h1>
-
-<div class="cart" id="cart"></div>
-<h2>Total: $<span id="total">0</span></h2>
-
-<button class="clear" onclick="clearCart()">Vaciar carrito</button><br><br>
-<a href="index.html" class="back">⬅ Regresar a la tienda</a><br><br>
-<a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="whatsapp">💬 WhatsApp</a>
+<button class="main" onclick="back()">⬅ Volver a la tienda</button>
+<button class="main" onclick="send()">Enviar por WhatsApp</button>
 
 <script>
-let cartItems=JSON.parse(localStorage.getItem("cartItems"))||[];
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
 function render(){
-const c=document.getElementById("cart");
-c.innerHTML="";
-let t=0;
-cartItems.forEach((p,i)=>{
-c.innerHTML+=`<div class="item">
-<img src="${p.img}">
-<div style="flex:1;text-align:left">
-<strong>${p.name}</strong><br>$${p.price}
-</div>
-<button onclick="remove(${i})">X</button>
-</div>`;
-t+=p.price;
-});
-document.getElementById("total").textContent=t.toFixed(2);
+  let t=0;
+  const d=document.getElementById("list");
+  d.innerHTML="";
+  cart.forEach((i,idx)=>{
+    t+=i.price*i.qty;
+    d.innerHTML+=`
+    <div class="item">
+      <img src="${i.img}">
+      <div>
+        <b>${i.name}</b><br>$${i.price}
+        <div class="qty">
+          <button onclick="chg(${idx},-1)">−</button>
+          ${i.qty}
+          <button onclick="chg(${idx},1)">+</button>
+        </div>
+      </div>
+    </div>`;
+  });
+  document.getElementById("total").innerText=t.toFixed(2);
+  localStorage.setItem("cart",JSON.stringify(cart));
 }
 
-function remove(i){
-cartItems.splice(i,1);
-localStorage.setItem("cartItems",JSON.stringify(cartItems));
-render();
+function chg(i,n){
+  cart[i].qty+=n;
+  if(cart[i].qty<=0)cart.splice(i,1);
+  render();
 }
-function clearCart(){
-cartItems=[];
-localStorage.setItem("cartItems",JSON.stringify(cartItems));
-render();
+
+function send(){
+  let m="Pedido Go Shop:%0A";
+  cart.forEach(i=>m+=`${i.qty}x ${i.name} $${i.price*i.qty}%0A`);
+  window.open("https://wa.me/?text="+m,"_blank");
 }
+function back(){location.href="index.html"}
 
 render();
 </script>
-
 </body>
 </html>
