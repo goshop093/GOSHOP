@@ -13,7 +13,7 @@ body {
 header {
   background: #111;
   color: #FFD700;
-  padding: 25px;
+  padding: 20px;
   font-size: 2rem;
   position: relative;
 }
@@ -156,83 +156,6 @@ header {
   box-shadow: 0 0 10px #FFD700;
 }
 
-/* ================= BOLSA ================= */
-.cart {
-  position: fixed;
-  right: -400px;
-  top: 0;
-  width: 350px;
-  height: 100%;
-  background: #111;
-  color: #FFD700;
-  padding: 20px;
-  transition: right 0.4s ease;
-  overflow-y: auto;
-  z-index: 1001;
-  box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-}
-
-.close-cart {
-  background: none;
-  border: none;
-  font-size: 28px;
-  color: #FFD700;
-  cursor: pointer;
-  display: block;
-  margin-left: auto;
-  transition: transform 0.3s ease;
-}
-
-.close-cart:hover {
-  transform: rotate(90deg);
-}
-
-.cart h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.cart-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #222;
-  padding: 10px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.cart-item:hover {
-  background: #333;
-  transform: scale(1.02);
-}
-
-.cart-item p {
-  margin: 0;
-}
-
-.remove-btn {
-  background: #000;
-  color: #FFD700;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.remove-btn:hover {
-  background: #222;
-}
-
-.cart-total {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 18px;
-  font-weight: bold;
-}
-
 /* ================= PRODUCTOS ================= */
 .products {
   display: flex;
@@ -240,6 +163,19 @@ header {
   justify-content: center;
   gap: 20px;
   padding: 30px;
+}
+
+.category-title {
+  font-size: 1.8rem;
+  color: #FFD700;
+  margin-bottom: 15px;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .product-card {
@@ -258,6 +194,8 @@ header {
 
 .product-card img {
   width: 100%;
+  height: 200px;
+  object-fit: cover;
   border-radius: 10px;
   transition: transform 0.3s ease;
 }
@@ -278,19 +216,19 @@ header {
   margin: 10px 0;
 }
 
-.product-card a.btn-whatsapp {
+.product-card button.btn-add {
   display: inline-block;
   padding: 10px 15px;
   background: #000;
   color: #FFD700;
   border-radius: 8px;
-  text-decoration: none;
   font-weight: bold;
   cursor: pointer;
+  border: none;
   transition: background 0.3s ease, transform 0.3s ease;
 }
 
-.product-card a.btn-whatsapp:hover {
+.product-card button.btn-add:hover {
   background: #222;
   transform: scale(1.05);
 }
@@ -316,18 +254,37 @@ header {
   transform: scale(1.05);
 }
 
-/* ================= CATEGORÍA ================= */
-.category-title {
-  font-size: 1.8rem;
+/* ================= PAGINA DEL CARRITO ================= */
+.cart-page {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+  text-align: center;
   color: #FFD700;
-  margin-bottom: 15px;
 }
 
-.product-grid {
+.cart-item-page {
+  background: #222;
+  color: #FFD700;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-item-page button {
+  background: #000;
+  color: #FFD700;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cart-item-page button:hover {
+  background: #222;
 }
 
 /* ================= RESPONSIVE ================= */
