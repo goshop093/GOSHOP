@@ -3,30 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <title>Mi Carrito - Go Shop</title>
-<link rel="stylesheet" href="styles.css">
+<style>
+body { background:#000; color:#FFD700; font-family:Arial, sans-serif; text-align:center; padding:20px; }
+.cart-page { max-width:900px; margin:auto; }
+.cart-item-page { display:flex; align-items:center; background:#222; margin-bottom:15px; border-radius:10px; padding:10px; }
+.cart-item-page img { width:120px; height:120px; border-radius:10px; object-fit:cover; }
+.cart-item-page .info { margin-left:15px; text-align:left; }
+.cart-total-page { font-size:24px; margin-top:20px; font-weight:bold; }
+.btn-clear-cart, .btn-whatsapp-cart { padding:12px 25px; margin:10px; background:#000; color:#FFD700; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
+.btn-clear-cart:hover, .btn-whatsapp-cart:hover { background:#222; }
+@media(max-width:600px){.cart-item-page{flex-direction:column;}.cart-item-page .info{margin-left:0;margin-top:10px;} .cart-item-page img{width:100%;height:auto;}}
+</style>
 </head>
 <body>
 
-<header>
-  <h1>Mi Carrito</h1>
-  <a href="index.html" style="position:absolute; left:20px; top:25px; color:#FFD700; font-size:18px; text-decoration:underline;">Volver</a>
-  <div class="cart-btn">🛒 <span id="cart-count">0</span></div>
-</header>
+<h1>Mi Carrito</h1>
+<section class="cart-page" id="cart-items-container"></section>
+<div class="cart-total-page">
+  Total: $<span id="cart-total-page">0</span>
+</div>
+<button class="btn-clear-cart" id="clear-cart">Vaciar Carrito</button>
+<br>
+<button class="btn-whatsapp-cart" onclick="window.open('https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t','_blank')">Contactar por WhatsApp</button>
 
-<main>
-  <section class="cart-page">
-    <div id="cart-items-container"></div>
-    <div class="cart-total-page">Total: $<span id="cart-total-page">0</span></div>
-    <button id="clear-cart" class="btn-clear-cart">Vaciar Carrito</button>
-  </section>
+<script>
+let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
-  <section class="contact-info">
-    <h2>Contacto</h2>
-    <p>WhatsApp: <a href="https://wa.me/1234567890" target="_blank">Enviar mensaje</a></p>
-    <p>Email: info@goshop.com</p>
-  </section>
-</main>
+function displayCart() {
+  const container = document.getElementById("cart-items-container");
+  const totalSpan = document.getElementById("cart-total-page");
+  container.innerHTML = "";
+  let total = 0;
 
-<script src="script.js"></script>
+  cartItems.forEach((item,index)=>{
+    const div = document.createElement("div");
+    div.classList.add("cart-item-page");
+    div.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <div class="info">
+        <p>${item.name}</p>
+        <p>$${item.price.toFixed(2)}</p>
+      </div>
+      <button data-index="${index}" class="remove-btn-page">X</button>
+    `;
+    container.appendChild(div);
+    total += item.price;
+  });
+
+  totalSpan.textContent = total.toFixed(2);
+
+  document.querySelectorAll(".remove-btn-page").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const index=btn.dataset.index;
+      cartItems.splice(index,1);
+      localStorage.setItem("cartItems",JSON.stringify(cartItems));
+      displayCart();
+    });
+  });
+}
+
+document.getElementById("clear-cart").addEventListener("click",()=>{
+  cartItems=[];
+  localStorage.setItem("cartItems",JSON.stringify(cartItems));
+  displayCart();
+});
+
+displayCart();
+</script>
+
 </body>
 </html>
