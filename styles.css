@@ -14,14 +14,7 @@ header {
   font-size: 2rem;
 }
 
-.products {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 30px;
-}
-
+/* ================= PRODUCTOS ================= */
 .product-card {
   background: #FFD700;
   border-radius: 15px;
@@ -48,4 +41,119 @@ header {
 }
 
 .price {
-  font-weight: b
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* ================= BOTÓN WHATSAPP ================= */
+.btn-whatsapp {
+  display: inline-block;
+  background: #000; /* fondo negro */
+  color: #FFD700;  /* texto dorado */
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(255,215,0,0.4); /* sombra dorada */
+}
+
+/* ================= SECCIONES ================= */
+.category {
+  margin: 60px 0;
+}
+
+.category-title {
+  position: relative;
+  display: inline-block;
+  font-size: 28px;
+  color: #FFD700; /* dorado */
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+/* Líneas doradas a los lados */
+.category-title::before,
+.category-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100px;
+  height: 2px;
+  background-color: #FFD700;
+}
+
+.category-title::before {
+  left: -120px;
+}
+
+.category-title::after {
+  right: -120px;
+}
+
+/* ================= GRID ================= */
+.category {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+  .category {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+  .category {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card {
+    width: 92%;
+    margin: 0 auto;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: auto;
+  }
+
+  .product-card h2 {
+    font-size: 20px;
+  }
+
+  .product-card p {
+    font-size: 15px;
+  }
+
+  .price {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .btn-whatsapp {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+  }
+
+  .category-title::before,
+  .category-title::after {
+    width: 60px;
+    left: -80px;
+    right: -80px;
+  }
+
+  .category-title {
+    font-size: 22px;
+  }
+}
