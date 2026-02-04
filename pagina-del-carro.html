@@ -4,124 +4,19 @@
 <meta charset="UTF-8">
 <title>Mi Carrito - Go Shop</title>
 <link rel="stylesheet" href="styles.css">
-<style>
-/* ================= CARRO COMPLETO ================= */
-.cart-page {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #111;
-  border-radius: 15px;
-  color: #FFD700;
-}
-
-.cart-item-page {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  background: #222;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 10px;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.cart-item-page:hover {
-  transform: scale(1.02);
-  background: #333;
-}
-
-.cart-item-page img {
-  width: 120px;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
-  transition: transform 0.3s ease;
-}
-
-.cart-item-page .info {
-  text-align: left;
-  margin-left: 15px;
-}
-
-.cart-item-page .info p {
-  margin: 5px 0;
-}
-
-.remove-btn-page {
-  background: #000;
-  color: #FFD700;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.remove-btn-page:hover {
-  background: #222;
-}
-
-.cart-total-page {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-top: 20px;
-}
-
-.btn-clear-cart {
-  display: block;
-  margin: 20px auto;
-  padding: 12px 25px;
-  background: #000;
-  color: #FFD700;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease, transform 0.3s ease;
-}
-
-.btn-clear-cart:hover {
-  background: #222;
-  transform: scale(1.05);
-}
-
-/* ================= CONTACTO ================= */
-.contact-info {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.contact-info a {
-  color: #FFD700;
-  text-decoration: underline;
-}
-
-/* ================= RESPONSIVE ================= */
-@media screen and (max-width: 600px) {
-  .cart-page { padding: 15px; }
-  .cart-item-page { flex-direction: column; align-items: flex-start; }
-  .cart-item-page .info { margin-left: 0; margin-top: 10px; }
-  .cart-item-page img { width: 100%; height: auto; }
-}
-</style>
 </head>
 <body>
 
 <header>
   <h1>Mi Carrito</h1>
-  <div class="cart-btn" id="cart-count-header">🛒 <span id="cart-count">0</span></div>
+  <a href="index.html" style="position:absolute; left:20px; top:25px; color:#FFD700; font-size:18px; text-decoration:underline;">Volver</a>
+  <div class="cart-btn">🛒 <span id="cart-count">0</span></div>
 </header>
 
 <main>
   <section class="cart-page">
     <div id="cart-items-container"></div>
-
-    <div class="cart-total-page">
-      Total: $<span id="cart-total-page">0</span>
-    </div>
-
+    <div class="cart-total-page">Total: $<span id="cart-total-page">0</span></div>
     <button id="clear-cart" class="btn-clear-cart">Vaciar Carrito</button>
   </section>
 
@@ -132,68 +27,6 @@
   </section>
 </main>
 
-<script>
-// ====== Inicializar carrito desde localStorage ======
-let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
-
-function updateCartCount() {
-  const cartCountElements = document.querySelectorAll("#cart-count");
-  cartCountElements.forEach(el => el.textContent = cartItems.length);
-}
-
-// ====== Mostrar productos en el carrito ======
-function displayCartPage() {
-  const container = document.getElementById("cart-items-container");
-  const totalSpan = document.getElementById("cart-total-page");
-  if (!container) return;
-
-  container.innerHTML = "";
-  let total = 0;
-
-  cartItems.forEach((item, index) => {
-    // Usar la ruta exacta de la imagen guardada en el carrito
-    const imgSrc = item.img || "images/default.jpg"; // default si no hay img
-
-    const div = document.createElement("div");
-    div.classList.add("cart-item-page");
-    div.innerHTML = `
-      <img src="${imgSrc}" alt="${item.name}">
-      <div class="info">
-        <p>${item.name}</p>
-        <p>$${item.price.toFixed(2)}</p>
-      </div>
-      <button class="remove-btn-page" data-index="${index}">X</button>
-    `;
-    container.appendChild(div);
-    total += item.price;
-  });
-
-  totalSpan.textContent = total.toFixed(2);
-
-  // Botones eliminar
-  document.querySelectorAll(".remove-btn-page").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const index = btn.dataset.index;
-      cartItems.splice(index, 1);
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      displayCartPage();
-      updateCartCount();
-    });
-  });
-}
-
-// ====== Vaciar carrito ======
-document.getElementById("clear-cart").addEventListener("click", () => {
-  cartItems = [];
-  localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  displayCartPage();
-  updateCartCount();
-});
-
-// ====== Inicializar ======
-updateCartCount();
-displayCartPage();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
