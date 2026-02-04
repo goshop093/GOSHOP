@@ -48,7 +48,7 @@ header{
 }
 
 /* ===== MAIN ===== */
-main{padding-top:90px;padding-bottom:110px}
+main{padding-top:90px;padding-bottom:90px}
 
 /* ===== MENÚ LATERAL ===== */
 .side-menu{
@@ -77,7 +77,7 @@ main{padding-top:90px;padding-bottom:110px}
 /* ===== BUSCADOR FLOTANTE ===== */
 .search-fab{
   position:fixed;
-  bottom:95px;
+  bottom:90px;
   right:20px;
   background:var(--gold);
   color:#000;
@@ -93,7 +93,7 @@ main{padding-top:90px;padding-bottom:110px}
 }
 .search-box{
   position:fixed;
-  bottom:165px;
+  bottom:160px;
   right:20px;
   width:0;
   overflow:hidden;
@@ -123,8 +123,6 @@ main{padding-top:90px;padding-bottom:110px}
 }
 .card img{
   width:100%;
-  height:170px;
-  object-fit:cover;
   border-radius:10px;
 }
 .card button{
@@ -147,7 +145,7 @@ main{padding-top:90px;padding-bottom:110px}
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ===== BARRA INFERIOR ===== */
+/* ===== BARRA MÓVIL ===== */
 .mobile-bar{
   position:fixed;
   bottom:0;
@@ -162,7 +160,11 @@ main{padding-top:90px;padding-bottom:110px}
   background:none;
   border:none;
   color:var(--gold);
-  font-size:20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width:600px){
+  .products{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
 }
 </style>
 </head>
@@ -175,7 +177,6 @@ main{padding-top:90px;padding-bottom:110px}
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
-<!-- MENÚ -->
 <div class="side-menu" id="menu">
   <button onclick="toggleSub()">Productos ▸</button>
   <div class="submenu" id="submenu">
@@ -197,66 +198,57 @@ main{padding-top:90px;padding-bottom:110px}
   <input type="text" placeholder="Buscar..." oninput="search(this.value)">
 </div>
 
-<!-- BARRA INFERIOR -->
 <div class="mobile-bar">
-  <button onclick="resetView()">🏠</button>
+  <button onclick="location.reload()">🏠</button>
   <button onclick="goCart()">🛒</button>
   <button onclick="openWA()">💬</button>
 </div>
 
 <script>
-/* ===== PRODUCTOS ===== */
-const data = [
-  /* PERFUMES HOMBRE */
-  {name:"Perfume Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
-  {name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
-  {name:"Perfume Dior",price:60,cat:"Perfumes Hombre",img:"images/perfume3.jpg"},
-  {name:"Dior Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume4.jpg"},
-  {name:"MYSLF",price:60,cat:"Perfumes Hombre",img:"images/perfume5.jpg"},
-  {name:"Creed Aventus",price:60,cat:"Perfumes Hombre",img:"images/perfume6.jpg"},
-  {name:"Layton Exclusif",price:60,cat:"Perfumes Hombre",img:"images/perfume7.jpg"},
-  {name:"YSL Eau de Parfum",price:60,cat:"Perfumes Hombre",img:"images/perfume8.jpg"},
-  {name:"Xerjoff Erba Pura",price:60,cat:"Perfumes Hombre",img:"images/perfume9.jpg"},
-  {name:"JPG Scandal",price:60,cat:"Perfumes Hombre",img:"images/perfume10.jpg"},
-  {name:"JPG Le Male",price:60,cat:"Perfumes Hombre",img:"images/perfume11.jpg"},
-  {name:"JPG Le Beau",price:60,cat:"Perfumes Hombre",img:"images/perfume12.jpg"},
-  {name:"JPG Le Male Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume13.jpg"},
-  {name:"JPG Ultra Male",price:60,cat:"Perfumes Hombre",img:"images/perfume14.jpg"},
-  {name:"Valentino Intense",price:60,cat:"Perfumes Hombre",img:"images/perfume15.jpg"},
-  {name:"Santal 33",price:60,cat:"Perfumes Hombre",img:"images/perfume16.jpg"},
-  {name:"Azzaro The Most Wanted",price:60,cat:"Perfumes Hombre",img:"images/perfume17.jpg"},
-
-  /* PERFUMES MUJER */
-  {name:"Dior J’adore",price:60,cat:"Perfumes Mujer",img:"images/perfume18.jpg"},
-  {name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
-  {name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"},
-
-  /* RELOJES */
-  {name:"Reloj Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
-  {name:"Reloj Casio",price:50,cat:"Relojes",img:"images/reloj2.jpg"},
-
-  /* TENIS */
-  {name:"Nike Air",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
-  {name:"Adidas Runner",price:85,cat:"Tenis",img:"images/tenis2.jpg"}
+// ===== DATOS DE PRODUCTOS =====
+const data=[
+{name:"Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
+{name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
+{name:"Dior",price:60,cat:"Perfumes Hombre",img:"images/perfume3.jpg"},
+{name:"Dior Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume4.jpg"},
+{name:"MYSLF",price:60,cat:"Perfumes Hombre",img:"images/perfume5.jpg"},
+{name:"Creed Aventus",price:60,cat:"Perfumes Hombre",img:"images/perfume6.jpg"},
+{name:"Layton Exclusif",price:60,cat:"Perfumes Hombre",img:"images/perfume7.jpg"},
+{name:"YSL Eau de Parfum",price:60,cat:"Perfumes Hombre",img:"images/perfume8.jpg"},
+{name:"Xerjoff Erba Pura",price:60,cat:"Perfumes Hombre",img:"images/perfume9.jpg"},
+{name:"JPG Scandal",price:60,cat:"Perfumes Hombre",img:"images/perfume10.jpg"},
+{name:"JPG Le Male",price:60,cat:"Perfumes Hombre",img:"images/perfume11.jpg"},
+{name:"JPG Le Beau",price:60,cat:"Perfumes Hombre",img:"images/perfume12.jpg"},
+{name:"JPG Le Male Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume13.jpg"},
+{name:"JPG Ultra Male",price:60,cat:"Perfumes Hombre",img:"images/perfume14.jpg"},
+{name:"Valentino Intense",price:60,cat:"Perfumes Hombre",img:"images/perfume15.jpg"},
+{name:"Santal 33",price:60,cat:"Perfumes Hombre",img:"images/perfume16.jpg"},
+{name:"Azzaro The Most Wanted",price:60,cat:"Perfumes Hombre",img:"images/perfume17.jpg"},
+{name:"Dior J’adore",price:60,cat:"Perfumes Mujer",img:"images/perfume18.jpg"},
+{name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
+{name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"},
+{name:"Reloj Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
+{name:"Reloj Casio",price:50,cat:"Relojes",img:"images/reloj2.jpg"},
+{name:"Tenis Nike",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
+{name:"Tenis Adidas",price:85,cat:"Tenis",img:"images/tenis2.jpg"}
 ];
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let favs = JSON.parse(localStorage.getItem("favs")) || [];
-let currentCat = null;
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+let favs=JSON.parse(localStorage.getItem("favs"))||[];
+let cat=null;
 
-/* ===== RENDER ===== */
 function render(list=data){
   const p=document.getElementById("products");
   p.innerHTML="";
   list.forEach(i=>{
     const f=favs.find(f=>f.name===i.name)?"❤️":"🤍";
     p.innerHTML+=`
-      <div class="card">
-        <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
-        <img src="${i.img}">
-        <b>${i.name}</b><br>$${i.price}
-        <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
-      </div>`;
+    <div class="card">
+      <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
+      <img src="${i.img}" alt="${i.name}">
+      <b>${i.name}</b><br>$${i.price}
+      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+    </div>`;
   });
 }
 
@@ -264,12 +256,13 @@ function addCart(i){
   cart.push({...i,qty:1});
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
+  alert(`${i.name} agregado al carrito`);
 }
 
 function toggleFav(i){
   favs=favs.find(f=>f.name===i.name)?favs.filter(f=>f.name!==i.name):[...favs,i];
   localStorage.setItem("favs",JSON.stringify(favs));
-  render(currentCat?data.filter(d=>d.cat===currentCat):data);
+  render(cat?data.filter(d=>d.cat===cat):data);
 }
 
 function search(t){
@@ -277,20 +270,14 @@ function search(t){
 }
 
 function filterCat(c){
-  currentCat=c;
+  cat=c;
   render(data.filter(d=>d.cat===c));
-}
-
-function resetView(){
-  currentCat=null;
-  render();
 }
 
 function updateCount(){
   document.getElementById("cartCount").innerText=cart.length;
 }
 
-/* ===== UI ===== */
 function toggleMenu(){
   const m=document.getElementById("menu");
   m.style.left=m.style.left==="0px"?"-260px":"0px";
@@ -304,20 +291,8 @@ function toggleSearch(){
   b.style.width=b.style.width==="220px"?"0":"220px";
 }
 function goCart(){location.href="pagina-del-carro.html"}
-function openWA(){
-  window.open("https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t","_blank")
-}
+function openWA(){window.open("https://wa.me/13129348674","_blank")}
 
-/* ===== CERRAR MENÚ AL TOCAR FUERA ===== */
-document.addEventListener("click",(e)=>{
-  const menu=document.getElementById("menu");
-  const btn=document.querySelector(".menu-btn");
-  if(menu.style.left==="0px" && !menu.contains(e.target) && !btn.contains(e.target)){
-    menu.style.left="-260px";
-  }
-});
-
-/* ===== INIT ===== */
 render();
 updateCount();
 </script>
