@@ -132,8 +132,6 @@ main{padding-top:90px;padding-bottom:90px}
   border-radius:8px;
   background:#000;
   color:var(--gold);
-  font-weight:bold;
-  cursor:pointer;
 }
 .fav{
   text-align:right;
@@ -164,18 +162,9 @@ main{padding-top:90px;padding-bottom:90px}
   color:var(--gold);
 }
 
-/* ===== BOTÓN WHATSAPP ===== */
-.btn-whatsapp{
-  background:#25D366;
-  color:#fff;
-  border:none;
-  padding:15px;
-  width:100%;
-  border-radius:14px;
-  font-size:18px;
-  font-weight:bold;
-  margin-top:20px;
-  cursor:pointer;
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width:600px){
+  .products{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
 }
 </style>
 </head>
@@ -203,6 +192,7 @@ main{padding-top:90px;padding-bottom:90px}
   <div class="products" id="products"></div>
 </main>
 
+<!-- BUSCADOR -->
 <div class="search-fab" onclick="toggleSearch()">🔍</div>
 <div class="search-box" id="searchBox">
   <input type="text" placeholder="Buscar..." oninput="search(this.value)">
@@ -215,18 +205,32 @@ main{padding-top:90px;padding-bottom:90px}
 </div>
 
 <script>
+// ===== DATOS DE PRODUCTOS =====
 const data=[
-  // PERFUMES HOMBRE
-  {name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
-  {name:"Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
-  // PERFUMES MUJER
-  {name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
-  // RELOJES
-  {name:"Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
-  {name:"Casio",price:50,cat:"Relojes",img:"images/reloj2.jpg"},
-  // TENIS
-  {name:"Nike Air",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
-  {name:"Adidas",price:85,cat:"Tenis",img:"images/tenis2.jpg"}
+{name:"Valentino",price:60,cat:"Perfumes Hombre",img:"images/perfume1.jpg"},
+{name:"Invictus",price:60,cat:"Perfumes Hombre",img:"images/perfume2.jpg"},
+{name:"Dior",price:60,cat:"Perfumes Hombre",img:"images/perfume3.jpg"},
+{name:"Dior Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume4.jpg"},
+{name:"MYSLF",price:60,cat:"Perfumes Hombre",img:"images/perfume5.jpg"},
+{name:"Creed Aventus",price:60,cat:"Perfumes Hombre",img:"images/perfume6.jpg"},
+{name:"Layton Exclusif",price:60,cat:"Perfumes Hombre",img:"images/perfume7.jpg"},
+{name:"YSL Eau de Parfum",price:60,cat:"Perfumes Hombre",img:"images/perfume8.jpg"},
+{name:"Xerjoff Erba Pura",price:60,cat:"Perfumes Hombre",img:"images/perfume9.jpg"},
+{name:"JPG Scandal",price:60,cat:"Perfumes Hombre",img:"images/perfume10.jpg"},
+{name:"JPG Le Male",price:60,cat:"Perfumes Hombre",img:"images/perfume11.jpg"},
+{name:"JPG Le Beau",price:60,cat:"Perfumes Hombre",img:"images/perfume12.jpg"},
+{name:"JPG Le Male Elixir",price:60,cat:"Perfumes Hombre",img:"images/perfume13.jpg"},
+{name:"JPG Ultra Male",price:60,cat:"Perfumes Hombre",img:"images/perfume14.jpg"},
+{name:"Valentino Intense",price:60,cat:"Perfumes Hombre",img:"images/perfume15.jpg"},
+{name:"Santal 33",price:60,cat:"Perfumes Hombre",img:"images/perfume16.jpg"},
+{name:"Azzaro The Most Wanted",price:60,cat:"Perfumes Hombre",img:"images/perfume17.jpg"},
+{name:"Dior J’adore",price:60,cat:"Perfumes Mujer",img:"images/perfume18.jpg"},
+{name:"Delina",price:60,cat:"Perfumes Mujer",img:"images/perfume19.jpg"},
+{name:"Stronger With You Mujer",price:60,cat:"Perfumes Mujer",img:"images/perfume20.jpg"},
+{name:"Reloj Rolex",price:150,cat:"Relojes",img:"images/reloj1.jpg"},
+{name:"Reloj Casio",price:50,cat:"Relojes",img:"images/reloj2.jpg"},
+{name:"Tenis Nike",price:80,cat:"Tenis",img:"images/tenis1.jpg"},
+{name:"Tenis Adidas",price:85,cat:"Tenis",img:"images/tenis2.jpg"}
 ];
 
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
@@ -241,20 +245,18 @@ function render(list=data){
     p.innerHTML+=`
     <div class="card">
       <div class="fav" onclick='toggleFav(${JSON.stringify(i)})'>${f}</div>
-      <img src="${i.img}">
+      <img src="${i.img}" alt="${i.name}">
       <b>${i.name}</b><br>$${i.price}
       <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
     </div>`;
   });
-  updateCount();
 }
 
 function addCart(i){
-  const exists = cart.find(p=>p.name===i.name);
-  if(exists) exists.qty += 1;
-  else cart.push({...i,qty:1});
+  cart.push({...i,qty:1});
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
+  alert(`${i.name} agregado al carrito`);
 }
 
 function toggleFav(i){
@@ -273,7 +275,7 @@ function filterCat(c){
 }
 
 function updateCount(){
-  document.getElementById("cartCount").innerText=cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById("cartCount").innerText=cart.length;
 }
 
 function toggleMenu(){
@@ -289,18 +291,11 @@ function toggleSearch(){
   b.style.width=b.style.width==="220px"?"0":"220px";
 }
 function goCart(){location.href="pagina-del-carro.html"}
-function openWA(){
-  let msg="Hola 👋 quiero hacer un pedido:";
-  let total=0;
-  cart.forEach(p=>{
-    msg+=`\n• ${p.name} x${p.qty} – $${p.price * p.qty}`;
-    total+=p.price*p.qty;
-  });
-  msg+=`\nTotal: $${total}`;
-  window.open(`https://wa.me/13129348674?text=${encodeURIComponent(msg)}`,"_blank");
-}
+function openWA(){window.open("https://wa.me/13129348674","_blank")}
 
 render();
+updateCount();
 </script>
+
 </body>
 </html>
