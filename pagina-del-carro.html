@@ -69,9 +69,9 @@ let filteredCart = [...cart];
 
 // ====== PRECIO MAYOREO ======
 function getMayoreoPrice(qty, base){
-  if(qty >= 10) return 500;
-  if(qty >= 5) return 300;
-  return base;
+  if(qty >= 10) return 500;  // total del grupo
+  if(qty >= 5) return 300;   // total del grupo
+  return base * qty;          // precio normal total
 }
 
 // ====== RENDER CARRITO ======
@@ -83,8 +83,10 @@ function updateCart(){
   let subtotal = 0;
 
   filteredCart.forEach((item,index)=>{
-    const priceUnit = getMayoreoPrice(item.qty, item.price); // calcula precio según cantidad
-    const totalItem = priceUnit * item.qty;
+    const totalItem = getMayoreoPrice(item.qty, item.price);  // total según cantidad
+    const priceUnit = totalItem / item.qty;                   // precio unitario
+    const normalTotal = item.price * item.qty;               // precio normal
+    const savings = normalTotal - totalItem;                 // ahorro por mayoreo
     subtotal += totalItem;
 
     const div = document.createElement('div');
@@ -101,6 +103,7 @@ function updateCart(){
         </p>
         <p>Total: $${totalItem.toFixed(2)}</p>
         <p><i>Mayoreo: 5 pcs → $${getMayoreoPrice(5,item.price)} · 10 pcs → $${getMayoreoPrice(10,item.price)}</i></p>
+        ${savings > 0 ? `<p style="color:gold">Ahorras: $${savings.toFixed(2)}</p>` : ''}
       </div>
       <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
@@ -145,10 +148,15 @@ function sendOrder(){
   if(cart.length===0){alert('El carrito está vacío'); return;}
   let msg = 'Pedido Go Shop:\n';
   cart.forEach(i=>{
-    const priceUnit = getMayoreoPrice(i.qty,i.price);
-    msg += `${i.name} - $${priceUnit.toFixed(2)} x ${i.qty} = $${(priceUnit*i.qty).toFixed(2)}\n`;
+    const totalItem = getMayoreoPrice(i.qty, i.price);
+    const priceUnit = totalItem / i.qty;
+    const normalTotal = i.price * i.qty;
+    const savings = normalTotal - totalItem;
+    msg += `${i.name} - $${priceUnit.toFixed(2)} x ${i.qty} = $${totalItem.toFixed(2)}`;
+    if(savings>0) msg += ` (Ahorras: $${savings.toFixed(2)})`;
+    msg += '\n';
   });
-  const total = cart.reduce((a,b)=>a+getMayoreoPrice(b.qty,b.price)*b.qty,0).toFixed(2);
+  const total = cart.reduce((a,b)=>a + getMayoreoPrice(b.qty,b.price), 0).toFixed(2);
   msg += `Total: $${total} (Envío: $0)`;
   const waNumber = '13129348674';
   const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(msg)}`;
