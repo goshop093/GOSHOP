@@ -1,162 +1,175 @@
-
-       
-      <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Go Shop</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Go Shop</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header>
+  <div class="menu-btn" id="menu-btn">⋮</div>
   <h1>Go Shop</h1>
+  <div class="cart-btn" id="cart-btn">🛒 <span id="cart-count">0</span></div>
 </header>
+
+<!-- MENÚ LATERAL -->
+<div id="side-menu" class="side-menu">
+  <button class="close-btn" id="close-menu">&times;</button>
+
+  <div class="menu-section">
+    <button class="menu-item" id="btn-products">Productos ▸</button>
+    <div class="submenu" id="submenu-products">
+      <button class="submenu-item active">Perfumes</button>
+      <button class="submenu-item">Relojes</button>
+      <button class="submenu-item">Tenis</button>
+    </div>
+  </div>
+
+  <div class="menu-section">
+    <button class="menu-item" id="btn-contact">Contacto</button>
+  </div>
+</div>
+
+<!-- BUSCADOR -->
+<div class="search-container">
+  <input type="text" id="search-input" placeholder="Buscar producto...">
+</div>
+
+<!-- BOLSA -->
+<div id="cart" class="cart">
+  <button id="close-cart" class="close-cart">&times;</button>
+  <h2>Mi Bolsa</h2>
+  <div id="cart-items"></div>
+  <div class="cart-total">Total: $<span id="cart-total">0</span></div>
+</div>
 
 <section class="products">
 
   <!-- ================= PERFUMES HOMBRE ================= -->
   <section class="category">
     <h2 class="category-title">Perfumes Hombre</h2>
-
     <div id="male-products" class="product-grid">
-      <!-- PERFUMES 1-17 -->
+      <!-- PERFUMES 1–17 -->
       <div class="product-card">
         <img src="images/perfume1.jpg" alt="Perfume Valentino">
         <h2>Perfume Valentino</h2>
         <p>Fragancia masculina, intensa y fresca.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume2.jpg" alt="Perfume Invictus">
         <h2>Perfume Invictus</h2>
         <p>Elegante y sofisticado, aroma floral.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume3.jpg" alt="Perfume Dior">
         <h2>Perfume Dior</h2>
         <p>Clásico y refinado, aroma duradero.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume4.jpg" alt="Perfume Dior elixir">
         <h2>Perfume Dior elixir</h2>
         <p>Clásico y refinado, aroma duradero.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume5.jpg" alt="Perfume MYSLF">
         <h2>Perfume MYSLF</h2>
         <p>Elegante y fuerte, aroma duradero.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume6.jpg" alt="Perfume Creed Aventus">
         <h2>Perfume Creed Aventus</h2>
         <p>Masculino y sofisticado, aroma duradero.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume7.jpg" alt="Perfume Layton Exclusif">
         <h2>Perfume Layton Exclusif</h2>
         <p>Lujo, poder y presencia.</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume8.jpg" alt="YSL Eau de Parfum">
         <h2>YSL Eau de Parfum</h2>
         <p>Elegante · Sensual · Duradero</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume9.jpg" alt="Xerjoff Erba Pura">
         <h2>Xerjoff Erba Pura</h2>
         <p>Dulce · Intenso · Exótico</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume10.jpg" alt="JPG Scandal">
         <h2>JPG Scandal</h2>
         <p>Audaz · Dulce · Potente</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume11.jpg" alt="JPG Le Male">
         <h2>JPG Le Male</h2>
         <p>Clásico · Masculino · Seductor</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume12.jpg" alt="JPG Le Beau">
         <h2>JPG Le Beau</h2>
         <p>Fresco · Tropical · Atractivo</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume13.jpg" alt="JPG Le Male Elixir">
         <h2>JPG Le Male Elixir</h2>
         <p>Intenso · Cálido · Adictivo</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume14.jpg" alt="JPG Ultra Male">
         <h2>JPG Ultra Male</h2>
         <p>Dulce · Fuerte · Nocturno</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume15.jpg" alt="Valentino Intense">
         <h2>Valentino Intense</h2>
         <p>Elegante · Oscuro · Sofisticado</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume16.jpg" alt="Santal 33">
         <h2>Santal 33</h2>
         <p>Amaderado · Moderno · Exclusivo</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume17.jpg" alt="Azzaro The Most Wanted">
         <h2>Azzaro The Most Wanted</h2>
         <p>Potente · Seductor · Duradero</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
     </div>
 
     <div class="pagination">
@@ -175,23 +188,21 @@
         <h2>Dior J’adore</h2>
         <p>Elegante · Floral · Femenino</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume19.jpg" alt="Delina">
         <h2>Delina</h2>
         <p>Romántico · Dulce · Sofisticado</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
-
       <div class="product-card">
         <img src="images/perfume20.jpg" alt="Stronger With You Mujer">
         <h2>Stronger With You</h2>
         <p>Cálido · Dulce · Envolvente</p>
         <div class="price">$60.00</div>
-        <a href="https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t" target="_blank" class="btn-whatsapp">Comprar</a>
+        <a href="#" class="btn-whatsapp">Comprar</a>
       </div>
     </div>
 
@@ -203,8 +214,9 @@
 
 </section>
 
-<!-- ================= JAVASCRIPT PAGINACIÓN ================= -->
+<!-- ================= JAVASCRIPT ================= -->
 <script>
+/* ===== PAGINACIÓN ===== */
 function setupPagination(containerId, prevBtnId, nextBtnId, itemsPerPage) {
   const container = document.getElementById(containerId);
   const items = Array.from(container.children);
@@ -232,10 +244,114 @@ function setupPagination(containerId, prevBtnId, nextBtnId, itemsPerPage) {
   showPage(currentPage);
 }
 
-// 6 perfumes por página
 setupPagination("male-products", "prev-male", "next-male", 6);
 setupPagination("female-products", "prev-female", "next-female", 6);
-</script>
 
-</body>
-</html>
+/* ===== MENÚ LATERAL ===== */
+const menuBtn = document.getElementById("menu-btn");
+const sideMenu = document.getElementById("side-menu");
+const closeMenu = document.getElementById("close-menu");
+const btnProducts = document.getElementById("btn-products");
+const submenuProducts = document.getElementById("submenu-products");
+const btnContact = document.getElementById("btn-contact");
+
+menuBtn.addEventListener("click", () => { sideMenu.style.left = "0"; });
+closeMenu.addEventListener("click", () => { sideMenu.style.left = "-250px"; });
+btnProducts.addEventListener("click", () => {
+  submenuProducts.style.display = submenuProducts.style.display === "block" ? "none" : "block";
+});
+btnContact.addEventListener("click", () => {
+  window.open("https://chat.whatsapp.com/EyDTR5Yg9LF7RSJyAUYIWX?mode=gi_t", "_blank");
+});
+
+/* ===== BUSCADOR ===== */
+const searchInput = document.getElementById("search-input");
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.toLowerCase();
+  const allProducts = document.querySelectorAll(".product-card");
+  allProducts.forEach(product => {
+    const name = product.querySelector("h2").textContent.toLowerCase();
+    product.style.display = name.includes(query) ? "block" : "none";
+  });
+});
+
+/* ===== BOLSA CON LOCALSTORAGE Y ANIMACIÓN ===== */
+const cartBtn = document.getElementById("cart-btn");
+const cart = document.getElementById("cart");
+const closeCart = document.getElementById("close-cart");
+const cartItemsContainer = document.getElementById("cart-items");
+const cartTotalSpan = document.getElementById("cart-total");
+const cartCount = document.getElementById("cart-count");
+
+let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+function updateCart() {
+  cartItemsContainer.innerHTML = "";
+  let total = 0;
+  cartItems.forEach((item, index) => {
+    const cartItemDiv = document.createElement("div");
+    cartItemDiv.classList.add("cart-item");
+    cartItemDiv.innerHTML = `<p>${item.name} - $${item.price}</p>
+    <button class="remove-btn" data-index="${index}">X</button>`;
+    cartItemsContainer.appendChild(cartItemDiv);
+    total += parseFloat(item.price);
+  });
+
+  cartTotalSpan.textContent = total.toFixed(2);
+  cartCount.textContent = cartItems.length;
+  localStorage.setItem("cartItems", JSON.stringify(cartItems));
+
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const index = btn.getAttribute("data-index");
+      cartItems.splice(index,1);
+      updateCart();
+    });
+  });
+}
+
+// Abrir/Cerrar bolsa
+cartBtn.addEventListener("click", () => { cart.style.right = "0"; });
+closeCart.addEventListener("click", () => { cart.style.right = "-400px"; });
+
+// Comprar con animación
+document.querySelectorAll(".btn-whatsapp").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.preventDefault();
+    const productCard = btn.closest(".product-card");
+    const name = productCard.querySelector("h2").textContent;
+    const price = productCard.querySelector(".price").textContent.replace("$","");
+
+    // Agregar al carrito
+    cartItems.push({name, price});
+    updateCart();
+
+    // Animación "vuelo" hacia la bolsa
+    const productImg = productCard.querySelector("img");
+    const imgClone = productImg.cloneNode(true);
+    const imgRect = productImg.getBoundingClientRect();
+    imgClone.style.position = "fixed";
+    imgClone.style.left = imgRect.left + "px";
+    imgClone.style.top = imgRect.top + "px";
+    imgClone.style.width = productImg.offsetWidth + "px";
+    imgClone.style.height = productImg.offsetHeight + "px";
+    imgClone.style.transition = "all 0.8s ease-in-out";
+    imgClone.style.zIndex = "10000";
+    document.body.appendChild(imgClone);
+
+    const cartRect = cartBtn.getBoundingClientRect();
+    setTimeout(() => {
+      imgClone.style.left = cartRect.left + "px";
+      imgClone.style.top = cartRect.top + "px";
+      imgClone.style.width = "30px";
+      imgClone.style.height = "30px";
+      imgClone.style.opacity = "0.5";
+    }, 50);
+
+    setTimeout(() => { imgClone.remove(); }, 900);
+  });
+});
+
+// Cargar bolsa al iniciar
+updateCart();
+</script>
