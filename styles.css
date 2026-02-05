@@ -52,6 +52,7 @@ header{
   padding:20px;
   transition:left 0.3s ease;
   z-index:2000;
+  overflow-y:auto;
 }
 .side-menu.open{left:0;}
 .side-menu button{
@@ -63,8 +64,15 @@ header{
   border-radius:10px;
   margin-bottom:10px;
   font-weight:bold;
+  cursor:pointer;
+  text-align:left;
 }
-.submenu{display:none;margin-left:10px}
+.submenu{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height 0.3s ease;
+  margin-left:10px;
+}
 
 /* BUSCADOR */
 .search-fab{
@@ -182,7 +190,7 @@ header{
   font-size:22px;
 }
 
-/* ANIMACION */
+/* ANIMACIONES */
 @keyframes fadeUp{
   from{opacity:0;transform:translateY(15px);}
   to{opacity:1;transform:translateY(0);}
