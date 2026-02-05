@@ -101,7 +101,8 @@ function renderSection(id,data){
 // Menú lateral
 function toggleMenu(){
   const menu = document.getElementById("menu");
-  menu.classList.toggle("open");
+  if(menu.style.left === "0px") menu.style.left = "-260px";
+  else menu.style.left = "0px";
 }
 function toggleSub(){
   const s=document.getElementById("submenu");
@@ -159,7 +160,7 @@ const relojesData=[
   {name:"Fossil Machine",img:"images/fossil1.jpg"}
 ];
 
-// Inicializar
+// Inicializar secciones
 renderSection("perfumes",perfumesData);
 renderSection("sneakers",sneakersData);
 renderSection("relojes",relojesData);
