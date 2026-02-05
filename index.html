@@ -9,7 +9,7 @@
 <body>
 
 <header>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="menu-btn" id="menuBtn">☰</div>
   <b>Go Shop</b>
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
@@ -25,6 +25,9 @@
   <button onclick="showFavs()">❤️ Favoritos</button>
   <button onclick="openWA()">💬 Contacto</button>
 </div>
+
+<!-- OVERLAY para cerrar el menú -->
+<div id="overlay"></div>
 
 <!-- BUSCADOR -->
 <div class="search-fab" onclick="toggleSearch()">🔍</div>
@@ -61,7 +64,6 @@
   <button onclick="openWA()">💬</button>
 </div>
 
-<!-- Se carga script separado -->
 <script src="script.js"></script>
 </body>
 </html>
