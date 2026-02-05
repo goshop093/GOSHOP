@@ -5,6 +5,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Go Shop</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* ================= SECCIONES HORIZONTALES ================= */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+  font-size: 1.5rem;
+  color: #FFD700;
+}
+.section-title button {
+  background: #000;
+  color: #FFD700;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.section-title button:hover {
+  background: #222;
+}
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding: 10px 20px;
+}
+.scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #FFD700;
+  border-radius: 4px;
+}
+.scroll-container::-webkit-scrollbar-track {
+  background: #111;
+}
+</style>
 </head>
 <body>
 
@@ -14,44 +52,30 @@
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
-<!-- MENÚ LATERAL -->
-<div class="side-menu" id="menu">
-  <button onclick="filterCategory('Perfumes')">Perfumes</button>
-  <button onclick="filterCategory('Sneakers')">Sneakers</button>
-  <button onclick="filterCategory('Relojes')">Relojes</button>
-  <button onclick="showFavs()">❤️ Favoritos</button>
-  <button onclick="openWA()">💬 Contacto</button>
-</div>
+<main style="padding-top:80px; padding-bottom:80px;">
 
-<!-- BANNER -->
-<section class="banner">
-  <img src="images/banner.jpg" alt="Banner Go Shop">
-</section>
+  <!-- PERFUMES -->
+  <div class="section-title">
+    <span>Perfumes Exclusivos</span>
+    <button onclick="location.href='perfumes.html'">Ver todos</button>
+  </div>
+  <div class="scroll-container" id="perfumes-container"></div>
 
-<!-- BARRAS DE CATEGORÍAS -->
-<section class="categories">
-  <button onclick="goCategory('perfumes.html')">Perfumes</button>
-  <button onclick="goCategory('sneakers.html')">Sneakers</button>
-  <button onclick="goCategory('relojes.html')">Relojes</button>
-</section>
+  <!-- SNEAKERS -->
+  <div class="section-title">
+    <span>Sneakers Exclusivos</span>
+    <button onclick="location.href='sneakers.html'">Ver todos</button>
+  </div>
+  <div class="scroll-container" id="sneakers-container"></div>
 
-<!-- CARRUSELES DESTACADOS -->
-<main>
-  <h2>Perfumes Destacados</h2>
-  <div class="carousel" id="perfumesCarousel"></div>
+  <!-- RELOJES -->
+  <div class="section-title">
+    <span>Relojes Exclusivos</span>
+    <button onclick="location.href='relojes.html'">Ver todos</button>
+  </div>
+  <div class="scroll-container" id="relojes-container"></div>
 
-  <h2>Sneakers Destacados</h2>
-  <div class="carousel" id="sneakersCarousel"></div>
-
-  <h2>Relojes Destacados</h2>
-  <div class="carousel" id="relojesCarousel"></div>
 </main>
-
-<!-- BUSCADOR FLOTANTE -->
-<div class="search-fab" onclick="toggleSearch()">🔍</div>
-<div class="search-box" id="searchBox">
-  <input type="text" placeholder="Buscar..." oninput="searchProducts(this.value)">
-</div>
 
 <div class="mobile-bar">
   <button onclick="location.reload()">🏠</button>
@@ -59,6 +83,92 @@
   <button onclick="openWA()">💬</button>
 </div>
 
-<script src="script.js"></script>
+<script>
+// ====== DATOS DE EJEMPLO (10 cada uno) ======
+const perfumes = [
+  {name:"Valentino", price:80, img:"images/perfume1.jpg"},
+  {name:"Dior J’adore", price:80, img:"images/perfume18.jpg"},
+  {name:"Creed Aventus", price:80, img:"images/perfume6.jpg"},
+  {name:"Tom Ford Oud Wood", price:80, img:"images/perfume25.jpg"},
+  {name:"Versace Eros", price:80, img:"images/perfume40.jpg"},
+  {name:"Gucci Bloom", price:80, img:"images/perfume39.jpg"},
+  {name:"YSL Black Opium", price:80, img:"images/perfume58.jpg"},
+  {name:"Bleu De Chanel", price:80, img:"images/perfume29.jpg"},
+  {name:"One Million", price:80, img:"images/perfume27.jpg"},
+  {name:"Baccarat Rouge 540", price:80, img:"images/perfume75.jpg"}
+];
+
+const sneakers = [
+  {name:"Air Jordan 1", price:250, img:"images/sneaker1.jpg"},
+  {name:"Air Jordan 4", price:300, img:"images/sneaker2.jpg"},
+  {name:"Nike AF1 Off-White", price:350, img:"images/sneaker3.jpg"},
+  {name:"Yeezy Boost 350", price:400, img:"images/sneaker4.jpg"},
+  {name:"Nike Dunk Low", price:220, img:"images/sneaker5.jpg"},
+  {name:"Puma RS-X", price:180, img:"images/sneaker6.jpg"},
+  {name:"Reebok Question", price:200, img:"images/sneaker7.jpg"},
+  {name:"Converse Chuck 70", price:150, img:"images/sneaker8.jpg"},
+  {name:"New Balance 990", price:210, img:"images/sneaker9.jpg"},
+  {name:"Adidas Forum Low", price:190, img:"images/sneaker10.jpg"}
+];
+
+const relojes = [
+  {name:"Rolex Submariner", price:12000, img:"images/reloj1.jpg"},
+  {name:"Omega Seamaster", price:9500, img:"images/reloj2.jpg"},
+  {name:"Tag Heuer Carrera", price:7000, img:"images/reloj3.jpg"},
+  {name:"Audemars Piguet Royal Oak", price:45000, img:"images/reloj4.jpg"},
+  {name:"Patek Philippe Nautilus", price:60000, img:"images/reloj5.jpg"},
+  {name:"Breitling Navitimer", price:8000, img:"images/reloj6.jpg"},
+  {name:"Hublot Big Bang", price:25000, img:"images/reloj7.jpg"},
+  {name:"Cartier Santos", price:11000, img:"images/reloj8.jpg"},
+  {name:"Seiko Prospex", price:900, img:"images/reloj9.jpg"},
+  {name:"Casio G-Shock", price:150, img:"images/reloj10.jpg"}
+];
+
+// ====== CARRITO ======
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCount(){
+  document.getElementById("cartCount").innerText = cart.reduce((s,p)=>s+p.qty||1,0);
+}
+
+// ====== RENDER FUNC ======
+function renderSection(containerId, items){
+  const container = document.getElementById(containerId);
+  container.innerHTML = "";
+  items.forEach(i=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.style.minWidth = "180px";
+    card.innerHTML = `
+      <img src="${i.img}" alt="${i.name}">
+      <h3>${i.name}</h3>
+      <p>$${i.price}</p>
+      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ====== AGREGAR AL CARRITO ======
+function addCart(item){
+  const index = cart.findIndex(p=>p.name===item.name);
+  if(index!==-1) cart[index].qty++;
+  else cart.push({...item, qty:1});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCount();
+  alert(`${item.name} agregado al carrito`);
+}
+
+// ====== FUNCIÓN CARRITO Y WA ======
+function goCart(){location.href='pagina-del-carro.html'}
+function openWA(){window.open("https://wa.me/13129348674","_blank")}
+
+// ====== INICIALIZAR ======
+renderSection("perfumes-container", perfumes);
+renderSection("sneakers-container", sneakers);
+renderSection("relojes-container", relojes);
+updateCount();
+</script>
+
 </body>
 </html>
