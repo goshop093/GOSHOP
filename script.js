@@ -3,7 +3,6 @@
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Actualiza contador del carrito en la barra superior
 function updateCount() {
   const counter = document.getElementById("cartCount");
   if (counter) {
@@ -11,107 +10,80 @@ function updateCount() {
   }
 }
 
-// Animación tipo toast al agregar
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "120px";
-  toast.style.right = "20px";
-  toast.style.background = "#800000";
-  toast.style.color = "#fff";
-  toast.style.padding = "10px 15px";
-  toast.style.borderRadius = "10px";
-  toast.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
-  toast.style.opacity = "0";
-  toast.style.transition = "opacity 0.5s, transform 0.5s";
-  toast.style.zIndex = "5000";
+  Object.assign(toast.style, {
+    position: "fixed",
+    bottom: "120px",
+    right: "20px",
+    background: "#800000",
+    color: "#fff",
+    padding: "10px 15px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.3)",
+    opacity: "0",
+    transition: "opacity 0.5s, transform 0.5s",
+    zIndex: "5000"
+  });
   document.body.appendChild(toast);
 
+  setTimeout(() => { toast.style.opacity = "1"; toast.style.transform = "translateY(-10px)"; }, 10);
   setTimeout(() => {
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(-10px)";
-  }, 10);
-
-  setTimeout(() => {
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(0)";
+    toast.style.opacity = "0"; toast.style.transform = "translateY(0)";
     setTimeout(() => document.body.removeChild(toast), 500);
   }, 2000);
 }
 
-// ===================
-// Agregar al carrito
-// ===================
 function addCart(item) {
-  const index = cart.findIndex(
-    p => p.name === item.name && p.size === (item.size || "")
-  );
-
-  if (index !== -1) {
-    cart[index].qty++;
-  } else {
-    cart.push({ ...item, qty: 1 });
-  }
-
+  const index = cart.findIndex(p => p.name === item.name && p.size === (item.size || ""));
+  if (index !== -1) cart[index].qty++;
+  else cart.push({...item, qty:1});
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCount();
   showToast(`${item.name} agregado al carrito`);
 }
 
 // ===================
-// Render secciones
+// Render de secciones
 // ===================
 function renderSection(id, data, price = 80, withSize = false) {
   const container = document.getElementById(id);
   if (!container) return;
 
   container.innerHTML = "";
-
   const sizesUS = ["US 6","US 7","US 8","US 9","US 10","US 11","US 12"];
 
   data.forEach((item, i) => {
     const card = document.createElement("div");
     card.className = "card";
 
-    let sizeSelect = "";
+    let sizeSelectHTML = "";
     if (withSize) {
-      sizeSelect = `
-        <select id="${id}-size-${i}">
-          <option value="">Selecciona talla</option>
-          ${sizesUS.map(sz => `<option value="${sz}">${sz}</option>`).join('')}
-        </select>
-      `;
+      sizeSelectHTML = `<select id="${id}-size-${i}"><option value="">Selecciona talla</option>${sizesUS.map(sz => `<option value="${sz}">${sz}</option>`).join('')}</select>`;
     }
 
     card.innerHTML = `
       <img src="${item.img}" alt="${item.name}">
       <b>${item.name}</b>
-      ${sizeSelect}
+      ${sizeSelectHTML}
       <b>$${price}</b>
-      <button onclick='handleAdd(${i},"${id}",${price},${withSize})'>Agregar</button>
+      <button>Agregar</button>
     `;
-
     container.appendChild(card);
+
+    // Asignar evento al botón
+    const btn = card.querySelector("button");
+    btn.addEventListener("click", () => {
+      let itemToAdd = {...item, price};
+      if (withSize) {
+        const size = document.getElementById(`${id}-size-${i}`).value;
+        if (!size) { alert("Selecciona una talla"); return; }
+        itemToAdd.size = size;
+      }
+      addCart(itemToAdd);
+    });
   });
-}
-
-// ===================
-// Manejar agregado con tallas
-// ===================
-function handleAdd(index, section, price, withSize) {
-  let item;
-  if (section === "sneakers" && withSize) {
-    const size = document.getElementById(`${section}-size-${index}`).value;
-    if (!size) { alert("Selecciona una talla"); return; }
-    item = { ...sneakersData[index], price, size };
-  } else if (section === "perfumes") {
-    item = { ...perfumesData[index], price };
-  } else if (section === "relojes") {
-    item = { ...relojesData[index], price };
-  }
-
-  addCart(item);
 }
 
 // ===================
@@ -119,17 +91,12 @@ function handleAdd(index, section, price, withSize) {
 // ===================
 function toggleSearch() {
   const b = document.getElementById("searchBox");
-  if (b) {
-    b.style.width = (b.style.width === "220px") ? "0" : "220px";
-  }
+  if (b) b.style.width = (b.style.width === "220px") ? "0" : "220px";
 }
 
-// ===================
-// Otros
-// ===================
 function goCart() { location.href = "pagina-del-carro.html"; }
-function openWA() { window.open("https://wa.me/13129348674", "_blank"); }
-function search(t) { console.log("Buscar: ", t); }
+function openWA() { window.open("https://wa.me/13129348674","_blank"); }
+function search(t) { console.log("Buscar:", t); }
 
 // ===================
 // Datos
@@ -177,6 +144,6 @@ const relojesData = [
 // Inicializar
 // ===================
 renderSection("perfumes", perfumesData, 80);
-renderSection("sneakers", sneakersData, 159, true); // true = tiene talla
+renderSection("sneakers", sneakersData, 159, true);
 renderSection("relojes", relojesData, 200);
 updateCount();
