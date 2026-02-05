@@ -8,6 +8,7 @@
 :root{
   --vino:#800020;
   --dark:#111;
+  --selected:#00ff9c;
 }
 *{box-sizing:border-box;}
 body{
@@ -61,27 +62,48 @@ main{padding-top:90px;padding-bottom:90px}
   border-radius:16px;
   padding:10px;
   position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
 .card img{
   width:100%;
   border-radius:10px;
 }
-.card select, .card button{
+.card b{
+  margin:5px 0;
+  text-align:center;
+}
+.card .sizes{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:5px;
+  margin:5px 0;
+}
+.size-btn{
+  background:#000;
+  color:var(--vino);
+  border:none;
+  border-radius:6px;
+  padding:5px 8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.size-btn.selected{
+  background:var(--selected);
+  color:#000;
+}
+.card button{
   width:100%;
   padding:8px;
   margin-top:5px;
   border:none;
   border-radius:8px;
+  background:#000;
+  color:var(--vino);
   font-weight:bold;
   cursor:pointer;
-}
-.card select{
-  background:#000;
-  color:var(--vino);
-}
-.card button{
-  background:#000;
-  color:var(--vino);
 }
 
 /* SECCIONES */
@@ -138,7 +160,6 @@ h2{
 <script>
 // ===== Base completa de sneakers =====
 const sneakersData=[
-  // ===== Nike =====
   {name:"UNDEFEATED x Air Jordan 4 Retro", cat:"Nike", img:"images/sneaker1.jpg"},
   {name:"Drake OVO x Air Jordan 4", cat:"Nike", img:"images/sneaker2.jpg"},
   {name:"KAWS x Air Jordan 4 Retro “Cool Grey”", cat:"Nike", img:"images/sneaker3.jpg"},
@@ -147,7 +168,6 @@ const sneakersData=[
   {name:"Union LA x Air Jordan 4 Retro SP “Guava Ice”", cat:"Nike", img:"images/sneaker6.jpg"},
   {name:"A Ma Maniére x Air Jordan 4 Retro", cat:"Nike", img:"images/sneaker7.jpg"},
   {name:"Air Jordan 4 Retro ‘Black Cat’", cat:"Nike", img:"images/sneaker8.jpg"},
-
   {name:"Nike x Louis Vuitton Air Force 1", cat:"Nike", img:"images/sneaker9.jpg"},
   {name:"VLONE x Nike Air Force 1 High “Paris Fashion Week”", cat:"Nike", img:"images/sneaker10.jpg"},
   {name:"CLOT x Nike Air Force 1 “1World”", cat:"Nike", img:"images/sneaker11.jpg"},
@@ -161,7 +181,7 @@ const sneakersData=[
   {name:"ALYX x Nike Air Force 1", cat:"Nike", img:"images/sneaker19.jpg"},
   {name:"Nike x Rocafella Air Force 1", cat:"Nike", img:"images/sneaker20.jpg"},
 
-  // ===== Adidas =====
+  // Adidas
   {name:"adidas Yeezy Boost 750 “Grey/Gum”", cat:"Adidas", img:"images/sneaker21.jpg"},
   {name:"adidas Yeezy Boost 350 “Moonrock”", cat:"Adidas", img:"images/sneaker22.jpg"},
   {name:"Chanel x Pharrell x Adidas NMD Hu", cat:"Adidas", img:"images/sneaker23.jpg"},
@@ -177,7 +197,7 @@ const sneakersData=[
   {name:"adidas x Alexander Wang", cat:"Adidas", img:"images/sneaker33.jpg"},
   {name:"adidas x Sean Wotherspoon", cat:"Adidas", img:"images/sneaker34.jpg"},
 
-  // ===== LV =====
+  // LV
   {name:"LV Trainer Sneaker Monogram beige/marrón", cat:"LV", img:"images/sneaker35.jpg"},
   {name:"LV Trainer Sneaker Monogram denim", cat:"LV", img:"images/sneaker36.jpg"},
   {name:"LV Trainer Sneaker Gris/blanco", cat:"LV", img:"images/sneaker37.jpg"},
@@ -189,7 +209,7 @@ const sneakersData=[
   {name:"LV Trainer Sneaker Blanco con detalles metálicos", cat:"LV", img:"images/sneaker43.jpg"},
   {name:"LV Trainer Sneaker Marrón cuero", cat:"LV", img:"images/sneaker44.jpg"},
 
-  // ===== Alexander McQueen =====
+  // Alexander McQueen
   {name:"Oversized Sneaker White/Black", cat:"Alexander McQueen", img:"images/sneaker45.jpg"},
   {name:"Oversized Sneaker White/Red Tartan", cat:"Alexander McQueen", img:"images/sneaker46.jpg"},
   {name:"Oversized Sneaker Black Crystal Heel", cat:"Alexander McQueen", img:"images/sneaker47.jpg"},
@@ -205,10 +225,10 @@ const sneakersData=[
 // Precio fijo
 const PRICE = 159;
 
-// ===== Carrito =====
+// Carrito
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
-// ===== Render =====
+// Render
 function render(){
   const nike = document.getElementById("products-nike");
   const adidas = document.getElementById("products-adidas");
@@ -220,18 +240,36 @@ function render(){
     const card = document.createElement("div");
     card.className="card";
 
+    // Tallas
     const sizes = ["6","7","8","9","10","11","12"];
-    let selectHTML = `<select id="size-${i.name.replace(/\s/g,'')}">`;
-    sizes.forEach(s=>{ selectHTML += `<option value="${s}">US ${s}</option>` });
-    selectHTML += "</select>";
+    let sizesDiv = document.createElement("div");
+    sizesDiv.className="sizes";
+    sizes.forEach(s=>{
+      const btn = document.createElement("button");
+      btn.className="size-btn";
+      btn.innerText = s;
+      btn.onclick = ()=>{
+        card.querySelectorAll(".size-btn").forEach(b=>b.classList.remove("selected"));
+        btn.classList.add("selected");
+      };
+      sizesDiv.appendChild(btn);
+    });
 
     card.innerHTML = `
       <img src="${i.img}">
       <b>${i.name}</b>
       <b>$${PRICE}</b>
-      ${selectHTML}
-      <button onclick='addCart("${i.name}","${i.cat}","${i.img}",document.getElementById("size-${i.name.replace(/\s/g,"")}").value)'>Agregar</button>
     `;
+    card.appendChild(sizesDiv);
+
+    const addBtn = document.createElement("button");
+    addBtn.innerText="Agregar";
+    addBtn.onclick = ()=>{
+      const selected = card.querySelector(".size-btn.selected");
+      if(!selected){ alert("Selecciona una talla"); return; }
+      addCart(i.name,i.cat,i.img,selected.innerText);
+    };
+    card.appendChild(addBtn);
 
     if(i.cat==="Nike") nike.appendChild(card);
     else if(i.cat==="Adidas") adidas.appendChild(card);
@@ -240,7 +278,7 @@ function render(){
   });
 }
 
-// ===== Agregar al carrito =====
+// Agregar al carrito
 function addCart(name, cat, img, size){
   const index = cart.findIndex(p=>p.name===name && p.size===size);
   if(index!==-1){
@@ -253,16 +291,16 @@ function addCart(name, cat, img, size){
   alert(`${name} US ${size} agregado al carrito`);
 }
 
-// ===== Contador =====
+// Contador
 function updateCount(){
   document.getElementById("cartCount").innerText=cart.reduce((s,p)=>s+p.qty,0);
 }
 
-// ===== Funciones adicionales =====
+// Funciones adicionales
 function goCart(){location.href="pagina-del-carro.html";}
 function openWA(){window.open("https://wa.me/13129348674","_blank");}
 
-// ===== Inicializar =====
+// Inicializar
 render();
 updateCount();
 </script>
