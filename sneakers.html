@@ -4,21 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sneakers - Go Shop</title>
-<link rel="stylesheet" href="style.css">
+<style>
+:root{
+  --vino:#800020;
+  --dark:#111;
+}
+*{box-sizing:border-box;}
+body{
+  background:#000;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  margin:0;
+  padding:0;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:var(--dark);
+  color:var(--vino);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:14px;
+  z-index:1000;
+}
+.cart-btn{
+  position:absolute;
+  right:15px;
+  font-size:24px;
+  cursor:pointer;
+}
+.cart-btn span{
+  background:#000;
+  padding:2px 6px;
+  border-radius:50%;
+  font-size:12px;
+}
+
+/* MAIN */
+main{padding-top:90px;padding-bottom:90px}
+
+/* PRODUCTOS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:15px;
+  padding:10px;
+}
+.card{
+  background:var(--vino);
+  color:#fff;
+  border-radius:16px;
+  padding:10px;
+  position:relative;
+}
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+.card select, .card button{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.card select{
+  background:#000;
+  color:var(--vino);
+}
+.card button{
+  background:#000;
+  color:var(--vino);
+}
+
+/* SECCIONES */
+h2{
+  margin:20px 10px 10px 10px;
+  color:var(--vino);
+}
+
+/* MOBILE BAR */
+.mobile-bar{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#111;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+}
+.mobile-bar button{
+  background:none;
+  border:none;
+  color:var(--vino);
+  font-size:20px;
+}
+</style>
 </head>
 <body>
 
 <header>
-  <div class="menu-btn" onclick="toggleMenu()">☰</div>
-  <b>Sneakers</b>
+  <b>Go Shop - Sneakers</b>
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
 
-<main style="padding-top:80px; padding-bottom:80px;">
+<main>
+  <h2>Nike</h2>
+  <div id="products-nike" class="products"></div>
 
-  <h2>Sneakers Exclusivos</h2>
-  <div class="products" id="products"></div>
+  <h2>Adidas</h2>
+  <div id="products-adidas" class="products"></div>
 
+  <h2>LV</h2>
+  <div id="products-lv" class="products"></div>
+
+  <h2>Alexander McQueen</h2>
+  <div id="products-amq" class="products"></div>
 </main>
 
 <div class="mobile-bar">
@@ -28,59 +136,133 @@
 </div>
 
 <script>
-// ====== DATOS DE SNEAKERS (ejemplo 10, puedes agregar hasta 100+) ======
-const data = [
-  {name:"Air Jordan 1 Retro High", price:250, img:"images/sneaker1.jpg"},
-  {name:"Air Jordan 4 Retro Black Cat", price:300, img:"images/sneaker2.jpg"},
-  {name:"Nike Air Force 1 x Off-White", price:350, img:"images/sneaker3.jpg"},
-  {name:"Adidas Yeezy Boost 350 V2", price:400, img:"images/sneaker4.jpg"},
-  {name:"Nike Dunk Low Retro", price:220, img:"images/sneaker5.jpg"},
-  {name:"Puma RS-X Trophy", price:180, img:"images/sneaker6.jpg"},
-  {name:"Reebok Question Mid", price:200, img:"images/sneaker7.jpg"},
-  {name:"Converse Chuck 70", price:150, img:"images/sneaker8.jpg"},
-  {name:"New Balance 990v5", price:210, img:"images/sneaker9.jpg"},
-  {name:"Adidas Forum Low", price:190, img:"images/sneaker10.jpg"}
+// ===== Base completa de sneakers =====
+const sneakersData=[
+  // ===== Nike =====
+  {name:"UNDEFEATED x Air Jordan 4 Retro", cat:"Nike", img:"images/sneaker1.jpg"},
+  {name:"Drake OVO x Air Jordan 4", cat:"Nike", img:"images/sneaker2.jpg"},
+  {name:"KAWS x Air Jordan 4 Retro “Cool Grey”", cat:"Nike", img:"images/sneaker3.jpg"},
+  {name:"Off-White x Air Jordan 4 Retro SP “Sail”", cat:"Nike", img:"images/sneaker4.jpg"},
+  {name:"Travis Scott x Air Jordan 4 Retro “Cactus Jack”", cat:"Nike", img:"images/sneaker5.jpg"},
+  {name:"Union LA x Air Jordan 4 Retro SP “Guava Ice”", cat:"Nike", img:"images/sneaker6.jpg"},
+  {name:"A Ma Maniére x Air Jordan 4 Retro", cat:"Nike", img:"images/sneaker7.jpg"},
+  {name:"Air Jordan 4 Retro ‘Black Cat’", cat:"Nike", img:"images/sneaker8.jpg"},
+
+  {name:"Nike x Louis Vuitton Air Force 1", cat:"Nike", img:"images/sneaker9.jpg"},
+  {name:"VLONE x Nike Air Force 1 High “Paris Fashion Week”", cat:"Nike", img:"images/sneaker10.jpg"},
+  {name:"CLOT x Nike Air Force 1 “1World”", cat:"Nike", img:"images/sneaker11.jpg"},
+  {name:"Tiffany & Co. x Nike Air Force 1", cat:"Nike", img:"images/sneaker12.jpg"},
+  {name:"KAWS x Nike Air Force 1 “1World”", cat:"Nike", img:"images/sneaker13.jpg"},
+  {name:"Nike x PlayStation Air Force 1", cat:"Nike", img:"images/sneaker14.jpg"},
+  {name:"UNDEFEATED x Nike Air Force 1", cat:"Nike", img:"images/sneaker15.jpg"},
+  {name:"Off-White x Nike Air Force 1", cat:"Nike", img:"images/sneaker16.jpg"},
+  {name:"Travis Scott x Nike Air Force 1", cat:"Nike", img:"images/sneaker17.jpg"},
+  {name:"Billie Eilish x Nike Air Force 1 High “Mushroom”", cat:"Nike", img:"images/sneaker18.jpg"},
+  {name:"ALYX x Nike Air Force 1", cat:"Nike", img:"images/sneaker19.jpg"},
+  {name:"Nike x Rocafella Air Force 1", cat:"Nike", img:"images/sneaker20.jpg"},
+
+  // ===== Adidas =====
+  {name:"adidas Yeezy Boost 750 “Grey/Gum”", cat:"Adidas", img:"images/sneaker21.jpg"},
+  {name:"adidas Yeezy Boost 350 “Moonrock”", cat:"Adidas", img:"images/sneaker22.jpg"},
+  {name:"Chanel x Pharrell x Adidas NMD Hu", cat:"Adidas", img:"images/sneaker23.jpg"},
+  {name:"adidas NMD_R1 “Friends and Family”", cat:"Adidas", img:"images/sneaker24.jpg"},
+  {name:"adidas Pharrell Williams Human Race NMD “Friends and Family”", cat:"Adidas", img:"images/sneaker25.jpg"},
+  {name:"adidas Parley for the Oceans Ultra Boost Uncaged", cat:"Adidas", img:"images/sneaker26.jpg"},
+  {name:"adidas Ultra Boost (ediciones limitadas)", cat:"Adidas", img:"images/sneaker27.jpg"},
+  {name:"adidas x Gucci Gazelle", cat:"Adidas", img:"images/sneaker28.jpg"},
+  {name:"adidas x Prada Superstar / Luna Rossa", cat:"Adidas", img:"images/sneaker29.jpg"},
+  {name:"adidas x Yohji Yamamoto Y-3 Qasa High", cat:"Adidas", img:"images/sneaker30.jpg"},
+  {name:"adidas x Hender Scheme Micropacer", cat:"Adidas", img:"images/sneaker31.jpg"},
+  {name:"adidas x Rick Owens", cat:"Adidas", img:"images/sneaker32.jpg"},
+  {name:"adidas x Alexander Wang", cat:"Adidas", img:"images/sneaker33.jpg"},
+  {name:"adidas x Sean Wotherspoon", cat:"Adidas", img:"images/sneaker34.jpg"},
+
+  // ===== LV =====
+  {name:"LV Trainer Sneaker Monogram beige/marrón", cat:"LV", img:"images/sneaker35.jpg"},
+  {name:"LV Trainer Sneaker Monogram denim", cat:"LV", img:"images/sneaker36.jpg"},
+  {name:"LV Trainer Sneaker Gris/blanco", cat:"LV", img:"images/sneaker37.jpg"},
+  {name:"LV Trainer Sneaker Multicolor monogram", cat:"LV", img:"images/sneaker38.jpg"},
+  {name:"LV Trainer Sneaker Beige/crema", cat:"LV", img:"images/sneaker39.jpg"},
+  {name:"LV Trainer Sneaker Negro/monogram", cat:"LV", img:"images/sneaker40.jpg"},
+  {name:"LV Trainer Sneaker Pharrell x Nigo", cat:"LV", img:"images/sneaker41.jpg"},
+  {name:"LV Trainer Sneaker Negro con studs", cat:"LV", img:"images/sneaker42.jpg"},
+  {name:"LV Trainer Sneaker Blanco con detalles metálicos", cat:"LV", img:"images/sneaker43.jpg"},
+  {name:"LV Trainer Sneaker Marrón cuero", cat:"LV", img:"images/sneaker44.jpg"},
+
+  // ===== Alexander McQueen =====
+  {name:"Oversized Sneaker White/Black", cat:"Alexander McQueen", img:"images/sneaker45.jpg"},
+  {name:"Oversized Sneaker White/Red Tartan", cat:"Alexander McQueen", img:"images/sneaker46.jpg"},
+  {name:"Oversized Sneaker Black Crystal Heel", cat:"Alexander McQueen", img:"images/sneaker47.jpg"},
+  {name:"Oversized Sneaker Black Leather", cat:"Alexander McQueen", img:"images/sneaker48.jpg"},
+  {name:"Sprint Runner Sneakers", cat:"Alexander McQueen", img:"images/sneaker49.jpg"},
+  {name:"EC1 Sneaker White", cat:"Alexander McQueen", img:"images/sneaker50.jpg"},
+  {name:"EC1 T-Bar Sneaker Dark Brown", cat:"Alexander McQueen", img:"images/sneaker51.jpg"},
+  {name:"Leather Sneakers Metallic Panel", cat:"Alexander McQueen", img:"images/sneaker52.jpg"},
+  {name:"Tread Slick ‘Blush’", cat:"Alexander McQueen", img:"images/sneaker53.jpg"},
+  {name:"Vintage Red Crystal Heel Sneaker", cat:"Alexander McQueen", img:"images/sneaker54.jpg"},
 ];
 
-// ====== CARRITO ======
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// Precio fijo
+const PRICE = 159;
 
-function updateCount(){
-  document.getElementById("cartCount").innerText = cart.reduce((s,p)=>s+p.qty||1,0);
-}
+// ===== Carrito =====
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
 
-// ====== RENDER SNEAKERS ======
+// ===== Render =====
 function render(){
-  const container = document.getElementById("products");
-  container.innerHTML = "";
-  data.forEach(i=>{
+  const nike = document.getElementById("products-nike");
+  const adidas = document.getElementById("products-adidas");
+  const lv = document.getElementById("products-lv");
+  const amq = document.getElementById("products-amq");
+  nike.innerHTML = adidas.innerHTML = lv.innerHTML = amq.innerHTML = "";
+
+  sneakersData.forEach(i=>{
     const card = document.createElement("div");
-    card.className = "product-card";
+    card.className="card";
+
+    const sizes = ["6","7","8","9","10","11","12"];
+    let selectHTML = `<select id="size-${i.name.replace(/\s/g,'')}">`;
+    sizes.forEach(s=>{ selectHTML += `<option value="${s}">US ${s}</option>` });
+    selectHTML += "</select>";
+
     card.innerHTML = `
-      <img src="${i.img}" alt="${i.name}">
-      <h3>${i.name}</h3>
-      <p>$${i.price}</p>
-      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+      <img src="${i.img}">
+      <b>${i.name}</b>
+      <b>$${PRICE}</b>
+      ${selectHTML}
+      <button onclick='addCart("${i.name}","${i.cat}","${i.img}",document.getElementById("size-${i.name.replace(/\s/g,"")}").value)'>Agregar</button>
     `;
-    container.appendChild(card);
+
+    if(i.cat==="Nike") nike.appendChild(card);
+    else if(i.cat==="Adidas") adidas.appendChild(card);
+    else if(i.cat==="LV") lv.appendChild(card);
+    else if(i.cat==="Alexander McQueen") amq.appendChild(card);
   });
 }
 
-// ====== AGREGAR AL CARRITO ======
-function addCart(item){
-  const index = cart.findIndex(p=>p.name===item.name);
-  if(index!==-1) cart[index].qty++;
-  else cart.push({...item, qty:1});
+// ===== Agregar al carrito =====
+function addCart(name, cat, img, size){
+  const index = cart.findIndex(p=>p.name===name && p.size===size);
+  if(index!==-1){
+    cart[index].qty++;
+  } else {
+    cart.push({name, cat, img, size, qty:1, price:PRICE});
+  }
   localStorage.setItem("cart",JSON.stringify(cart));
   updateCount();
-  alert(`${item.name} agregado al carrito`);
+  alert(`${name} US ${size} agregado al carrito`);
 }
 
-// ====== FUNCIÓN CARRITO Y WA ======
-function goCart(){location.href='pagina-del-carro.html'}
-function openWA(){window.open("https://wa.me/13129348674","_blank")}
+// ===== Contador =====
+function updateCount(){
+  document.getElementById("cartCount").innerText=cart.reduce((s,p)=>s+p.qty,0);
+}
 
-// ====== INICIALIZAR ======
+// ===== Funciones adicionales =====
+function goCart(){location.href="pagina-del-carro.html";}
+function openWA(){window.open("https://wa.me/13129348674","_blank");}
+
+// ===== Inicializar =====
 render();
 updateCount();
 </script>
