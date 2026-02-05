@@ -43,14 +43,17 @@ header{
 /* SIDE MENU */
 .side-menu{
   position:fixed;
-  left:-260px;
   top:0;
+  left:-260px; /* oculto por defecto */
   width:260px;
   height:100%;
   background:var(--dark);
   padding:20px;
   transition:left 0.3s ease;
   z-index:2000;
+}
+.side-menu.open{
+  left:0; /* cuando se abre */
 }
 .side-menu button{
   width:100%;
