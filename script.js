@@ -1,88 +1,17 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Go Shop</title>
-<style>
-:root{
-  --primary:#800000;
-  --dark:#111;
-  --bg:#000;
-  --text:#fff;
-}
-*{box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;margin:0;padding:0;overflow-x:hidden;}
-button{cursor:pointer;transition:.3s;}
-button:hover{opacity:0.8;}
-header{
-  background:var(--dark);
-  color:var(--primary);
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px;
-  position:fixed;
-  top:0;
-  width:100%;
-  z-index:1000;
-  font-size:1.8rem;
-}
-header b{flex:1;text-align:center;}
-#cartCount{background:var(--primary);padding:2px 8px;border-radius:50%;margin-left:5px;font-size:1rem;}
-.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;padding:10px;margin-top:80px;}
-.card{
-  background:var(--dark);
-  color:#fff;
-  border-radius:16px;
-  padding:10px;
-  text-align:center;
-}
-.card img{width:100%;border-radius:10px;}
-.card select, .card button{width:100%;margin-top:5px;padding:8px;border-radius:8px;border:none;font-weight:bold;}
-.card select{background:#222;color:#fff;}
-.card button{background:var(--primary);color:#fff;cursor:pointer;}
-.mobile-bar{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:var(--dark);
-  display:flex;
-  justify-content:space-around;
-  padding:10px 0;
-}
-.mobile-bar button{background:none;border:none;color:var(--primary);font-size:20px;}
-</style>
-</head>
-<body>
-
-<header>
-  <b>Go Shop</b>
-  🛒 <span id="cartCount">0</span>
-</header>
-
-<main id="perfumes" class="products"></main>
-<main id="sneakers" class="products"></main>
-<main id="relojes" class="products"></main>
-
-<div class="mobile-bar">
-  <button onclick="location.href='index.html'">🏠</button>
-  <button onclick="goCart()">🛒</button>
-  <button onclick="openWA()">💬</button>
-</div>
-
-<script>
 // ===================
 // Carrito
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// Actualiza contador del carrito en la barra superior
 function updateCount() {
   const counter = document.getElementById("cartCount");
-  if (counter) counter.innerText = cart.reduce((a, b) => a + b.qty, 0);
+  if (counter) {
+    counter.innerText = cart.reduce((a, b) => a + b.qty, 0);
+  }
 }
 
-// Animación tipo toast
+// Animación tipo toast al agregar
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
@@ -99,9 +28,14 @@ function showToast(message) {
   toast.style.zIndex = "5000";
   document.body.appendChild(toast);
 
-  setTimeout(() => { toast.style.opacity = "1"; toast.style.transform = "translateY(-10px)"; }, 10);
   setTimeout(() => {
-    toast.style.opacity = "0"; toast.style.transform = "translateY(0)";
+    toast.style.opacity = "1";
+    toast.style.transform = "translateY(-10px)";
+  }, 10);
+
+  setTimeout(() => {
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(0)";
     setTimeout(() => document.body.removeChild(toast), 500);
   }, 2000);
 }
@@ -110,107 +44,139 @@ function showToast(message) {
 // Agregar al carrito
 // ===================
 function addCart(item) {
-  const index = cart.findIndex(p => p.name === item.name && (!item.size || p.size===item.size));
-  if (index !== -1) cart[index].qty++;
-  else cart.push({...item, qty:1});
+  const index = cart.findIndex(
+    p => p.name === item.name && p.size === (item.size || "")
+  );
+
+  if (index !== -1) {
+    cart[index].qty++;
+  } else {
+    cart.push({ ...item, qty: 1 });
+  }
+
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCount();
   showToast(`${item.name} agregado al carrito`);
 }
 
 // ===================
-// Render de secciones
+// Render secciones
 // ===================
-function renderSection(id, data) {
+function renderSection(id, data, price = 80, withSize = false) {
   const container = document.getElementById(id);
   if (!container) return;
+
   container.innerHTML = "";
+
+  const sizesUS = ["US 6","US 7","US 8","US 9","US 10","US 11","US 12"];
+
   data.forEach((item, i) => {
     const card = document.createElement("div");
     card.className = "card";
 
-    let html = `<img src="${item.img}" alt="${item.name}"><b>${item.name}</b>`;
-    
-    // Sneakers con select de talla
-    if(item.sizes){
-      html += `<select id="${id}-size-${i}"><option value="">Selecciona talla</option>${item.sizes.map(sz=>`<option value="${sz}">${sz}</option>`).join('')}</select>`;
-      html += `<b>$${item.price}</b>`;
-      html += `<button onclick="handleAdd('${id}', ${i})">Agregar</button>`;
-    } else {
-      html += `<b>$${item.price}</b>`;
-      html += `<button onclick='addCart(${JSON.stringify(item)})'>Agregar</button>`;
+    let sizeSelect = "";
+    if (withSize) {
+      sizeSelect = `
+        <select id="${id}-size-${i}">
+          <option value="">Selecciona talla</option>
+          ${sizesUS.map(sz => `<option value="${sz}">${sz}</option>`).join('')}
+        </select>
+      `;
     }
 
-    card.innerHTML = html;
+    card.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <b>${item.name}</b>
+      ${sizeSelect}
+      <b>$${price}</b>
+      <button onclick='handleAdd(${i},"${id}",${price},${withSize})'>Agregar</button>
+    `;
+
     container.appendChild(card);
   });
 }
 
-// Manejo de sneakers con talla
-function handleAdd(section, index){
-  const select = document.getElementById(`${section}-size-${index}`);
-  const size = select.value;
-  if(!size){ alert("Selecciona una talla"); return; }
-  const item = {...sneakersData[index], size: size};
+// ===================
+// Manejar agregado con tallas
+// ===================
+function handleAdd(index, section, price, withSize) {
+  let item;
+  if (section === "sneakers" && withSize) {
+    const size = document.getElementById(`${section}-size-${index}`).value;
+    if (!size) { alert("Selecciona una talla"); return; }
+    item = { ...sneakersData[index], price, size };
+  } else if (section === "perfumes") {
+    item = { ...perfumesData[index], price };
+  } else if (section === "relojes") {
+    item = { ...relojesData[index], price };
+  }
+
   addCart(item);
 }
 
 // ===================
-// Datos de ejemplo
+// Buscador
+// ===================
+function toggleSearch() {
+  const b = document.getElementById("searchBox");
+  if (b) {
+    b.style.width = (b.style.width === "220px") ? "0" : "220px";
+  }
+}
+
+// ===================
+// Otros
+// ===================
+function goCart() { location.href = "pagina-del-carro.html"; }
+function openWA() { window.open("https://wa.me/13129348674", "_blank"); }
+function search(t) { console.log("Buscar: ", t); }
+
+// ===================
+// Datos
 // ===================
 const perfumesData = [
-  { name: "Valentino", img: "images/perfume1.jpg", price:80 },
-  { name: "JPG Scandal", img: "images/perfume10.jpg", price:80 },
-  { name: "Dior", img: "images/perfume3.jpg", price:80 },
-  { name: "Creed Aventus", img: "images/perfume6.jpg", price:80 },
-  { name: "Tom Ford Lost Cherry", img: "images/perfume33.jpg", price:80 },
-  { name: "Versace Eros", img: "images/perfume40.jpg", price:80 },
-  { name: "Gucci Bloom", img: "images/perfume39.jpg", price:80 },
-  { name: "YSL Eau de Parfum", img: "images/perfume8.jpg", price:80 },
-  { name: "Invictus", img: "images/perfume2.jpg", price:80 },
-  { name: "Bleu De Chanel Parfum", img: "images/perfume29.jpg", price:80 }
+  { name: "Valentino", img: "images/perfume1.jpg" },
+  { name: "JPG Scandal", img: "images/perfume10.jpg" },
+  { name: "Dior", img: "images/perfume3.jpg" },
+  { name: "Creed Aventus", img: "images/perfume6.jpg" },
+  { name: "Tom Ford Lost Cherry", img: "images/perfume33.jpg" },
+  { name: "Versace Eros", img: "images/perfume40.jpg" },
+  { name: "Gucci Bloom", img: "images/perfume39.jpg" },
+  { name: "YSL Eau de Parfum", img: "images/perfume8.jpg" },
+  { name: "Invictus", img: "images/perfume2.jpg" },
+  { name: "Bleu De Chanel Parfum", img: "images/perfume29.jpg" }
 ];
 
 const sneakersData = [
-  { name: "UNDEFEATED x Air Jordan 4 Retro", img: "images/sneaker1.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "KAWS x Air Jordan 4 Retro Cool Grey", img: "images/sneaker3.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Off-White x Air Jordan 4 Sail", img: "images/sneaker4.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Travis Scott x Air Jordan 4 Cactus Jack", img: "images/sneaker5.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Air Jordan 4 Black Cat", img: "images/sneaker8.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Nike x Louis Vuitton Air Force 1", img: "images/sneaker9.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Tiffany x Nike Air Force 1", img: "images/sneaker12.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "adidas Yeezy Boost 750 Grey", img: "images/sneaker21.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "Chanel x Pharrell Adidas NMD", img: "images/sneaker23.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] },
-  { name: "LV Trainer Sneaker Monogram", img: "images/sneaker31.jpg", price:159, sizes:["US 6","US 7","US 8","US 9","US 10","US 11","US 12"] }
+  { name: "UNDEFEATED x Air Jordan 4 Retro", img: "images/sneaker1.jpg" },
+  { name: "KAWS x Air Jordan 4 Retro Cool Grey", img: "images/sneaker3.jpg" },
+  { name: "Off-White x Air Jordan 4 Sail", img: "images/sneaker4.jpg" },
+  { name: "Travis Scott x Air Jordan 4 Cactus Jack", img: "images/sneaker5.jpg" },
+  { name: "Air Jordan 4 Black Cat", img: "images/sneaker8.jpg" },
+  { name: "Nike x Louis Vuitton Air Force 1", img: "images/sneaker9.jpg" },
+  { name: "Tiffany x Nike Air Force 1", img: "images/sneaker12.jpg" },
+  { name: "adidas Yeezy Boost 750 Grey", img: "images/sneaker21.jpg" },
+  { name: "Chanel x Pharrell Adidas NMD", img: "images/sneaker23.jpg" },
+  { name: "LV Trainer Sneaker Monogram", img: "images/sneaker31.jpg" }
 ];
 
 const relojesData = [
-  {name:"Rolex Submariner", cat:"Rolex", img:"images/watch1.jpg", price:12000},
-  {name:"Rolex Daytona", cat:"Rolex", img:"images/watch2.jpg", price:15000},
-  {name:"Omega Speedmaster", cat:"Omega", img:"images/watch8.jpg", price:8000},
-  {name:"Audemars Piguet Royal Oak", cat:"Audemars Piguet", img:"images/watch16.jpg", price:40000},
-  {name:"Patek Philippe Nautilus", cat:"Patek Philippe", img:"images/watch31.jpg", price:60000},
-  {name:"Cartier Santos", cat:"Cartier", img:"images/watch21.jpg", price:9000},
-  {name:"Hublot Big Bang", cat:"Hublot", img:"images/watch26.jpg", price:25000},
-  {name:"IWC Portugieser", cat:"IWC", img:"images/watch36.jpg", price:12000},
-  {name:"Panerai Luminor", cat:"Panerai", img:"images/watch41.jpg", price:10000},
-  {name:"Vacheron Constantin Overseas", cat:"Vacheron Constantin", img:"images/watch49.jpg", price:50000}
+  { name: "Rolex Submariner", img: "images/watch1.jpg" },
+  { name: "Rolex Daytona", img: "images/watch2.jpg" },
+  { name: "Omega Speedmaster", img: "images/watch8.jpg" },
+  { name: "Audemars Piguet Royal Oak", img: "images/watch16.jpg" },
+  { name: "Patek Philippe Nautilus", img: "images/watch31.jpg" },
+  { name: "Cartier Santos", img: "images/watch21.jpg" },
+  { name: "Hublot Big Bang", img: "images/watch26.jpg" },
+  { name: "IWC Portugieser", img: "images/watch36.jpg" },
+  { name: "Panerai Luminor", img: "images/watch41.jpg" },
+  { name: "Vacheron Constantin Overseas", img: "images/watch49.jpg" }
 ];
 
 // ===================
-// Funciones extras
+// Inicializar
 // ===================
-function goCart(){ location.href="pagina-del-carro.html"; }
-function openWA(){ window.open("https://wa.me/13129348674","_blank"); }
-
-// ===================
-// Inicializar todo
-// ===================
-renderSection("perfumes", perfumesData);
-renderSection("sneakers", sneakersData);
-renderSection("relojes", relojesData);
+renderSection("perfumes", perfumesData, 80);
+renderSection("sneakers", sneakersData, 159, true); // true = tiene talla
+renderSection("relojes", relojesData, 200);
 updateCount();
-</script>
-
-</body>
-</html>
