@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relojes - Go Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <b>Relojes</b>
+  <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
+</header>
+
+<main style="padding-top:80px; padding-bottom:80px;">
+
+  <h2>Relojes Exclusivos</h2>
+  <div class="products" id="products"></div>
+
+</main>
+
+<div class="mobile-bar">
+  <button onclick="location.href='index.html'">🏠</button>
+  <button onclick="goCart()">🛒</button>
+  <button onclick="openWA()">💬</button>
+</div>
+
+<script>
+// ====== DATOS DE RELOJES (ejemplo 10, puedes agregar hasta 100+) ======
+const data = [
+  {name:"Rolex Submariner", price:12000, img:"images/reloj1.jpg"},
+  {name:"Omega Seamaster", price:9500, img:"images/reloj2.jpg"},
+  {name:"Tag Heuer Carrera", price:7000, img:"images/reloj3.jpg"},
+  {name:"Audemars Piguet Royal Oak", price:45000, img:"images/reloj4.jpg"},
+  {name:"Patek Philippe Nautilus", price:60000, img:"images/reloj5.jpg"},
+  {name:"Breitling Navitimer", price:8000, img:"images/reloj6.jpg"},
+  {name:"Hublot Big Bang", price:25000, img:"images/reloj7.jpg"},
+  {name:"Cartier Santos", price:11000, img:"images/reloj8.jpg"},
+  {name:"Seiko Prospex", price:900, img:"images/reloj9.jpg"},
+  {name:"Casio G-Shock", price:150, img:"images/reloj10.jpg"}
+];
+
+// ====== CARRITO ======
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCount(){
+  document.getElementById("cartCount").innerText = cart.reduce((s,p)=>s+p.qty||1,0);
+}
+
+// ====== RENDER RELOJES ======
+function render(){
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+  data.forEach(i=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${i.img}" alt="${i.name}">
+      <h3>${i.name}</h3>
+      <p>$${i.price}</p>
+      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ====== AGREGAR AL CARRITO ======
+function addCart(item){
+  const index = cart.findIndex(p=>p.name===item.name);
+  if(index!==-1) cart[index].qty++;
+  else cart.push({...item, qty:1});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCount();
+  alert(`${item.name} agregado al carrito`);
+}
+
+// ====== FUNCIÓN CARRITO Y WA ======
+function goCart(){location.href='pagina-del-carro.html'}
+function openWA(){window.open("https://wa.me/13129348674","_blank")}
+
+// ====== INICIALIZAR ======
+render();
+updateCount();
+</script>
+
+</body>
+</html>
