@@ -1,11 +1,46 @@
+// ===================
+// Variables
+// ===================
+const menu = document.getElementById("menu");
+const overlay = document.getElementById("overlay");
+const menuBtn = document.getElementById("menuBtn");
+
+// ===================
+// Abrir/Cerrar menú
+// ===================
+menuBtn.addEventListener("click", () => {
+  menu.classList.add("open");
+  overlay.classList.add("active");
+  // rotar icono
+  menuBtn.style.transform = "rotate(90deg)";
+});
+
+overlay.addEventListener("click", () => {
+  menu.classList.remove("open");
+  overlay.classList.remove("active");
+  menuBtn.style.transform = "rotate(0deg)";
+});
+
+// Submenú animado
+function toggleSub(){
+  const s = document.getElementById("submenu");
+  if(s.style.maxHeight && s.style.maxHeight !== "0px"){
+    s.style.maxHeight = "0px";
+  } else {
+    s.style.maxHeight = s.scrollHeight + "px";
+  }
+}
+
+// ===================
+// Carrito
+// ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Contador del carrito
 function updateCount(){
   document.getElementById("cartCount").innerText = cart.reduce((a,b)=>a+b.qty,0);
 }
 
-// Toast de agregar al carrito
+// Animación tipo toast
 function showToast(message){
   const toast = document.createElement("div");
   toast.innerText = message;
@@ -22,21 +57,21 @@ function showToast(message){
   toast.style.zIndex="5000";
   document.body.appendChild(toast);
 
-  setTimeout(()=>{
-    toast.style.opacity="1";
-    toast.style.transform="translateY(-10px)";
+  setTimeout(()=>{ 
+    toast.style.opacity="1"; 
+    toast.style.transform="translateY(-10px)"; 
   },10);
 
   setTimeout(()=>{
-    toast.style.opacity="0";
-    toast.style.transform="translateY(0)";
+    toast.style.opacity="0"; 
+    toast.style.transform="translateY(0)"; 
     setTimeout(()=>document.body.removeChild(toast),500);
   },2000);
 }
 
 // Agregar al carrito
 function addCart(name,img,price=80){
-  const index = cart.findIndex(p=>p.name===name);
+  const index = cart.findIndex(p => p.name===name);
   if(index!==-1) cart[index].qty++;
   else cart.push({name,img,qty:1,price});
   localStorage.setItem("cart",JSON.stringify(cart));
@@ -44,7 +79,9 @@ function addCart(name,img,price=80){
   showToast(`${name} agregado al carrito`);
 }
 
-// Render secciones
+// ===================
+// Render de secciones
+// ===================
 function renderSection(id,data){
   const container = document.getElementById(id);
   container.innerHTML="";
@@ -60,33 +97,22 @@ function renderSection(id,data){
   });
 }
 
-// Menú lateral
-function toggleMenu(){
-  document.getElementById("menu").classList.toggle("open");
-}
-
-function toggleSub(){
-  const s=document.getElementById("submenu");
-  if(s.style.maxHeight && s.style.maxHeight !== "0px"){
-    s.style.maxHeight = "0px";
-  } else {
-    s.style.maxHeight = s.scrollHeight + "px";
-  }
-}
-
-// Buscador
+// ===================
+// Buscador y otros
+// ===================
 function toggleSearch(){
   const b=document.getElementById("searchBox");
   b.style.width = (b.style.width==="220px")?"0":"220px";
 }
 
-// Otros
 function goCart(){location.href="pagina-del-carro.html";}
 function openWA(){window.open("https://wa.me/13129348674","_blank");}
 function search(t){console.log("Buscar: ",t);}
 function showFavs(){alert("Función de favoritos aún no implementada");}
 
+// ===================
 // Datos de ejemplo
+// ===================
 const perfumesData=[
   {name:"Valentino",img:"images/perfume1.jpg"},
   {name:"JPG Scandal",img:"images/perfume10.jpg"},
@@ -126,7 +152,9 @@ const relojesData=[
   {name:"Fossil Machine",img:"images/fossil1.jpg"}
 ];
 
+// ===================
 // Inicializar
+// ===================
 renderSection("perfumes",perfumesData);
 renderSection("sneakers",sneakersData);
 renderSection("relojes",relojesData);
