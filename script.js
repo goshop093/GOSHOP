@@ -3,6 +3,7 @@
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// Actualiza contador del carrito en la barra superior
 function updateCount() {
   const counter = document.getElementById("cartCount");
   if (counter) {
@@ -10,6 +11,7 @@ function updateCount() {
   }
 }
 
+// Animación tipo toast al agregar
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
@@ -35,6 +37,9 @@ function showToast(message) {
   }, 2000);
 }
 
+// ===================
+// Agregar al carrito
+// ===================
 function addCart(item) {
   const index = cart.findIndex(p => p.name === item.name && p.size === (item.size || ""));
   if (index !== -1) cart[index].qty++;
@@ -72,7 +77,6 @@ function renderSection(id, data, price = 80, withSize = false) {
     `;
     container.appendChild(card);
 
-    // Asignar evento al botón
     const btn = card.querySelector("button");
     btn.addEventListener("click", () => {
       let itemToAdd = {...item, price};
@@ -87,7 +91,7 @@ function renderSection(id, data, price = 80, withSize = false) {
 }
 
 // ===================
-// Buscador
+// Buscador y otros
 // ===================
 function toggleSearch() {
   const b = document.getElementById("searchBox");
@@ -99,7 +103,7 @@ function openWA() { window.open("https://wa.me/13129348674","_blank"); }
 function search(t) { console.log("Buscar:", t); }
 
 // ===================
-// Datos
+// Datos de Perfumes
 // ===================
 const perfumesData = [
   { name: "Valentino", img: "images/perfume1.jpg" },
@@ -114,6 +118,9 @@ const perfumesData = [
   { name: "Bleu De Chanel Parfum", img: "images/perfume29.jpg" }
 ];
 
+// ===================
+// Datos de Sneakers (tallas US)
+// ===================
 const sneakersData = [
   { name: "UNDEFEATED x Air Jordan 4 Retro", img: "images/sneaker1.jpg" },
   { name: "KAWS x Air Jordan 4 Retro Cool Grey", img: "images/sneaker3.jpg" },
@@ -127,23 +134,28 @@ const sneakersData = [
   { name: "LV Trainer Sneaker Monogram", img: "images/sneaker31.jpg" }
 ];
 
+// ===================
+// Datos Top 10 Relojes de Lujo
+// ===================
 const relojesData = [
-  { name: "Rolex Submariner", img: "images/watch1.jpg" },
-  { name: "Rolex Daytona", img: "images/watch2.jpg" },
-  { name: "Omega Speedmaster", img: "images/watch8.jpg" },
-  { name: "Audemars Piguet Royal Oak", img: "images/watch16.jpg" },
-  { name: "Patek Philippe Nautilus", img: "images/watch31.jpg" },
-  { name: "Cartier Santos", img: "images/watch21.jpg" },
-  { name: "Hublot Big Bang", img: "images/watch26.jpg" },
-  { name: "IWC Portugieser", img: "images/watch36.jpg" },
-  { name: "Panerai Luminor", img: "images/watch41.jpg" },
-  { name: "Vacheron Constantin Overseas", img: "images/watch49.jpg" }
+  { name: "Rolex Submariner", img: "images/watch1.jpg", price:12000 },
+  { name: "Rolex Daytona", img: "images/watch2.jpg", price:15000 },
+  { name: "Omega Speedmaster", img: "images/watch8.jpg", price:8000 },
+  { name: "Audemars Piguet Royal Oak", img: "images/watch16.jpg", price:40000 },
+  { name: "Patek Philippe Nautilus", img: "images/watch31.jpg", price:60000 },
+  { name: "Cartier Santos", img: "images/watch21.jpg", price:9000 },
+  { name: "Hublot Big Bang", img: "images/watch26.jpg", price:25000 },
+  { name: "IWC Portugieser", img: "images/watch36.jpg", price:12000 },
+  { name: "Panerai Luminor", img: "images/watch41.jpg", price:10000 },
+  { name: "Vacheron Constantin Overseas", img: "images/watch49.jpg", price:50000 }
 ];
 
 // ===================
-// Inicializar
+// Inicializar al cargar DOM
 // ===================
-renderSection("perfumes", perfumesData, 80);
-renderSection("sneakers", sneakersData, 159, true);
-renderSection("relojes", relojesData, 200);
-updateCount();
+document.addEventListener("DOMContentLoaded", () => {
+  renderSection("perfumes", perfumesData, 80);
+  renderSection("sneakers", sneakersData, 159, true);
+  renderSection("relojes", relojesData, 200);
+  updateCount();
+});
