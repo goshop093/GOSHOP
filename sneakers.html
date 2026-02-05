@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sneakers - Go Shop</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <b>Sneakers</b>
+  <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
+</header>
+
+<main style="padding-top:80px; padding-bottom:80px;">
+
+  <h2>Sneakers Exclusivos</h2>
+  <div class="products" id="products"></div>
+
+</main>
+
+<div class="mobile-bar">
+  <button onclick="location.href='index.html'">🏠</button>
+  <button onclick="goCart()">🛒</button>
+  <button onclick="openWA()">💬</button>
+</div>
+
+<script>
+// ====== DATOS DE SNEAKERS (ejemplo 10, puedes agregar hasta 100+) ======
+const data = [
+  {name:"Air Jordan 1 Retro High", price:250, img:"images/sneaker1.jpg"},
+  {name:"Air Jordan 4 Retro Black Cat", price:300, img:"images/sneaker2.jpg"},
+  {name:"Nike Air Force 1 x Off-White", price:350, img:"images/sneaker3.jpg"},
+  {name:"Adidas Yeezy Boost 350 V2", price:400, img:"images/sneaker4.jpg"},
+  {name:"Nike Dunk Low Retro", price:220, img:"images/sneaker5.jpg"},
+  {name:"Puma RS-X Trophy", price:180, img:"images/sneaker6.jpg"},
+  {name:"Reebok Question Mid", price:200, img:"images/sneaker7.jpg"},
+  {name:"Converse Chuck 70", price:150, img:"images/sneaker8.jpg"},
+  {name:"New Balance 990v5", price:210, img:"images/sneaker9.jpg"},
+  {name:"Adidas Forum Low", price:190, img:"images/sneaker10.jpg"}
+];
+
+// ====== CARRITO ======
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function updateCount(){
+  document.getElementById("cartCount").innerText = cart.reduce((s,p)=>s+p.qty||1,0);
+}
+
+// ====== RENDER SNEAKERS ======
+function render(){
+  const container = document.getElementById("products");
+  container.innerHTML = "";
+  data.forEach(i=>{
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${i.img}" alt="${i.name}">
+      <h3>${i.name}</h3>
+      <p>$${i.price}</p>
+      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ====== AGREGAR AL CARRITO ======
+function addCart(item){
+  const index = cart.findIndex(p=>p.name===item.name);
+  if(index!==-1) cart[index].qty++;
+  else cart.push({...item, qty:1});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  updateCount();
+  alert(`${item.name} agregado al carrito`);
+}
+
+// ====== FUNCIÓN CARRITO Y WA ======
+function goCart(){location.href='pagina-del-carro.html'}
+function openWA(){window.open("https://wa.me/13129348674","_blank")}
+
+// ====== INICIALIZAR ======
+render();
+updateCount();
+</script>
+
+</body>
+</html>
