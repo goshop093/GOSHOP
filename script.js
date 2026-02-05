@@ -1,96 +1,199 @@
-// ===== Productos Destacados (10 por categoría) =====
-const perfumes = [
-  {name:"Valentino Uomo", price:80, img:"images/perfume1.jpg"},
-  {name:"Creed Aventus", price:120, img:"images/perfume2.jpg"},
-  {name:"Dior Homme", price:110, img:"images/perfume3.jpg"},
-  {name:"Tom Ford Oud Wood", price:130, img:"images/perfume4.jpg"},
-  {name:"Versace Eros", price:90, img:"images/perfume5.jpg"},
-  {name:"YSL Libre", price:100, img:"images/perfume6.jpg"},
-  {name:"Bleu de Chanel", price:125, img:"images/perfume7.jpg"},
-  {name:"Good Girl", price:95, img:"images/perfume8.jpg"},
-  {name:"JPG Scandal", price:85, img:"images/perfume9.jpg"},
-  {name:"Gucci Bloom", price:90, img:"images/perfume10.jpg"}
-];
-
-const sneakers = [
-  {name:"Jordan 4 Retro", price:350, img:"images/sneaker1.jpg"},
-  {name:"Nike Air Force 1", price:300, img:"images/sneaker2.jpg"},
-  {name:"Adidas Yeezy 350", price:400, img:"images/sneaker3.jpg"},
-  {name:"Puma RS-X", price:200, img:"images/sneaker4.jpg"},
-  {name:"New Balance 550", price:220, img:"images/sneaker5.jpg"},
-  {name:"Air Max 90", price:280, img:"images/sneaker6.jpg"},
-  {name:"Air Max 97", price:330, img:"images/sneaker7.jpg"},
-  {name:"Dior x Jordan", price:1200, img:"images/sneaker8.jpg"},
-  {name:"Travis Scott x Air Jordan", price:1000, img:"images/sneaker9.jpg"},
-  {name:"Off-White x Nike", price:950, img:"images/sneaker10.jpg"}
-];
-
-const relojes = [
-  {name:"Rolex Submariner", price:12000, img:"images/watch1.jpg"},
-  {name:"Omega Seamaster", price:9000, img:"images/watch2.jpg"},
-  {name:"Tag Heuer Carrera", price:7000, img:"images/watch3.jpg"},
-  {name:"Audemars Piguet Royal Oak", price:25000, img:"images/watch4.jpg"},
-  {name:"Patek Philippe Nautilus", price:50000, img:"images/watch5.jpg"},
-  {name:"Breitling Navitimer", price:6000, img:"images/watch6.jpg"},
-  {name:"Cartier Santos", price:8000, img:"images/watch7.jpg"},
-  {name:"Hublot Big Bang", price:15000, img:"images/watch8.jpg"},
-  {name:"Seiko Prospex", price:1200, img:"images/watch9.jpg"},
-  {name:"Casio G-Shock", price:400, img:"images/watch10.jpg"}
-];
-
-// ===== Carrito =====
-let cart = JSON.parse(localStorage.getItem("cart"))||[];
-function updateCartCount(){
-  document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+1,0);
-}
-function addCart(item){
-  cart.push({...item, qty:1, priceFinal:item.price});
-  localStorage.setItem("cart",JSON.stringify(cart));
-  updateCartCount();
-  alert(`${item.name} agregado al carrito`);
+:root{
+  --black:#000;
+  --red:#ff0000;
+  --white:#fff;
+  --gray:#f5f5f5;
 }
 
-// ===== Render carruseles =====
-function renderCarousel(items, containerId){
-  const container=document.getElementById(containerId);
-  container.innerHTML="";
-  items.forEach(i=>{
-    const div=document.createElement("div");
-    div.className="product-card";
-    div.innerHTML=`
-      <img src="${i.img}" alt="${i.name}">
-      <h3>${i.name}</h3>
-      <p>$${i.price}</p>
-      <button onclick='addCart(${JSON.stringify(i)})'>Agregar</button>
-    `;
-    container.appendChild(div);
-  });
+/* ===== BODY ===== */
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--gray);
+  color:var(--black);
 }
 
-// ===== BUSCADOR =====
-function toggleSearch(){
-  const b=document.getElementById("searchBox");
-  b.style.width=b.style.width==="220px"?"0":"220px";
+/* ===== HEADER ===== */
+header{
+  position:fixed;
+  top:0;
+  width:100%;
+  background:var(--black);
+  color:var(--white);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:14px;
+  z-index:1000;
 }
-function searchProducts(t){
-  const allItems=[...perfumes,...sneakers,...relojes];
-  const filtered=allItems.filter(i=>i.name.toLowerCase().includes(t.toLowerCase()));
-  renderCarousel(filtered,"perfumesCarousel"); // Para simplicidad, mostramos resultados en perfumes
+header b{
+  font-size:1.8rem;
+}
+.menu-btn, .cart-btn{
+  position:absolute;
+  font-size:24px;
+  cursor:pointer;
+}
+.menu-btn{left:15px;}
+.cart-btn{right:15px;}
+.cart-btn span{
+  background:var(--red);
+  color:var(--white);
+  padding:2px 6px;
+  border-radius:50%;
+  font-size:12px;
 }
 
-// ===== NAVEGACIÓN =====
-function goCategory(url){location.href=url;}
-function goCart(){location.href="pagina-del-carro.html";}
-function toggleMenu(){
-  const m=document.getElementById("menu");
-  m.style.left=m.style.left==="0px"?"-260px":"0px";
+/* ===== BANNER ===== */
+.banner img{
+  width:100%;
+  display:block;
+  margin-top:60px;
+  border-radius:8px;
 }
-function filterCategory(cat){alert("Filtrar "+cat);}
-function showFavs(){alert("Favoritos");}
-function openWA(){window.open("https://wa.me/13129348674","_blank");}
 
-// ===== Inicializar =====
-renderCarousel(perfumes,"perfumesCarousel");
-renderCarousel(sneakers,"sneakersCarousel");
-renderCarousel(relojes,"relojesCarousel");
-updateCartCount();
+/* ===== CATEGORÍAS ===== */
+.categories{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin:15px 0;
+}
+.categories button{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:var(--black);
+  color:var(--red);
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+.categories button:hover{
+  background:var(--red);
+  color:var(--white);
+}
+
+/* ===== CARRUSEL ===== */
+.carousel{
+  display:flex;
+  overflow-x:auto;
+  gap:15px;
+  padding:10px;
+  scroll-behavior:smooth;
+}
+.carousel::-webkit-scrollbar{display:none;}
+
+.product-card{
+  min-width:160px;
+  background:var(--white);
+  border-radius:12px;
+  padding:10px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.2);
+  flex-shrink:0;
+  text-align:center;
+}
+.product-card img{
+  width:100%;
+  border-radius:10px;
+  margin-bottom:8px;
+}
+.product-card h3{
+  margin:5px 0;
+  font-size:14px;
+}
+.product-card p{
+  margin:5px 0;
+  font-size:13px;
+  font-weight:bold;
+}
+.product-card button{
+  width:100%;
+  padding:8px;
+  border:none;
+  border-radius:10px;
+  background:var(--black);
+  color:var(--red);
+  font-weight:bold;
+  cursor:pointer;
+}
+.product-card button:hover{
+  background:var(--red);
+  color:var(--white);
+}
+
+/* ===== BUSCADOR FLOTANTE ===== */
+.search-fab{
+  position:fixed;
+  bottom:90px;
+  right:20px;
+  width:55px;
+  height:55px;
+  background:var(--red);
+  color:var(--white);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+  z-index:3000;
+}
+.search-box{
+  position:fixed;
+  bottom:160px;
+  right:20px;
+  width:0;
+  overflow:hidden;
+  transition:0.3s;
+}
+.search-box input{
+  width:220px;
+  padding:12px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+}
+
+/* ===== MOBILE BAR ===== */
+.mobile-bar{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:var(--black);
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  z-index:1000;
+}
+.mobile-bar button{
+  background:none;
+  border:none;
+  color:var(--red);
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* ===== TITULOS DE SECCIÓN ===== */
+main h2{
+  margin:15px 10px;
+  font-size:1.2rem;
+  text-align:left;
+  color:var(--black);
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width:600px){
+  .carousel{
+    padding:5px;
+    gap:10px;
+  }
+  .product-card{
+    min-width:140px;
+    padding:8px;
+  }
+  main h2{
+    font-size:1rem;
+    margin:10px 5px;
+  }
+}
