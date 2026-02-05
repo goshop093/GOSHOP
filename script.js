@@ -133,17 +133,17 @@ const sneakersData = [
 // ===================
 // Relojes
 // ===================
-const relojesData = [
-  { name: "Rolex Submariner", img: "images/rolex1.jpg" },
-  { name: "Omega Seamaster", img: "images/omega1.jpg" },
-  { name: "Tag Heuer Carrera", img: "images/tag1.jpg" },
-  { name: "Audemars Piguet Royal Oak", img: "images/ap1.jpg" },
-  { name: "Cartier Santos", img: "images/cartier1.jpg" },
-  { name: "Hublot Big Bang", img: "images/hublot1.jpg" },
-  { name: "Tissot PRX", img: "images/tissot1.jpg" },
-  { name: "Seiko Prospex", img: "images/seiko1.jpg" },
-  { name: "Casio G-Shock", img: "images/casio1.jpg" },
-  { name: "Fossil Machine", img: "images/fossil1.jpg" }
+const watches = [
+  {name:"Rolex Submariner", cat:"Rolex", img:"images/watch1.jpg", price:12000},
+  {name:"Rolex Daytona", cat:"Rolex", img:"images/watch2.jpg", price:15000},
+  {name:"Omega Speedmaster", cat:"Omega", img:"images/watch8.jpg", price:8000},
+  {name:"Audemars Piguet Royal Oak", cat:"Audemars Piguet", img:"images/watch16.jpg", price:40000},
+  {name:"Patek Philippe Nautilus", cat:"Patek Philippe", img:"images/watch31.jpg", price:60000},
+  {name:"Cartier Santos", cat:"Cartier", img:"images/watch21.jpg", price:9000},
+  {name:"Hublot Big Bang", cat:"Hublot", img:"images/watch26.jpg", price:25000},
+  {name:"IWC Portugieser", cat:"IWC", img:"images/watch36.jpg", price:12000},
+  {name:"Panerai Luminor", cat:"Panerai", img:"images/watch41.jpg", price:10000},
+  {name:"Vacheron Constantin Overseas", cat:"Vacheron Constantin", img:"images/watch49.jpg", price:50000}
 ];
 
 // ===================
