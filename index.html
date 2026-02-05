@@ -104,8 +104,8 @@ function toggleMenu(){
   menu.classList.toggle("open");
 }
 function toggleSub(){
-  const s = document.getElementById("submenu");
-  s.classList.toggle("open");
+  const s=document.getElementById("submenu");
+  s.style.display = (s.style.display==="block") ? "none" : "block";
 }
 
 // Buscador
