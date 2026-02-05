@@ -9,25 +9,9 @@
 <body>
 
 <header>
-  <div class="menu-btn" id="menuBtn">☰</div>
   <b>Go Shop</b>
   <div class="cart-btn" onclick="goCart()">🛒 <span id="cartCount">0</span></div>
 </header>
-
-<!-- MENÚ LATERAL -->
-<div class="side-menu" id="menu">
-  <button onclick="toggleSub()">Productos ▸</button>
-  <div class="submenu" id="submenu">
-    <button onclick="location.href='perfumes.html'">Perfumes</button>
-    <button onclick="location.href='sneakers.html'">Sneakers</button>
-    <button onclick="location.href='relojes.html'">Relojes</button>
-  </div>
-  <button onclick="showFavs()">❤️ Favoritos</button>
-  <button onclick="openWA()">💬 Contacto</button>
-</div>
-
-<!-- OVERLAY para cerrar el menú -->
-<div id="overlay"></div>
 
 <!-- BUSCADOR -->
 <div class="search-fab" onclick="toggleSearch()">🔍</div>
