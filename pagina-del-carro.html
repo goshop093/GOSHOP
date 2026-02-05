@@ -3,33 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Carrito Avanzado - Go Shop</title>
+<title>Mi Carrito - Go Shop</title>
 <style>
 :root{
-  --gold:#FFD700;
+  --primary:#800000; /* rojo vino */
   --dark:#111;
+  --bg:#000;
+  --text:#fff;
 }
+
+/* RESET Y BODY */
 *{box-sizing:border-box;}
-body{background:#000;color:#fff;font-family:Arial,sans-serif;margin:0;padding:0;overflow-x:hidden;}
-header{background:var(--dark);color:var(--gold);display:flex;justify-content:center;align-items:center;padding:14px;position:fixed;top:0;width:100%;z-index:1000;font-size:1.8rem;}
-header b{flex:1;text-align:center;}
+body{background:var(--bg);color:var(--text);font-family:Arial,sans-serif;margin:0;padding:0;overflow-x:hidden;}
 button{cursor:pointer;transition:.3s;}
-button:hover{opacity:.8;}
+button:hover{opacity:0.8;}
+
+/* HEADER */
+header{
+  background:var(--dark);
+  color:var(--primary);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:14px;
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:1000;
+  font-size:1.8rem;
+}
+header b{flex:1;text-align:center;}
+
+/* CONTENEDOR CARRITO */
 .cart-page{padding:120px 20px 20px 20px;max-width:900px;margin:0 auto;}
-.cart-item{display:flex;align-items:center;justify-content:space-between;background:#222;margin-bottom:15px;padding:10px;border-radius:10px;transition:all .3s ease;}
+.cart-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--dark);
+  margin-bottom:15px;
+  padding:10px;
+  border-radius:10px;
+  transition:all .3s ease;
+}
 .cart-item.animate{animation:fadeIn 0.4s ease;}
 .cart-item img{width:100px;height:100px;object-fit:cover;border-radius:10px;}
 .cart-item .info{flex:1;margin-left:15px;}
 .cart-item .info p{margin:4px 0;}
-.qty-btn{padding:4px 8px;margin:0 4px;background:#000;color:var(--gold);border:none;border-radius:5px;}
-.remove-btn{background:#000;color:var(--gold);border:none;padding:6px 10px;border-radius:6px;}
-.cart-total{font-size:1.5rem;font-weight:bold;text-align:center;margin-top:20px;}
-.btn-actions{display:flex;justify-content:center;gap:15px;margin-top:20px;flex-wrap:wrap;}
-.btn-actions button{padding:10px 20px;background:#000;color:var(--gold);border:none;border-radius:10px;font-weight:bold;transition:.3s;}
-.btn-actions button:hover{background:#222;}
+
+/* BOTONES */
+.qty-btn{
+  padding:4px 8px;
+  margin:0 4px;
+  background:var(--primary);
+  color:var(--text);
+  border:none;
+  border-radius:5px;
+  font-weight:bold;
+}
+.remove-btn{
+  background:var(--primary);
+  color:var(--text);
+  border:none;
+  padding:6px 10px;
+  border-radius:6px;
+  font-weight:bold;
+}
+
+/* TOTAL */
+.cart-total{
+  font-size:1.5rem;
+  font-weight:bold;
+  text-align:center;
+  margin-top:20px;
+}
+
+/* BOTONES DE ACCIÓN */
+.btn-actions{
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  margin-top:20px;
+  flex-wrap:wrap;
+}
+.btn-actions button{
+  padding:10px 20px;
+  background:var(--primary);
+  color:var(--text);
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+  transition:.3s;
+}
+.btn-actions button:hover{background:#4d0000;}
+
+/* BUSCADOR */
 .search-cart{margin:15px 0;text-align:center;}
-.search-cart input{width:90%;max-width:400px;padding:10px;border-radius:25px;border:none;outline:none;font-size:16px;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.search-cart input{
+  width:90%;
+  max-width:400px;
+  padding:10px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  font-size:16px;
+  background:#222;
+  color:#fff;
+}
+
+/* ANIMACIÓN */
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+/* RESPONSIVE */
 @media screen and (max-width:600px){
   .cart-item{flex-direction:column;align-items:flex-start;}
   .cart-item img{width:100%;height:auto;}
@@ -69,9 +157,9 @@ let filteredCart = [...cart];
 
 // ====== PRECIO MAYOREO ======
 function getMayoreoPrice(qty, base){
-  if(qty >= 10) return 500;  // total del grupo
-  if(qty >= 5) return 300;   // total del grupo
-  return base * qty;          // precio normal total
+  if(qty >= 10) return 500;  
+  if(qty >= 5) return 300;   
+  return base * qty;          
 }
 
 // ====== RENDER CARRITO ======
@@ -83,10 +171,10 @@ function updateCart(){
   let subtotal = 0;
 
   filteredCart.forEach((item,index)=>{
-    const totalItem = getMayoreoPrice(item.qty, item.price);  // total según cantidad
-    const priceUnit = totalItem / item.qty;                   // precio unitario
-    const normalTotal = item.price * item.qty;               // precio normal
-    const savings = normalTotal - totalItem;                 // ahorro por mayoreo
+    const totalItem = getMayoreoPrice(item.qty, item.price);  
+    const priceUnit = totalItem / item.qty;                   
+    const normalTotal = item.price * item.qty;               
+    const savings = normalTotal - totalItem;                 
     subtotal += totalItem;
 
     const div = document.createElement('div');
@@ -102,8 +190,7 @@ function updateCart(){
           <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
         </p>
         <p>Total: $${totalItem.toFixed(2)}</p>
-        <p><i>Mayoreo: 5 pcs → $${getMayoreoPrice(5,item.price)} · 10 pcs → $${getMayoreoPrice(10,item.price)}</i></p>
-        ${savings > 0 ? `<p style="color:gold">Ahorras: $${savings.toFixed(2)}</p>` : ''}
+        ${savings > 0 ? `<p style="color:var(--primary)">Ahorras: $${savings.toFixed(2)}</p>` : ''}
       </div>
       <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
