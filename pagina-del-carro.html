@@ -6,7 +6,7 @@
 <title>Mi Carrito - Go Shop</title>
 <style>
 :root{
-  --primary:#800000;
+  --primary:#800000; /* color vino */
   --dark:#111;
   --bg:#000;
   --card-bg:#2c0000;
@@ -34,22 +34,24 @@ header{
 .cart-item{
   display:flex;
   align-items:center;
-  justify-content:space-between;
   background:var(--card-bg);
   margin-bottom:15px;
   padding:10px;
   border-radius:10px;
+  gap:15px;
   flex-wrap:wrap;
 }
 .cart-item img{
-  width:100px;
-  height:100px;
+  width:80px;
+  height:80px;
   object-fit:cover;
   border-radius:10px;
 }
 .cart-item .info{
   flex:1;
-  margin-left:15px;
+}
+.cart-item .info p{
+  margin:4px 0;
 }
 .qty-btn{
   padding:4px 8px;
@@ -92,6 +94,16 @@ header{
 .btn-actions button:hover{
   background:#2c0000;
 }
+@media screen and (max-width:600px){
+  .cart-item{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .cart-item img{
+    width:100%;
+    height:auto;
+  }
+}
 </style>
 </head>
 <body>
@@ -121,8 +133,7 @@ function getTotalPriceWithMayoreo(){
   const totalQty = cart.reduce((a,b)=>a+b.qty,0);
   let subtotal = 0;
   cart.forEach(item=>{
-    let price = item.price;
-    subtotal += price * item.qty;
+    subtotal += item.price * item.qty;
   });
 
   // Descuento por mayoreo según cantidad total
@@ -138,4 +149,67 @@ function updateCart(){
   const totalSpan = document.getElementById('cart-total');
   container.innerHTML = '';
 
-  cart
+  cart.forEach((item,index)=>{
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <div class="info">
+        <p><b>${item.name}</b></p>
+        <p>Precio unitario: $${item.price.toFixed(2)}</p>
+        <p>
+          Cantidad: 
+          <button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
+          ${item.qty}
+          <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+        </p>
+        <p>Total: $${(item.price*item.qty).toFixed(2)}</p>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${index})">X</button>
+    `;
+    container.appendChild(div);
+  });
+
+  const subtotal = getTotalPriceWithMayoreo();
+  subtotalSpan.textContent = subtotal.toFixed(2);
+  totalSpan.textContent = subtotal.toFixed(2);
+
+  localStorage.setItem('cart',JSON.stringify(cart));
+}
+
+// ====== CANTIDAD + / - ======
+function changeQty(index,delta){
+  cart[index].qty += delta;
+  if(cart[index].qty<1) cart[index].qty=1;
+  updateCart();
+}
+
+// ====== ELIMINAR ======
+function removeItem(index){
+  cart.splice(index,1);
+  updateCart();
+}
+
+// ====== REGRESAR ======
+function goBack(){window.location.href='index.html';}
+
+// ====== WHATSAPP ======
+function sendOrder(){
+  if(cart.length===0){alert('El carrito está vacío'); return;}
+  let msg = 'Pedido Go Shop:\n';
+  cart.forEach(i=>{
+    msg += `${i.name} x${i.qty} = $${(i.price*i.qty).toFixed(2)}\n`;
+  });
+  const total = getTotalPriceWithMayoreo().toFixed(2);
+  msg += `Total: $${total}`;
+  const waNumber = '13129348674';
+  const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+}
+
+// ====== INICIALIZAR ======
+updateCart();
+</script>
+
+</body>
+</html>
