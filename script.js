@@ -1,46 +1,42 @@
-// ===================
-// Carrito (solo contador)
-// ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+// Contador del carrito
 function updateCount(){
   document.getElementById("cartCount").innerText = cart.reduce((a,b)=>a+b.qty,0);
 }
 
-// Animación tipo toast al agregar
+// Toast de agregar al carrito
 function showToast(message){
   const toast = document.createElement("div");
   toast.innerText = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "120px";
-  toast.style.right = "20px";
-  toast.style.background = "#800000";
-  toast.style.color = "#fff";
-  toast.style.padding = "10px 15px";
-  toast.style.borderRadius = "10px";
-  toast.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
-  toast.style.opacity = "0";
-  toast.style.transition = "opacity 0.5s, transform 0.5s";
-  toast.style.zIndex = "5000";
+  toast.style.position="fixed";
+  toast.style.bottom="120px";
+  toast.style.right="20px";
+  toast.style.background="#800000";
+  toast.style.color="#fff";
+  toast.style.padding="10px 15px";
+  toast.style.borderRadius="10px";
+  toast.style.boxShadow="0 4px 10px rgba(0,0,0,0.3)";
+  toast.style.opacity="0";
+  toast.style.transition="opacity 0.5s, transform 0.5s";
+  toast.style.zIndex="5000";
   document.body.appendChild(toast);
 
   setTimeout(()=>{
-    toast.style.opacity = "1";
-    toast.style.transform = "translateY(-10px)";
+    toast.style.opacity="1";
+    toast.style.transform="translateY(-10px)";
   },10);
 
   setTimeout(()=>{
-    toast.style.opacity = "0";
-    toast.style.transform = "translateY(0)";
+    toast.style.opacity="0";
+    toast.style.transform="translateY(0)";
     setTimeout(()=>document.body.removeChild(toast),500);
   },2000);
 }
 
-// ===================
-// Agregar productos a las secciones
-// ===================
+// Agregar al carrito
 function addCart(name,img,price=80){
-  const index = cart.findIndex(p => p.name===name);
+  const index = cart.findIndex(p=>p.name===name);
   if(index!==-1) cart[index].qty++;
   else cart.push({name,img,qty:1,price});
   localStorage.setItem("cart",JSON.stringify(cart));
@@ -48,13 +44,14 @@ function addCart(name,img,price=80){
   showToast(`${name} agregado al carrito`);
 }
 
+// Render secciones
 function renderSection(id,data){
   const container = document.getElementById(id);
-  container.innerHTML = "";
+  container.innerHTML="";
   data.forEach(item=>{
     const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
+    card.className="card";
+    card.innerHTML=`
       <img src="${item.img}" alt="${item.name}">
       <b>${item.name}</b>
       <button onclick='addCart("${item.name}","${item.img}",80)'>Agregar</button>
@@ -63,37 +60,33 @@ function renderSection(id,data){
   });
 }
 
-// ===================
 // Menú lateral
-// ===================
 function toggleMenu(){
-  const menu = document.getElementById("menu");
-  menu.classList.toggle("open");
+  document.getElementById("menu").classList.toggle("open");
 }
+
 function toggleSub(){
   const s=document.getElementById("submenu");
-  s.style.display = (s.style.display==="block") ? "none" : "block";
+  if(s.style.maxHeight && s.style.maxHeight !== "0px"){
+    s.style.maxHeight = "0px";
+  } else {
+    s.style.maxHeight = s.scrollHeight + "px";
+  }
 }
 
-// ===================
 // Buscador
-// ===================
 function toggleSearch(){
-  const b = document.getElementById("searchBox");
-  b.style.width = (b.style.width==="220px") ? "0" : "220px";
+  const b=document.getElementById("searchBox");
+  b.style.width = (b.style.width==="220px")?"0":"220px";
 }
 
-// ===================
 // Otros
-// ===================
-function goCart(){ location.href="pagina-del-carro.html"; }
-function openWA(){ window.open("https://wa.me/13129348674","_blank"); }
-function search(t){ console.log("Buscar: ",t); }
-function showFavs(){ alert("Función de favoritos aún no implementada"); }
+function goCart(){location.href="pagina-del-carro.html";}
+function openWA(){window.open("https://wa.me/13129348674","_blank");}
+function search(t){console.log("Buscar: ",t);}
+function showFavs(){alert("Función de favoritos aún no implementada");}
 
-// ===================
 // Datos de ejemplo
-// ===================
 const perfumesData=[
   {name:"Valentino",img:"images/perfume1.jpg"},
   {name:"JPG Scandal",img:"images/perfume10.jpg"},
@@ -133,9 +126,7 @@ const relojesData=[
   {name:"Fossil Machine",img:"images/fossil1.jpg"}
 ];
 
-// ===================
-// Inicializar secciones y contador
-// ===================
+// Inicializar
 renderSection("perfumes",perfumesData);
 renderSection("sneakers",sneakersData);
 renderSection("relojes",relojesData);
