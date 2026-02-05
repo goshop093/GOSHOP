@@ -1,12 +1,9 @@
-<script>
 // ===================
 // Carrito
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ===================
-// Actualizar contador
-// ===================
+// Actualiza contador del carrito
 function updateCount() {
   const counter = document.getElementById("cartCount");
   if (counter) {
@@ -14,9 +11,7 @@ function updateCount() {
   }
 }
 
-// ===================
-// Animación tipo toast
-// ===================
+// Animación tipo toast al agregar
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
@@ -48,54 +43,37 @@ function showToast(message) {
 // ===================
 // Agregar al carrito
 // ===================
-function addCart(name, img, price = 80, size = null) {
-  let existing;
-  if (size) {
-    existing = cart.find(p => p.name === name && p.size === size);
-  } else {
-    existing = cart.find(p => p.name === name);
-  }
+function addCart(name, img, price = 80) {
+  const index = cart.findIndex(p => p.name === name);
 
-  if (existing) {
-    existing.qty++;
+  if (index !== -1) {
+    cart[index].qty++;
   } else {
-    const item = { name, img, price, qty: 1 };
-    if (size) item.size = size;
-    cart.push(item);
+    cart.push({ name, img, qty: 1, price });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCount();
-  showToast(`${name}${size ? ' - ' + size : ''} agregado al carrito`);
+  showToast(`${name} agregado al carrito`);
 }
 
 // ===================
 // Render de secciones
 // ===================
-function renderSection(id, data, price = 80, withSize = false) {
+function renderSection(id, data, price = 80) {
   const container = document.getElementById(id);
   if (!container) return;
+
   container.innerHTML = "";
 
-  data.forEach((item, i) => {
+  data.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
-
-    let sizeSelect = "";
-    if (withSize) {
-      const sizesUS = ["US 6","US 7","US 8","US 9","US 10","US 11","US 12"];
-      sizeSelect = `<select id="size-${id}-${i}">
-        <option value="">Selecciona talla</option>
-        ${sizesUS.map(sz=>`<option value="${sz}">${sz}</option>`).join('')}
-      </select>`;
-    }
-
     card.innerHTML = `
       <img src="${item.img}" alt="${item.name}">
       <b>${item.name}</b>
-      ${sizeSelect}
       <b>$${price}</b>
-      <button onclick='${withSize ? "addCartWithSize(\"" + id + "\"," + i + "," + price + ")" : "addCart(\"" + item.name + "\",\"" + item.img + "\"," + price + ")"}'>
+      <button onclick='addCart("${item.name}","${item.img}",${price})'>
         Agregar
       </button>
     `;
@@ -104,33 +82,24 @@ function renderSection(id, data, price = 80, withSize = false) {
 }
 
 // ===================
-// Agregar con talla
+// Buscador
 // ===================
-function addCartWithSize(sectionId, index, price) {
-  const sizeSelect = document.getElementById(`size-${sectionId}-${index}`);
-  if (!sizeSelect) return;
-  const size = sizeSelect.value;
-  if (!size) { alert("Selecciona una talla"); return; }
-
-  let item;
-  if (sectionId === "sneakers") item = sneakersData[index];
-  else return;
-
-  addCart(item.name, item.img, price, size);
+function toggleSearch() {
+  const b = document.getElementById("searchBox");
+  if (b) {
+    b.style.width = (b.style.width === "220px") ? "0" : "220px";
+  }
 }
 
 // ===================
-// Funciones extras
+// Otros
 // ===================
 function goCart() { location.href = "pagina-del-carro.html"; }
 function openWA() { window.open("https://wa.me/13129348674", "_blank"); }
-function toggleSearch() {
-  const b = document.getElementById("searchBox");
-  if (b) b.style.width = (b.style.width === "220px") ? "0" : "220px";
-}
+function search(t) { console.log("Buscar: ", t); }
 
 // ===================
-// Datos
+// Perfumes
 // ===================
 const perfumesData = [
   { name: "Valentino", img: "images/perfume1.jpg" },
@@ -145,6 +114,9 @@ const perfumesData = [
   { name: "Bleu De Chanel Parfum", img: "images/perfume29.jpg" }
 ];
 
+// ===================
+// Sneakers premium ($159)
+// ===================
 const sneakersData = [
   { name: "UNDEFEATED x Air Jordan 4 Retro", img: "images/sneaker1.jpg" },
   { name: "KAWS x Air Jordan 4 Retro Cool Grey", img: "images/sneaker3.jpg" },
@@ -158,24 +130,26 @@ const sneakersData = [
   { name: "LV Trainer Sneaker Monogram", img: "images/sneaker31.jpg" }
 ];
 
+// ===================
+// Relojes
+// ===================
 const relojesData = [
-  {name:"Rolex Submariner", img:"images/watch1.jpg", price:12000},
-  {name:"Rolex Daytona", img:"images/watch2.jpg", price:15000},
-  {name:"Omega Speedmaster", img:"images/watch8.jpg", price:8000},
-  {name:"Audemars Piguet Royal Oak", img:"images/watch16.jpg", price:40000},
-  {name:"Patek Philippe Nautilus", img:"images/watch31.jpg", price:60000},
-  {name:"Cartier Santos", img:"images/watch21.jpg", price:9000},
-  {name:"Hublot Big Bang", img:"images/watch26.jpg", price:25000},
-  {name:"IWC Portugieser", img:"images/watch36.jpg", price:12000},
-  {name:"Panerai Luminor", img:"images/watch41.jpg", price:10000},
-  {name:"Vacheron Constantin Overseas", img:"images/watch49.jpg", price:50000}
+  { name: "Rolex Submariner", img: "images/rolex1.jpg" },
+  { name: "Omega Seamaster", img: "images/omega1.jpg" },
+  { name: "Tag Heuer Carrera", img: "images/tag1.jpg" },
+  { name: "Audemars Piguet Royal Oak", img: "images/ap1.jpg" },
+  { name: "Cartier Santos", img: "images/cartier1.jpg" },
+  { name: "Hublot Big Bang", img: "images/hublot1.jpg" },
+  { name: "Tissot PRX", img: "images/tissot1.jpg" },
+  { name: "Seiko Prospex", img: "images/seiko1.jpg" },
+  { name: "Casio G-Shock", img: "images/casio1.jpg" },
+  { name: "Fossil Machine", img: "images/fossil1.jpg" }
 ];
 
 // ===================
-// Inicializar
+// Inicializar todo
 // ===================
 renderSection("perfumes", perfumesData, 80);
-renderSection("sneakers", sneakersData, 159, true); // con talla
+renderSection("sneakers", sneakersData, 159);
 renderSection("relojes", relojesData, 200);
 updateCount();
-</script>
