@@ -4,33 +4,72 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Go Shop</title>
-<link rel="stylesheet" href="style.css">
 <style>
+/* ================= BODY ================= */
+body {
+  background-color: #000;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  text-align: center;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: #111;
+  color: #FFD700;
+  padding: 16px;
+  font-size: 1.8rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+header b { flex: 1; }
+.menu-btn, .cart-btn {
+  position: absolute;
+  top: 16px;
+  font-size: 26px;
+  cursor: pointer;
+  color: #FFD700;
+}
+.menu-btn { left: 16px; }
+.cart-btn { right: 16px; }
+.cart-btn span {
+  background: #000;
+  color: #FFD700;
+  padding: 2px 7px;
+  border-radius: 50%;
+  font-size: 14px;
+  vertical-align: super;
+}
+
 /* ================= SECCIONES HORIZONTALES ================= */
 .section-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px;
-  font-size: 1.5rem;
+  margin: 70px 20px 10px 20px;
+  font-size: 1.4rem;
   color: #FFD700;
 }
 .section-title button {
   background: #000;
   color: #FFD700;
   border: none;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: 6px;
   cursor: pointer;
 }
-.section-title button:hover {
-  background: #222;
-}
+.section-title button:hover { background: #222; }
+
 .scroll-container {
   display: flex;
   overflow-x: auto;
-  gap: 15px;
+  gap: 10px;
   padding: 10px 20px;
+  scroll-behavior: smooth;
 }
 .scroll-container::-webkit-scrollbar {
   height: 8px;
@@ -39,8 +78,67 @@
   background: #FFD700;
   border-radius: 4px;
 }
-.scroll-container::-webkit-scrollbar-track {
+.scroll-container::-webkit-scrollbar-track { background: #111; }
+
+/* ================= PRODUCT CARDS ================= */
+.product-card {
+  min-width: 140px;
+  max-width: 140px;
+  background: #FFD700;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  text-align: center;
+  flex-shrink: 0;
+}
+.product-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.product-card h3 {
+  font-size: 0.85rem;
+  margin: 5px 0 2px 0;
+}
+.product-card p {
+  font-size: 0.75rem;
+  margin: 2px 0 5px 0;
+}
+.product-card button {
+  font-size: 0.7rem;
+  padding: 5px 8px;
+  background: #000;
+  color: #FFD700;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.product-card button:hover { background: #222; }
+
+/* ================= MOBILE BAR ================= */
+.mobile-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   background: #111;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 1000;
+}
+.mobile-bar button {
+  background: none;
+  border: none;
+  color: #FFD700;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+@media screen and (max-width:600px) {
+  .product-card { min-width: 120px; max-width: 120px; }
+  .product-card img { height: 90px; }
 }
 </style>
 </head>
@@ -84,7 +182,7 @@
 </div>
 
 <script>
-// ====== DATOS DE EJEMPLO (10 cada uno) ======
+// ====== DATOS EJEMPLO ======
 const perfumes = [
   {name:"Valentino", price:80, img:"images/perfume1.jpg"},
   {name:"Dior J’adore", price:80, img:"images/perfume18.jpg"},
@@ -131,14 +229,13 @@ function updateCount(){
   document.getElementById("cartCount").innerText = cart.reduce((s,p)=>s+p.qty||1,0);
 }
 
-// ====== RENDER FUNC ======
+// ====== RENDER SECCIONES ======
 function renderSection(containerId, items){
   const container = document.getElementById(containerId);
   container.innerHTML = "";
   items.forEach(i=>{
     const card = document.createElement("div");
     card.className = "product-card";
-    card.style.minWidth = "180px";
     card.innerHTML = `
       <img src="${i.img}" alt="${i.name}">
       <h3>${i.name}</h3>
@@ -149,7 +246,7 @@ function renderSection(containerId, items){
   });
 }
 
-// ====== AGREGAR AL CARRITO ======
+// ====== FUNCIONES CARRITO ======
 function addCart(item){
   const index = cart.findIndex(p=>p.name===item.name);
   if(index!==-1) cart[index].qty++;
@@ -159,9 +256,8 @@ function addCart(item){
   alert(`${item.name} agregado al carrito`);
 }
 
-// ====== FUNCIÓN CARRITO Y WA ======
-function goCart(){location.href='pagina-del-carro.html'}
-function openWA(){window.open("https://wa.me/13129348674","_blank")}
+function goCart(){ location.href='pagina-del-carro.html'; }
+function openWA(){ window.open("https://wa.me/13129348674","_blank"); }
 
 // ====== INICIALIZAR ======
 renderSection("perfumes-container", perfumes);
