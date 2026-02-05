@@ -3,18 +3,15 @@
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ===================
-// Actualiza contador
-// ===================
+// Actualiza contador del carrito
 function updateCount() {
-  const el = document.getElementById("cartCount");
-  if (!el) return;
-  el.innerText = cart.reduce((a, b) => a + b.qty, 0);
+  const counter = document.getElementById("cartCount");
+  if (counter) {
+    counter.innerText = cart.reduce((a, b) => a + b.qty, 0);
+  }
 }
 
-// ===================
-// Toast animado
-// ===================
+// Animación tipo toast al agregar
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
@@ -29,7 +26,6 @@ function showToast(message) {
   toast.style.opacity = "0";
   toast.style.transition = "opacity 0.5s, transform 0.5s";
   toast.style.zIndex = "5000";
-
   document.body.appendChild(toast);
 
   setTimeout(() => {
@@ -45,105 +41,42 @@ function showToast(message) {
 }
 
 // ===================
-// AGREGAR AL CARRITO
-// (ahora soporta SIZE)
+// Agregar al carrito
 // ===================
-function addCart(name, img, price = 80, size = null) {
-
-  // Si es sneaker, exigir size
-  if (price === 159 && !size) {
-    alert("Selecciona un size");
-    return;
-  }
-
-  // Buscar mismo producto + mismo size
-  const index = cart.findIndex(p =>
-    p.name === name && p.size === size
-  );
+function addCart(name, img, price = 80) {
+  const index = cart.findIndex(p => p.name === name);
 
   if (index !== -1) {
     cart[index].qty++;
   } else {
-    cart.push({
-      name,
-      img,
-      qty: 1,
-      price,
-      size
-    });
+    cart.push({ name, img, qty: 1, price });
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCount();
-
-  showToast(
-    size
-      ? `${name} (US ${size}) agregado`
-      : `${name} agregado`
-  );
+  showToast(`${name} agregado al carrito`);
 }
 
 // ===================
-// Render secciones
+// Render de secciones
 // ===================
-function renderSection(id, data) {
-
+function renderSection(id, data, price = 80) {
   const container = document.getElementById(id);
   if (!container) return;
 
   container.innerHTML = "";
 
-  data.forEach((item, i) => {
-
+  data.forEach(item => {
     const card = document.createElement("div");
     card.className = "card";
-
-    // Sneakers → selector de size
-    if (id === "sneakers") {
-
-      const sizeOptions = [6,7,8,9,10,11,12]
-        .map(s => `<option value="${s}">US ${s}</option>`)
-        .join("");
-
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.name}">
-        <b>${item.name}</b>
-
-        <select id="size-${i}">
-          <option value="">Size</option>
-          ${sizeOptions}
-        </select>
-
-        <button onclick="
-          addCart(
-            '${item.name}',
-            '${item.img}',
-            159,
-            document.getElementById('size-${i}').value
-          )
-        ">
-          Agregar
-        </button>
-      `;
-
-    } else {
-
-      // Perfumes / relojes normales
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.name}">
-        <b>${item.name}</b>
-        <button onclick="
-          addCart(
-            '${item.name}',
-            '${item.img}',
-            80
-          )
-        ">
-          Agregar
-        </button>
-      `;
-    }
-
+    card.innerHTML = `
+      <img src="${item.img}" alt="${item.name}">
+      <b>${item.name}</b>
+      <b>$${price}</b>
+      <button onclick='addCart("${item.name}","${item.img}",${price})'>
+        Agregar
+      </button>
+    `;
     container.appendChild(card);
   });
 }
@@ -153,8 +86,9 @@ function renderSection(id, data) {
 // ===================
 function toggleSearch() {
   const b = document.getElementById("searchBox");
-  if (!b) return;
-  b.style.width = (b.style.width === "220px") ? "0" : "220px";
+  if (b) {
+    b.style.width = (b.style.width === "220px") ? "0" : "220px";
+  }
 }
 
 // ===================
@@ -165,7 +99,7 @@ function openWA() { window.open("https://wa.me/13129348674", "_blank"); }
 function search(t) { console.log("Buscar: ", t); }
 
 // ===================
-// DATOS
+// Perfumes
 // ===================
 const perfumesData = [
   { name: "Valentino", img: "images/perfume1.jpg" },
@@ -180,19 +114,25 @@ const perfumesData = [
   { name: "Bleu De Chanel Parfum", img: "images/perfume29.jpg" }
 ];
 
+// ===================
+// Sneakers premium ($159)
+// ===================
 const sneakersData = [
-  { name: "Jordan 4 Black Cat", img: "images/jordan4blackcat.jpg" },
-  { name: "Nike Air Force 1", img: "images/af1.jpg" },
-  { name: "Adidas Yeezy", img: "images/yeezy.jpg" },
-  { name: "Air Jordan 1", img: "images/jordan1.jpg" },
-  { name: "Nike Dunk Low", img: "images/dunklow.jpg" },
-  { name: "New Balance 550", img: "images/nb550.jpg" },
-  { name: "Puma RS-X", img: "images/pumarsx.jpg" },
-  { name: "Reebok Question", img: "images/reebokquestion.jpg" },
-  { name: "Asics Gel Lyte", img: "images/asicsgel.jpg" },
-  { name: "Converse Chuck 70", img: "images/converse70.jpg" }
+  { name: "UNDEFEATED x Air Jordan 4 Retro", img: "images/sneaker1.jpg" },
+  { name: "KAWS x Air Jordan 4 Retro Cool Grey", img: "images/sneaker3.jpg" },
+  { name: "Off-White x Air Jordan 4 Sail", img: "images/sneaker4.jpg" },
+  { name: "Travis Scott x Air Jordan 4 Cactus Jack", img: "images/sneaker5.jpg" },
+  { name: "Air Jordan 4 Black Cat", img: "images/sneaker8.jpg" },
+  { name: "Nike x Louis Vuitton Air Force 1", img: "images/sneaker9.jpg" },
+  { name: "Tiffany x Nike Air Force 1", img: "images/sneaker12.jpg" },
+  { name: "adidas Yeezy Boost 750 Grey", img: "images/sneaker21.jpg" },
+  { name: "Chanel x Pharrell Adidas NMD", img: "images/sneaker23.jpg" },
+  { name: "LV Trainer Sneaker Monogram", img: "images/sneaker31.jpg" }
 ];
 
+// ===================
+// Relojes
+// ===================
 const relojesData = [
   { name: "Rolex Submariner", img: "images/rolex1.jpg" },
   { name: "Omega Seamaster", img: "images/omega1.jpg" },
@@ -207,9 +147,9 @@ const relojesData = [
 ];
 
 // ===================
-// Inicializar
+// Inicializar todo
 // ===================
-renderSection("perfumes", perfumesData);
-renderSection("sneakers", sneakersData);
-renderSection("relojes", relojesData);
+renderSection("perfumes", perfumesData, 80);
+renderSection("sneakers", sneakersData, 159);
+renderSection("relojes", relojesData, 200);
 updateCount();
