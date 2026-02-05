@@ -133,7 +133,7 @@ const sneakersData = [
 // ===================
 // Relojes
 // ===================
-const watches = [
+const relojesdata = [
   {name:"Rolex Submariner", cat:"Rolex", img:"images/watch1.jpg", price:12000},
   {name:"Rolex Daytona", cat:"Rolex", img:"images/watch2.jpg", price:15000},
   {name:"Omega Speedmaster", cat:"Omega", img:"images/watch8.jpg", price:8000},
