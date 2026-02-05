@@ -3,19 +3,25 @@
 // ===================
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// Actualiza contador del carrito
+// ===================
+// Actualiza contador
+// ===================
 function updateCount() {
-  document.getElementById("cartCount").innerText = cart.reduce((a, b) => a + b.qty, 0);
+  const el = document.getElementById("cartCount");
+  if (!el) return;
+  el.innerText = cart.reduce((a, b) => a + b.qty, 0);
 }
 
-// Animación tipo toast al agregar
+// ===================
+// Toast animado
+// ===================
 function showToast(message) {
   const toast = document.createElement("div");
   toast.innerText = message;
   toast.style.position = "fixed";
   toast.style.bottom = "120px";
   toast.style.right = "20px";
-  toast.style.background = "#800000"; // color de la marca
+  toast.style.background = "#800000";
   toast.style.color = "#fff";
   toast.style.padding = "10px 15px";
   toast.style.borderRadius = "10px";
@@ -23,15 +29,14 @@ function showToast(message) {
   toast.style.opacity = "0";
   toast.style.transition = "opacity 0.5s, transform 0.5s";
   toast.style.zIndex = "5000";
+
   document.body.appendChild(toast);
 
-  // Entrada
   setTimeout(() => {
     toast.style.opacity = "1";
     toast.style.transform = "translateY(-10px)";
   }, 10);
 
-  // Desaparece después de 2 segundos
   setTimeout(() => {
     toast.style.opacity = "0";
     toast.style.transform = "translateY(0)";
@@ -39,31 +44,106 @@ function showToast(message) {
   }, 2000);
 }
 
-// Agregar al carrito
-function addCart(name, img, price = 80) {
-  const index = cart.findIndex(p => p.name === name);
+// ===================
+// AGREGAR AL CARRITO
+// (ahora soporta SIZE)
+// ===================
+function addCart(name, img, price = 80, size = null) {
+
+  // Si es sneaker, exigir size
+  if (price === 159 && !size) {
+    alert("Selecciona un size");
+    return;
+  }
+
+  // Buscar mismo producto + mismo size
+  const index = cart.findIndex(p =>
+    p.name === name && p.size === size
+  );
+
   if (index !== -1) {
     cart[index].qty++;
   } else {
-    cart.push({ name, img, qty: 1, price });
+    cart.push({
+      name,
+      img,
+      qty: 1,
+      price,
+      size
+    });
   }
+
   localStorage.setItem("cart", JSON.stringify(cart));
   updateCount();
-  showToast(`${name} agregado al carrito`);
+
+  showToast(
+    size
+      ? `${name} (US ${size}) agregado`
+      : `${name} agregado`
+  );
 }
 
-// Render de secciones
+// ===================
+// Render secciones
+// ===================
 function renderSection(id, data) {
+
   const container = document.getElementById(id);
+  if (!container) return;
+
   container.innerHTML = "";
-  data.forEach(item => {
+
+  data.forEach((item, i) => {
+
     const card = document.createElement("div");
     card.className = "card";
-    card.innerHTML = `
-      <img src="${item.img}" alt="${item.name}">
-      <b>${item.name}</b>
-      <button onclick='addCart("${item.name}","${item.img}",80)'>Agregar</button>
-    `;
+
+    // Sneakers → selector de size
+    if (id === "sneakers") {
+
+      const sizeOptions = [6,7,8,9,10,11,12]
+        .map(s => `<option value="${s}">US ${s}</option>`)
+        .join("");
+
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.name}">
+        <b>${item.name}</b>
+
+        <select id="size-${i}">
+          <option value="">Size</option>
+          ${sizeOptions}
+        </select>
+
+        <button onclick="
+          addCart(
+            '${item.name}',
+            '${item.img}',
+            159,
+            document.getElementById('size-${i}').value
+          )
+        ">
+          Agregar
+        </button>
+      `;
+
+    } else {
+
+      // Perfumes / relojes normales
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.name}">
+        <b>${item.name}</b>
+        <button onclick="
+          addCart(
+            '${item.name}',
+            '${item.img}',
+            80
+          )
+        ">
+          Agregar
+        </button>
+      `;
+    }
+
     container.appendChild(card);
   });
 }
@@ -73,6 +153,7 @@ function renderSection(id, data) {
 // ===================
 function toggleSearch() {
   const b = document.getElementById("searchBox");
+  if (!b) return;
   b.style.width = (b.style.width === "220px") ? "0" : "220px";
 }
 
@@ -84,7 +165,7 @@ function openWA() { window.open("https://wa.me/13129348674", "_blank"); }
 function search(t) { console.log("Buscar: ", t); }
 
 // ===================
-// Datos de ejemplo
+// DATOS
 // ===================
 const perfumesData = [
   { name: "Valentino", img: "images/perfume1.jpg" },
@@ -126,7 +207,7 @@ const relojesData = [
 ];
 
 // ===================
-// Inicializar todo
+// Inicializar
 // ===================
 renderSection("perfumes", perfumesData);
 renderSection("sneakers", sneakersData);
