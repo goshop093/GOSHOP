@@ -6,7 +6,7 @@
 <title>Mi Carrito - Go Shop</title>
 <style>
 :root{
-  --primary:#800000; /* rojo vino */
+  --primary:#800000;
   --dark:#111;
   --bg:#000;
   --text:#fff;
@@ -46,7 +46,6 @@ header b{flex:1;text-align:center;}
   border-radius:10px;
   transition:all .3s ease;
 }
-.cart-item.animate{animation:fadeIn 0.4s ease;}
 .cart-item img{width:100px;height:100px;object-fit:cover;border-radius:10px;}
 .cart-item .info{flex:1;margin-left:15px;}
 .cart-item .info p{margin:4px 0;}
@@ -155,13 +154,6 @@ header b{flex:1;text-align:center;}
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let filteredCart = [...cart];
 
-// ====== PRECIO MAYOREO ======
-function getMayoreoPrice(qty, base){
-  if(qty >= 10) return 500;  
-  if(qty >= 5) return 300;   
-  return base * qty;          
-}
-
 // ====== RENDER CARRITO ======
 function updateCart(){
   const container = document.getElementById('cart-container');
@@ -171,10 +163,7 @@ function updateCart(){
   let subtotal = 0;
 
   filteredCart.forEach((item,index)=>{
-    const totalItem = getMayoreoPrice(item.qty, item.price);  
-    const priceUnit = totalItem / item.qty;                   
-    const normalTotal = item.price * item.qty;               
-    const savings = normalTotal - totalItem;                 
+    const totalItem = item.price * item.qty;
     subtotal += totalItem;
 
     const div = document.createElement('div');
@@ -183,14 +172,14 @@ function updateCart(){
       <img src="${item.img}" alt="${item.name}">
       <div class="info">
         <p><b>${item.name}</b></p>
-        <p>Precio unitario: $${priceUnit.toFixed(2)}</p>
+        <p>Talla: ${item.size}</p>
+        <p>Precio unitario: $${item.price.toFixed(2)}</p>
         <p>Cantidad:
           <button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
           ${item.qty}
           <button class="qty-btn" onclick="changeQty(${index},1)">+</button>
         </p>
         <p>Total: $${totalItem.toFixed(2)}</p>
-        ${savings > 0 ? `<p style="color:var(--primary)">Ahorras: $${savings.toFixed(2)}</p>` : ''}
       </div>
       <button class="remove-btn" onclick="removeItem(${index})">X</button>
     `;
@@ -206,7 +195,7 @@ function updateCart(){
 
 // ====== CANTIDAD + / - ======
 function changeQty(index,delta){
-  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
+  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name && i.size===filteredCart[index].size);
   cart[realIndex].qty += delta;
   if(cart[realIndex].qty<1) cart[realIndex].qty=1;
   filteredCart[index].qty = cart[realIndex].qty;
@@ -215,7 +204,7 @@ function changeQty(index,delta){
 
 // ====== ELIMINAR PRODUCTO ======
 function removeItem(index){
-  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name);
+  const realIndex = cart.findIndex(i=>i.name===filteredCart[index].name && i.size===filteredCart[index].size);
   cart.splice(realIndex,1);
   filteredCart.splice(index,1);
   updateCart();
@@ -223,27 +212,22 @@ function removeItem(index){
 
 // ====== BUSCADOR ======
 function searchCart(text){
-  filteredCart = cart.filter(i=>i.name.toLowerCase().includes(text.toLowerCase()));
+  filteredCart = cart.filter(i=>i.name.toLowerCase().includes(text.toLowerCase()) || i.size.toLowerCase().includes(text.toLowerCase()));
   updateCart();
 }
 
 // ====== REGRESAR ======
-function goBack(){window.location.href='index.html';}
+function goBack(){window.location.href='sneakers.html';}
 
 // ====== WHATSAPP ======
 function sendOrder(){
   if(cart.length===0){alert('El carrito está vacío'); return;}
   let msg = 'Pedido Go Shop:\n';
   cart.forEach(i=>{
-    const totalItem = getMayoreoPrice(i.qty, i.price);
-    const priceUnit = totalItem / i.qty;
-    const normalTotal = i.price * i.qty;
-    const savings = normalTotal - totalItem;
-    msg += `${i.name} - $${priceUnit.toFixed(2)} x ${i.qty} = $${totalItem.toFixed(2)}`;
-    if(savings>0) msg += ` (Ahorras: $${savings.toFixed(2)})`;
-    msg += '\n';
+    const totalItem = i.price * i.qty;
+    msg += `${i.name} - Talla: ${i.size} - $${i.price.toFixed(2)} x ${i.qty} = $${totalItem.toFixed(2)}\n`;
   });
-  const total = cart.reduce((a,b)=>a + getMayoreoPrice(b.qty,b.price), 0).toFixed(2);
+  const total = cart.reduce((a,b)=>a + b.price*b.qty, 0).toFixed(2);
   msg += `Total: $${total} (Envío: $0)`;
   const waNumber = '13129348674';
   const url = `https://api.whatsapp.com/send?phone=${waNumber}&text=${encodeURIComponent(msg)}`;
